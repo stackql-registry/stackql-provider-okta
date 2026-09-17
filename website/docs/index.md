@@ -78,6 +78,168 @@ The following parameter is required for the `okta` provider:
 
 This parameter must be supplied to the `WHERE` clause of each `SELECT` statement.
 
+## Example Queries
+
+Try the following queries using `stackql shell`, or run them from a script or CI pipeline with `stackql exec`.
+
+### Users with status and last sign-in
+
+Every user with login, department, lifecycle status, last sign-in and the provider that validates the password:
+
+```sql
+SELECT id,
+       json_extract(profile, '$.login') AS login,
+       json_extract(profile, '$.department') AS department,
+       status, lastLogin, passwordChanged,
+       json_extract(credentials, '$.provider.type') AS auth_provider
+FROM okta.users.users
+WHERE subdomain = '{{ subdomain }}'
+ORDER BY lastLogin;
+```
+
+### Groups and their members
+
+Groups with member counts (`expand = 'stats'` populates `_embedded.stats.usersCount`), then the members of one group:
+
+```sql
+SELECT id,
+       json_extract(profile, '$.name') AS name,
+       type,
+       json_extract(_embedded, '$.stats.usersCount') AS member_count,
+       lastMembershipUpdated
+FROM okta.groups.groups
+WHERE subdomain = '{{ subdomain }}'
+  AND expand = 'stats'
+ORDER BY member_count DESC;
+
+SELECT id,
+       json_extract(profile, '$.login') AS login,
+       status, lastLogin
+FROM okta.groups.users
+WHERE groupId = '{{ groupId }}'
+  AND subdomain = '{{ subdomain }}';
+```
+
+### Applications with status and sign-on mode
+
+Every app instance with its sign-on mode and lifecycle status:
+
+```sql
+SELECT id, label, signOnMode, status, created, lastUpdated
+FROM okta.apps.applications
+WHERE subdomain = '{{ subdomain }}'
+ORDER BY signOnMode, label;
+```
+
+### Groups assigned to an application
+
+The group assignments of one application, with the group name looked up from the groups resource:
+
+```sql
+SELECT g.id,
+       json_extract(g.profile, '$.name') AS group_name,
+       g.type,
+       ga.priority, ga.lastUpdated
+FROM okta.apps.group_assignments ga
+JOIN okta.groups.groups g
+  ON g.id = ga.id
+WHERE ga.appId = '{{ appId }}'
+  AND ga.subdomain = '{{ subdomain }}'
+  AND g.subdomain = '{{ subdomain }}'
+ORDER BY ga.priority;
+```
+
+### Sign-on policies and their rules
+
+Sign-on policies in priority order (`type` is a required parameter of the policies resource), then the rules of one policy:
+
+```sql
+SELECT id, name, status, priority, system, lastUpdated
+FROM okta.policies.policies
+WHERE type = 'OKTA_SIGN_ON'
+  AND subdomain = '{{ subdomain }}'
+ORDER BY priority;
+
+SELECT id, name, status, priority, system, type
+FROM okta.policies.policy_rules
+WHERE policyId = '{{ policyId }}'
+  AND subdomain = '{{ subdomain }}'
+ORDER BY priority;
+```
+
+### Failed sign-ins from the system log
+
+Failed sign-in attempts since a given time, with the `filter` expression evaluated by Okta rather than after the fact:
+
+```sql
+SELECT published, eventType, displayMessage,
+       json_extract(actor, '$.alternateId') AS actor_login,
+       json_extract(client, '$.ipAddress') AS ip_address,
+       json_extract(client, '$.geographicalContext.country') AS country,
+       json_extract(outcome, '$.reason') AS reason
+FROM okta.logs.system_log_events
+WHERE subdomain = '{{ subdomain }}'
+  AND since = '2026-09-10T00:00:00.000Z'
+  AND filter = 'eventType eq "user.session.start" and outcome.result eq "FAILURE"'
+ORDER BY published DESC;
+```
+
+### API tokens by expiry
+
+Active API tokens with the owning user, client and expiry:
+
+```sql
+SELECT id, name, clientName, userId, created, lastUpdated, expiresAt, tokenWindow
+FROM okta.api_tokens.api_tokens
+WHERE subdomain = '{{ subdomain }}'
+ORDER BY expiresAt;
+```
+
+### Users by status
+
+Number of users in each lifecycle status (the default listing omits users with the `DEPROVISIONED` status):
+
+```sql
+SELECT status, COUNT(*) AS user_count
+FROM okta.users.users
+WHERE subdomain = '{{ subdomain }}'
+GROUP BY status
+ORDER BY user_count DESC;
+```
+
+### Group provisioning
+
+Create a group, replace its profile (the groups resource exposes `replace` rather than `update`), then delete it:
+
+```sql
+INSERT INTO okta.groups.groups (data__profile, subdomain)
+SELECT '{"name": "finance-readers", "description": "Read-only access to finance apps"}',
+       '{{ subdomain }}';
+
+REPLACE okta.groups.groups
+SET data__profile = '{"name": "finance-readers", "description": "Read-only access to finance and billing apps"}'
+WHERE groupId = '{{ groupId }}'
+  AND subdomain = '{{ subdomain }}';
+
+DELETE FROM okta.groups.groups
+WHERE groupId = '{{ groupId }}'
+  AND subdomain = '{{ subdomain }}';
+```
+
+### Lifecycle operations
+
+Lifecycle methods are `EXEC` calls, for example suspending a user or deactivating an application:
+
+```sql
+EXEC okta.users.users.suspend_user
+  @id = '{{ userId }}',
+  @subdomain = '{{ subdomain }}';
+
+EXEC okta.apps.applications.deactivate_application
+  @appId = '{{ appId }}',
+  @subdomain = '{{ subdomain }}';
+```
+
 ## Services
 <div class="row">
 <div class="providerDocColumn">
