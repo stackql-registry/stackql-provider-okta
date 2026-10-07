@@ -2,44 +2,30 @@ openapi: 3.0.3
 info:
   title: mappings API
   description: okta mappings API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/mappings:
     get:
       summary: List all profile mappings
-      description: >-
-        Lists all profile mappings in your org with
-        [pagination](https://developer.okta.com/docs/api/#pagination). You can
-        return a subset of profile mappings that match a supported `sourceId`
-        and/or `targetId`.
+      description: |-
+        Lists all profile mappings in your org with [pagination](https://developer.okta.com/docs/api/#pagination). You can return a subset of profile mappings that match a supported `sourceId` and/or `targetId`.
 
+        The results are [paginated](/#pagination) according to the `limit` parameter. If there are multiple pages of results, the Link header contains a `next` link that you should treat as an opaque value (follow it, don't parse it). See [Link Header](https://developer.okta.com/docs/api/#link-header).
 
-        The results are [paginated](/#pagination) according to the `limit`
-        parameter. If there are multiple pages of results, the Link header
-        contains a `next` link that you should treat as an opaque value (follow
-        it, don't parse it). See [Link
-        Header](https://developer.okta.com/docs/api/#link-header).
-
-
-        The response is a collection of profile mappings that include a subset
-        of the profile mapping object's parameters. The profile mapping object
-        describes
-
-        the properties mapping between an Okta user and an app user profile
-        using [JSON Schema Draft
-        4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04).
+        The response is a collection of profile mappings that include a subset of the profile mapping object's parameters. The profile mapping object describes
+        the properties mapping between an Okta user and an app user profile using [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04).
       operationId: listProfileMappings
       parameters:
         - name: after
           in: query
-          description: >-
-            Mapping `id` that specifies the pagination cursor for the next page
-            of mappings
+          description: Mapping `id` that specifies the pagination cursor for the next page of mappings
           schema:
             type: string
         - name: limit
           in: query
-          description: Specifies the number of results per page
+          description: |-
+            Specifies the number of results per page
+            > **Note:** If you encounter timeout errors with larger values, reduce the limit (for example, `50`) and use pagination with the `after` parameter to retrieve the results.
           schema:
             type: integer
             format: int32
@@ -47,18 +33,12 @@ paths:
             maximum: 200
         - name: sourceId
           in: query
-          description: >-
-            The user type or app instance ID that acts as the source of
-            expressions in a mapping. If this parameter is included, all
-            returned mappings have this as their `source.id`.
+          description: The user type or app instance ID that acts as the source of expressions in a mapping. If this parameter is included, all returned mappings have this as their `source.id`.
           schema:
             type: string
         - name: targetId
           in: query
-          description: >-
-            The user type or app instance ID that acts as the target of
-            expressions in a mapping. If this parameter is included, all
-            returned mappings have this as their `target.id`.
+          description: The user type or app instance ID that acts as the target of expressions in a mapping. If this parameter is included, all returned mappings have this as their `target.id`.
           schema:
             type: string
       responses:
@@ -67,9 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ListProfileMappings'
+                $ref: '#/components/schemas/ListProfileMappingsResponse'
               examples:
                 MappingList:
                   summary: List all profile mappings response
@@ -88,6 +66,11 @@ paths:
         lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
+      x-stackql-bare-array-wrap:
+        wrapperKey: profile_mappings
+        wrapperName: ListProfileMappingsResponse
+        mediaType: application/json
+        scalar: false
   /api/v1/mappings/{mappingId}:
     get:
       summary: Retrieve a profile mapping
@@ -120,11 +103,11 @@ paths:
         lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/pathMappingId'
     post:
       summary: Update a profile mapping
-      description: >-
-        Updates an existing profile mapping by adding, updating, or removing one
-        or many property mappings
+      description: Updates an existing profile mapping by adding, updating, or removing one or many property mappings
       operationId: updateProfileMapping
       x-codegen-request-body-name: profileMapping
       requestBody:
@@ -149,19 +132,13 @@ paths:
                 $ref: '#/components/schemas/ProfileMapping'
               examples:
                 Addpropertymapping:
-                  summary: >-
-                    Update an existing profile mapping by adding one or more
-                    properties
+                  summary: Update an existing profile mapping by adding one or more properties
                   $ref: '#/components/examples/AddMappingResponse'
                 Updatepropertymapping:
-                  summary: >-
-                    Update an existing profile mapping by updating one or more
-                    properties
+                  summary: Update an existing profile mapping by updating one or more properties
                   $ref: '#/components/examples/UpdateMappingResponse'
                 Removepropertymapping:
-                  summary: >-
-                    Update an existing profile mapping by removing one or more
-                    properties
+                  summary: Update an existing profile mapping by removing one or more properties
                   $ref: '#/components/examples/RemoveMappingResponse'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
@@ -181,21 +158,15 @@ paths:
         lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
-    parameters:
-      - $ref: '#/components/parameters/pathMappingId'
+      parameters:
+        - $ref: '#/components/parameters/pathMappingId'
 components:
   schemas:
     ListProfileMappings:
-      description: >-
-        A collection of the profile mappings that include a subset of the
-        profile mapping object's properties. The profile mapping object
-        describes a mapping between an Okta user's and an app user's properties
-        using [JSON Schema Draft
-        4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04).
+      description: |-
+        A collection of the profile mappings that include a subset of the profile mapping object's properties. The profile mapping object describes a mapping between an Okta user's and an app user's properties using [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04).
 
-
-        > **Note:** Same type source/target mappings aren't supported by this
-        API. Profile mappings must either be Okta->App or App->Okta.
+        > **Note:** Same type source/target mappings aren't supported by this API. Profile mappings must either be Okta->App or App->Okta.
       type: object
       properties:
         id:
@@ -209,14 +180,10 @@ components:
         _links:
           $ref: '#/components/schemas/LinksSelf'
     ProfileMapping:
-      description: >-
-        The profile mapping object describes a mapping between an Okta user's
-        and an app user's properties using [JSON Schema Draft
-        4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04).
+      description: |-
+        The profile mapping object describes a mapping between an Okta user's and an app user's properties using [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04).
 
-
-        > **Note:** Same type source/target mappings aren't supported by this
-        API. Profile mappings must be between Okta and an app.
+        > **Note:** Same type source/target mappings aren't supported by this API. Profile mappings must be between Okta and an app.
       type: object
       properties:
         id:
@@ -233,7 +200,6 @@ components:
           $ref: '#/components/schemas/ProfileMappingTarget'
         _links:
           $ref: '#/components/schemas/LinksSelf'
-        type: object
     ProfileMappingRequest:
       description: The updated request body properties
       type: object
@@ -241,22 +207,15 @@ components:
         properties:
           type: object
           $ref: '#/components/schemas/ProfileMappingProperty'
-        type: object
       required:
         - properties
         - expression
         - pushStatus
     ProfileMappingSource:
-      description: >-
-        The parameter is the source of a profile mapping and is a valid [JSON
-        Schema Draft
-        4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04)
-        document with the following properties. The data type can be an app
-        instance or an Okta object.
+      description: |-
+        The parameter is the source of a profile mapping and is a valid [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04) document with the following properties. The data type can be an app instance or an Okta object.
 
-
-        > **Note:** If the source is Okta and the UserTypes feature isn't
-        enabled, then the source `_links` only has a link to the schema.
+        > **Note:** If the source is Okta and the UserTypes feature isn't enabled, then the source `_links` only has a link to the schema.
       type: object
       properties:
         id:
@@ -265,9 +224,7 @@ components:
           readOnly: true
         name:
           type: string
-          description: >-
-            Variable name of the application instance or name of the referenced
-            UserType
+          description: Variable name of the application instance or name of the referenced UserType
           readOnly: true
         type:
           type: string
@@ -276,12 +233,8 @@ components:
         _links:
           $ref: '#/components/schemas/SourceLinks'
     ProfileMappingTarget:
-      description: >-
-        The parameter is the target of a profile mapping and is a valid [JSON
-        Schema Draft
-        4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04)
-        document with the following properties. The data type can be an app
-        instance or an Okta object.
+      description: |-
+        The parameter is the target of a profile mapping and is a valid [JSON Schema Draft 4](https://datatracker.ietf.org/doc/html/draft-zyp-json-schema-04) document with the following properties. The data type can be an app instance or an Okta object.
 
          > **Note:** If the target is Okta and the UserTypes feature isn't enabled, then the target `_links` only has a link to the schema.
       type: object
@@ -292,9 +245,7 @@ components:
           readOnly: true
         name:
           type: string
-          description: >-
-            Variable name of the application instance or name of the referenced
-            userType
+          description: Variable name of the application instance or name of the referenced userType
           readOnly: true
         type:
           type: string
@@ -303,13 +254,7 @@ components:
         _links:
           $ref: '#/components/schemas/SourceLinks'
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
@@ -328,66 +273,59 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ProfileMappingProperty:
-      description: >-
-        A target property, in string form, that maps to a valid [JSON Schema
-        Draft](https://tools.ietf.org/html/draft-zyp-json-schema-04) document.
+      description: A target property, in string form, that maps to a valid [JSON Schema Draft](https://tools.ietf.org/html/draft-zyp-json-schema-04) document.
       type: object
       properties:
         expression:
-          description: >-
-            Combination or single source properties that are mapped to the
-            target property. See [Okta Expression
-            Language](https://developer.okta.com/docs/reference/okta-expression-language/).
+          description: Combination or single source properties that are mapped to the target property. See [Okta Expression Language](https://developer.okta.com/docs/reference/okta-expression-language/).
           type: string
         pushStatus:
           $ref: '#/components/schemas/ProfileMappingPropertyPushStatus'
     SourceLinks:
-      allOf:
-        - $ref: '#/components/schemas/LinksSelf'
-        - type: object
-          properties:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/HrefObject'
-                - description: The associated schema
-    HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    ErrorCause:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
-        errorSummary:
-          type: string
-    ProfileMappingPropertyPushStatus:
-      description: >-
-        Indicates whether to update target properties for user create and update
-        or just for user create.
-
-
-        - Having a pushStatus of `PUSH` causes properties in the target to be
-        updated on create and update. 
-
-        - Having a pushStatus of `DONT_PUSH` causes properties in the target to
-        be updated only on create.
-      type: string
-      enum:
-        - DONT_PUSH
-        - PUSH
-    HrefObject:
+        self:
+          $ref: '#/components/schemas/HrefObjectSelfLink'
+        schema:
+          x-okta-ignore-redocly-rules-for-sdk: true
+          title: Link Object
+          additionalProperties: true
+          type: object
+          properties:
+            hints:
+              $ref: '#/components/schemas/HrefHints'
+              readOnly: true
+            href:
+              type: string
+              description: Link URI
+            name:
+              type: string
+              description: Link name
+              readOnly: true
+            templated:
+              type: boolean
+              description: Indicates whether the link object's `href` property is a URI template.
+              readOnly: true
+            type:
+              type: string
+              description: The media type of the link. If omitted, it is implicitly `application/json`.
+              readOnly: true
+          required:
+            - href
+          description: The associated schema
+      readOnly: true
+    HrefObjectSelfLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -404,15 +342,53 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    ErrorCause:
+      type: object
+      properties:
+        errorSummary:
+          type: string
+    ProfileMappingPropertyPushStatus:
+      description: |-
+        Indicates whether to update target properties for user create and update or just for user create.
+
+        - Having a pushStatus of `PUSH` causes properties in the target to be updated on create and update. 
+        - Having a pushStatus of `DONT_PUSH` causes properties in the target to be updated only on create.
+      type: string
+      enum:
+        - DONT_PUSH
+        - PUSH
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -431,6 +407,13 @@ components:
         - GET
         - POST
         - PUT
+    ListProfileMappingsResponse:
+      type: object
+      properties:
+        profile_mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/ListProfileMappings'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -488,11 +471,9 @@ components:
             type: user
             _links:
               self:
-                href: >-
-                  https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
+                href: https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
               schema:
-                href: >-
-                  https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
+                href: https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
           target:
             id: 0oa1qmn4LZQQEH0wZ0g4
             name: okta_org2org
@@ -501,8 +482,7 @@ components:
               self:
                 href: https://{yourOktaDomain}/api/v1/apps/0oa1qmn4LZQQEH0wZ0g4
               schema:
-                href: >-
-                  https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
+                href: https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
           _links:
             self:
               href: https://{yourOktaDomain}/api/v1/mappings/prm1k48weFSOnEUnw0g4
@@ -516,11 +496,9 @@ components:
           type: user
           _links:
             self:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
         target:
           id: 0oa1qmn4LZQQEH0wZ0g4
           name: okta_org2org
@@ -529,8 +507,7 @@ components:
             self:
               href: https://{yourOktaDomain}/api/v1/apps/0oa1qmn4LZQQEH0wZ0g4
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
         properties:
           firstName:
             expression: user.firstName
@@ -579,11 +556,9 @@ components:
           type: user
           _links:
             self:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
         target:
           id: 0oa1qmn4LZQQEH0wZ0g4
           name: okta_org2org
@@ -592,8 +567,7 @@ components:
             self:
               href: https://{yourOktaDomain}/api/v1/apps/0oa1qmn4LZQQEH0wZ0g4
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
         properties:
           fullName:
             expression: user.firstName + user.lastName
@@ -615,11 +589,9 @@ components:
           type: user
           _links:
             self:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
         target:
           id: 0oa1qmn4LZQQEH0wZ0g4
           name: okta_org2org
@@ -628,8 +600,7 @@ components:
             self:
               href: https://{yourOktaDomain}/api/v1/apps/0oa1qmn4LZQQEH0wZ0g4
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
         properties:
           fullName:
             expression: user.firstName + user.lastName
@@ -651,11 +622,9 @@ components:
           type: user
           _links:
             self:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/types/user/otysbePhQ3yqt4cVv0g3
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/user/oscsbePhQ3yqt4cVv0g3
         target:
           id: 0oa1qmn4LZQQEH0wZ0g4
           name: okta_org2org
@@ -664,8 +633,7 @@ components:
             self:
               href: https://{yourOktaDomain}/api/v1/apps/0oa1qmn4LZQQEH0wZ0g4
             schema:
-              href: >-
-                https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
+              href: https://{yourOktaDomain}/api/v1/meta/schemas/apps/0oa1qmn4LZQQEH0wZ0g4/default
         properties:
           fullName:
             expression: user.firstName + user.lastName
@@ -711,7 +679,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

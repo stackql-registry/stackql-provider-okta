@@ -2,14 +2,12 @@ openapi: 3.0.3
 info:
   title: first_party_app_settings API
   description: okta first_party_app_settings API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/first-party-app-settings/{appName}:
     get:
       summary: Retrieve the Okta application settings
-      description: >-
-        Retrieves the settings for an Okta app (also known as an Okta
-        first-party app)
+      description: Retrieves the settings for an Okta app (also known as an Okta first-party app)
       operationId: getFirstPartyAppSettings
       responses:
         '200':
@@ -34,11 +32,11 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathFirstPartyAppName'
     put:
       summary: Replace the Okta application settings
-      description: >-
-        Replaces the settings for an Okta app (also known as an Okta first-party
-        app)
+      description: Replaces the settings for an Okta app (also known as an Okta first-party app)
       operationId: replaceFirstPartyAppSettings
       requestBody:
         content:
@@ -81,8 +79,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathFirstPartyAppName'
+      parameters:
+        - $ref: '#/components/parameters/pathFirstPartyAppName'
 components:
   schemas:
     AdminConsoleSettings:
@@ -91,17 +89,13 @@ components:
       type: object
       properties:
         sessionIdleTimeoutMinutes:
-          description: >-
-            The maximum idle time before the Okta Admin Console session expires.
-            Must be no more than 12 hours.
+          description: The maximum idle time before the Okta Admin Console session expires. Must be no more than 12 hours.
           type: integer
           minimum: 5
           maximum: 720
           default: 15
         sessionMaxLifetimeMinutes:
-          description: >-
-            The absolute maximum session lifetime of the Okta Admin Console.
-            Must be no more than 7 days.
+          description: The absolute maximum session lifetime of the Okta Admin Console. Must be no more than 7 days.
           type: integer
           minimum: 5
           maximum: 10080
@@ -119,18 +113,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
@@ -211,7 +200,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

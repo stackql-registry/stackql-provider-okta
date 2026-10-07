@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: trustedorigins API
   description: okta trustedorigins API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/trustedOrigins:
     get:
@@ -16,11 +16,8 @@ paths:
           schema:
             type: string
         - name: filter
-          description: >
-            [Filter](https://developer.okta.com/docs/api/#filter) trusted
-            origins with a supported expression for a subset of properties. You
-            can filter on the following properties: `name`, `origin`, `status`,
-            and `type` (type of scopes).
+          description: |
+            [Filter](https://developer.okta.com/docs/api/#filter) trusted origins with a supported expression for a subset of properties. You can filter on the following properties: `name`, `origin`, `status`, and `type` (type of scopes).
           in: query
           schema:
             type: string
@@ -46,9 +43,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TrustedOrigin'
+                $ref: '#/components/schemas/ListTrustedOriginsResponse'
               examples:
                 TrustedOriginsResponse:
                   $ref: '#/components/examples/TrustedOriginsResponse'
@@ -65,6 +60,11 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: trusted_origins
+        wrapperName: ListTrustedOriginsResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a trusted origin
       description: Creates a trusted origin
@@ -81,8 +81,7 @@ paths:
               TrustedOriginBodyWithIframeEmbedding:
                 $ref: '#/components/examples/TrustedOriginBodyWithIframeEmbedding'
               TrustedOriginBodyWithIframeEmbeddingSignIn:
-                $ref: >-
-                  #/components/examples/TrustedOriginBodyWithIframeEmbeddingSignIn
+                $ref: '#/components/examples/TrustedOriginBodyWithIframeEmbeddingSignIn'
         required: true
       responses:
         '200':
@@ -95,11 +94,9 @@ paths:
                 TrustedOriginResponse:
                   $ref: '#/components/examples/TrustedOriginResponse'
                 TrustedOriginResponseWithIframeEmbedding:
-                  $ref: >-
-                    #/components/examples/TrustedOriginResponseWithIframeEmbedding
+                  $ref: '#/components/examples/TrustedOriginResponseWithIframeEmbedding'
                 TrustedOriginResponseWithIframeEmbeddingSignIn:
-                  $ref: >-
-                    #/components/examples/TrustedOriginResponseWithIframeEmbeddingSignIn
+                  $ref: '#/components/examples/TrustedOriginResponseWithIframeEmbeddingSignIn'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -131,11 +128,9 @@ paths:
                 TrustedOriginResponse:
                   $ref: '#/components/examples/TrustedOriginResponse'
                 TrustedOriginResponseWithIframeEmbedding:
-                  $ref: >-
-                    #/components/examples/TrustedOriginResponseWithIframeEmbedding
+                  $ref: '#/components/examples/TrustedOriginResponseWithIframeEmbedding'
                 TrustedOriginResponseWithIframeEmbeddingSignIn:
-                  $ref: >-
-                    #/components/examples/TrustedOriginResponseWithIframeEmbeddingSignIn
+                  $ref: '#/components/examples/TrustedOriginResponseWithIframeEmbeddingSignIn'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '404':
@@ -151,6 +146,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathTrustedOriginId'
     put:
       summary: Replace a trusted origin
       description: Replaces a trusted origin
@@ -178,8 +175,7 @@ paths:
                 TrustedOriginPutResponse:
                   $ref: '#/components/examples/TrustedOriginPutResponse'
                 TrustedOriginPutResponseWithIFrameEmbedding:
-                  $ref: >-
-                    #/components/examples/TrustedOriginPutResponseWithIframeEmbedding
+                  $ref: '#/components/examples/TrustedOriginPutResponseWithIframeEmbedding'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -197,6 +193,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathTrustedOriginId'
     delete:
       summary: Delete a trusted origin
       description: Deletes a trusted origin
@@ -220,8 +218,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathTrustedOriginId'
+      parameters:
+        - $ref: '#/components/parameters/pathTrustedOriginId'
   /api/v1/trustedOrigins/{trustedOriginId}/lifecycle/activate:
     post:
       summary: Activate a trusted origin
@@ -252,8 +250,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathTrustedOriginId'
+      parameters:
+        - $ref: '#/components/parameters/pathTrustedOriginId'
   /api/v1/trustedOrigins/{trustedOriginId}/lifecycle/deactivate:
     post:
       summary: Deactivate a trusted origin
@@ -284,8 +282,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathTrustedOriginId'
+      parameters:
+        - $ref: '#/components/parameters/pathTrustedOriginId'
 components:
   schemas:
     TrustedOrigin:
@@ -336,9 +334,7 @@ components:
       type: string
     TrustedOriginOrigin:
       maximum: 255
-      description: >-
-        Unique origin URL for the trusted origin. The supported schemes for this
-        attribute are HTTP, HTTPS, FTP, Ionic 2, and Capacitor.
+      description: Unique origin URL for the trusted origin. The supported schemes for this attribute are HTTP, HTTPS, FTP, Ionic 2, and Capacitor.
       type: string
     TrustedOriginScopes:
       maximum: 3
@@ -352,14 +348,16 @@ components:
         - ACTIVE
         - INACTIVE
     LinksSelfAndLifecycle:
-      allOf:
-        - $ref: '#/components/schemas/LinksSelf'
-        - type: object
-          properties:
-            activate:
-              $ref: '#/components/schemas/HrefObjectActivateLink'
-            deactivate:
-              $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HrefObjectSelfLink'
+        activate:
+          $ref: '#/components/schemas/HrefObjectActivateLink'
+        deactivate:
+          $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      readOnly: true
     Error:
       title: Error
       type: object
@@ -373,18 +371,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     TrustedOriginScope:
       type: object
       properties:
@@ -396,52 +389,14 @@ components:
         type:
           $ref: '#/components/schemas/TrustedOriginScopeType'
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
           $ref: '#/components/schemas/HrefObjectSelfLink'
       readOnly: true
     HrefObjectActivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to activate the resource
-    HrefObjectDeactivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to deactivate the resource
-    ErrorCause:
-      type: object
-      properties:
-        errorSummary:
-          type: string
-    IframeEmbedScopeAllowedApps:
-      type: string
-      enum:
-        - OKTA_ENDUSER
-    TrustedOriginScopeType:
-      description: >
-        The scope type. Supported values: When you use `IFRAME_EMBED` as the
-        scope type, leave the `allowedOktaApps` property empty to allow iFrame
-        embedding of only Okta sign-in pages. Include `OKTA_ENDUSER` as a value
-        for the `allowedOktaApps` property to allow iFrame embedding of both
-        Okta sign-in pages and the Okta End-User Dashboard.
-      type: string
-      enum:
-        - CORS
-        - IFRAME_EMBED
-        - REDIRECT
-    HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -458,15 +413,109 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to activate the resource
+    HrefObjectDeactivateLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to deactivate the resource
+    ErrorCause:
+      type: object
+      properties:
+        errorSummary:
+          type: string
+    IframeEmbedScopeAllowedApps:
+      type: string
+      enum:
+        - OKTA_ENDUSER
+    TrustedOriginScopeType:
+      description: |
+        The scope type. Supported values: When you use `IFRAME_EMBED` as the scope type, leave the `allowedOktaApps` property empty to allow iFrame embedding of only Okta sign-in pages. Include `OKTA_ENDUSER` as a value for the `allowedOktaApps` property to allow iFrame embedding of both Okta sign-in pages and the Okta End-User Dashboard.
+      type: string
+      enum:
+        - CORS
+        - IFRAME_EMBED
+        - REDIRECT
+    HrefObjectSelfLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -485,6 +534,13 @@ components:
         - GET
         - POST
         - PUT
+    ListTrustedOriginsResponse:
+      type: object
+      properties:
+        trusted_origins:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrustedOrigin'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -548,16 +604,14 @@ components:
           lastedUpdatedBy: 00ut5t92p6IEOi4bu0g3
           _links:
             self:
-              href: >-
-                https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
+              href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -570,13 +624,9 @@ components:
           - type: CORS
           - type: REDIRECT
     TrustedOriginBodyWithIframeEmbedding:
-      summary: >-
-        Trusted origin request body with iFrame embedding (Okta End-User
-        Dashboard and Okta sign-in page)
-      description: >
-        Creates a new trusted origin for iFrame embedding of an Okta resource
-        within that origin. In this example, the type of Okta resource is both
-        the Okta End-User Dashboard and the Okta sign-in page.
+      summary: Trusted origin request body with iFrame embedding (Okta End-User Dashboard and Okta sign-in page)
+      description: |
+        Creates a new trusted origin for iFrame embedding of an Okta resource within that origin. In this example, the type of Okta resource is both the Okta End-User Dashboard and the Okta sign-in page.
       value:
         name: New trusted origin
         origin: http://example.com
@@ -586,10 +636,8 @@ components:
               - OKTA_ENDUSER
     TrustedOriginBodyWithIframeEmbeddingSignIn:
       summary: Trusted origin request body with iFrame embedding (Okta sign-in page)
-      description: >
-        Creates a new trusted origin for iFrame embedding of an Okta resource
-        within that origin. In this example, the Okta resource is the Okta
-        sign-in page.
+      description: |
+        Creates a new trusted origin for iFrame embedding of an Okta resource within that origin. In this example, the Okta resource is the Okta sign-in page.
       value:
         name: New trusted origin
         origin: http://example.com
@@ -612,23 +660,19 @@ components:
         lastedUpdatedBy: 00ut5t92p6IEOi4bu0g3
         _links:
           self:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
             hints:
               allow:
                 - GET
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
     TrustedOriginResponseWithIframeEmbedding:
-      summary: >-
-        Trusted origin response with iFrame embedding (End-User Dashboard and
-        Okta sign-in page)
+      summary: Trusted origin response with iFrame embedding (End-User Dashboard and Okta sign-in page)
       value:
         id: tos10hu7rkbtrFt1M0g4
         name: New trusted origin
@@ -644,16 +688,14 @@ components:
         lastedUpdatedBy: 00ut5t92p6IEOi4bu0g3
         _links:
           self:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
             hints:
               allow:
                 - GET
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -673,16 +715,14 @@ components:
         lastedUpdatedBy: 00ut5t92p6IEOi4bu0g3
         _links:
           self:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
             hints:
               allow:
                 - GET
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -703,16 +743,14 @@ components:
           lastUpdatedBy: 00ut5t92p6IEOi4bu0g3
           _links:
             self:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -734,16 +772,14 @@ components:
           lastUpdatedBy: 00ut5t92p6IEOi4bu0g3
           _links:
             self:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -764,16 +800,14 @@ components:
           lastUpdatedBy: 00ut5t92p6IEOi4bu0g3
           _links:
             self:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -795,16 +829,14 @@ components:
           lastUpdatedBy: 00ut5t92p6IEOi4bu0g3
           _links:
             self:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
+              href: https://${yourOktaDomain}/api/v1/trustedOrigins/tosue7JvguwJ7U6kz0g3/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -824,14 +856,12 @@ components:
         lastedUpdatedBy: 00ut5t92p6IEOi4bu0g3
         _links:
           activate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/activate
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4/lifecycle/activate
             hints:
               allow:
                 - POST
           self:
-            href: >-
-              https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
+            href: https://{yourOktaDomain}/api/v1/trustedOrigins/tos10hu7rkbtrFt1M0g4
             hints:
               allow:
                 - GET
@@ -874,7 +904,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

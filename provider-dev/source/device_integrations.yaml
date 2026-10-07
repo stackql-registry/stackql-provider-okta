@@ -2,19 +2,16 @@ openapi: 3.0.3
 info:
   title: device_integrations API
   description: okta device_integrations API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/device-integrations:
     get:
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: LIMITED_GA
         isGenerallyAvailable: false
         SKUs: []
       summary: List all device integrations
-      description: >-
-        Lists all device integrations for your org. Examples include Device
-        Posture Provider, Windows Security Center, Chrome Device Trust, OSQuery,
-        and Android Device Trust.
+      description: Lists all device integrations for your org. Examples include Device Posture Provider, Windows Security Center, Chrome Device Trust, OSQuery, and Android Device Trust.
       operationId: listDeviceIntegrations
       responses:
         '200':
@@ -22,9 +19,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/DeviceIntegrations'
+                $ref: '#/components/schemas/ListDeviceIntegrationsResponse'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -37,10 +32,15 @@ paths:
             - okta.deviceIntegrations.read
       tags:
         - DeviceIntegrations
+      x-stackql-bare-array-wrap:
+        wrapperKey: device_integrations
+        wrapperName: ListDeviceIntegrationsResponse
+        mediaType: application/json
+        scalar: false
   /api/v1/device-integrations/{deviceIntegrationId}:
     get:
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: LIMITED_GA
         isGenerallyAvailable: false
         SKUs: []
       summary: Retrieve a device integration
@@ -57,20 +57,15 @@ paths:
                 CrowdStrike:
                   $ref: '#/components/examples/DeviceIntegrationCrowdStrikeResponse'
                 WindowsSecurityCenter:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationWindowsSecurityCenterResponse
+                  $ref: '#/components/examples/DeviceIntegrationWindowsSecurityCenterResponse'
                 ChromeDeviceTrustConnector:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationChromeDeviceTrustConnectorResponse
+                  $ref: '#/components/examples/DeviceIntegrationChromeDeviceTrustConnectorResponse'
                 DevicePostureIdP:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationDevicePostureIdPResponse
+                  $ref: '#/components/examples/DeviceIntegrationDevicePostureIdPResponse'
                 DevicePostureCheck:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationDevicePostureCheckResponse
+                  $ref: '#/components/examples/DeviceIntegrationDevicePostureCheckResponse'
                 AndroidZeroTrust:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationAndroidZeroTrustResponse
+                  $ref: '#/components/examples/DeviceIntegrationAndroidZeroTrustResponse'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -83,18 +78,16 @@ paths:
             - okta.deviceIntegrations.read
       tags:
         - DeviceIntegrations
-    parameters:
-      - $ref: '#/components/parameters/pathDeviceIntegrationId'
+      parameters:
+        - $ref: '#/components/parameters/pathDeviceIntegrationId'
   /api/v1/device-integrations/{deviceIntegrationId}/lifecycle/activate:
     post:
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: LIMITED_GA
         isGenerallyAvailable: false
         SKUs: []
       summary: Activate a device integration
-      description: >-
-        Activates a device integration and populates the related configurations
-        by `deviceIntegrationId`
+      description: Activates a device integration and populates the related configurations by `deviceIntegrationId`
       operationId: activateDeviceIntegration
       responses:
         '200':
@@ -105,17 +98,13 @@ paths:
                 $ref: '#/components/schemas/DeviceIntegrations'
               examples:
                 ChromeDeviceTrustConnector:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationChromeDeviceTrustConnectorResponse
+                  $ref: '#/components/examples/DeviceIntegrationChromeDeviceTrustConnectorResponse'
                 DevicePostureIdP:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationDevicePostureIdPResponse
+                  $ref: '#/components/examples/DeviceIntegrationDevicePostureIdPResponse'
                 DevicePostureCheck:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationDevicePostureCheckResponse
+                  $ref: '#/components/examples/DeviceIntegrationDevicePostureCheckResponse'
                 AndroidZeroTrust:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationAndroidZeroTrustResponse
+                  $ref: '#/components/examples/DeviceIntegrationAndroidZeroTrustResponse'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -130,12 +119,12 @@ paths:
             - okta.deviceIntegrations.manage
       tags:
         - DeviceIntegrations
-    parameters:
-      - $ref: '#/components/parameters/pathDeviceIntegrationId'
+      parameters:
+        - $ref: '#/components/parameters/pathDeviceIntegrationId'
   /api/v1/device-integrations/{deviceIntegrationId}/lifecycle/deactivate:
     post:
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: LIMITED_GA
         isGenerallyAvailable: false
         SKUs: []
       summary: Deactivate a device integration
@@ -152,8 +141,7 @@ paths:
                 CrowdStrike:
                   $ref: '#/components/examples/DeviceIntegrationCrowdStrikeResponse'
                 WindowsSecurityCenter:
-                  $ref: >-
-                    #/components/examples/DeviceIntegrationWindowsSecurityCenterResponse
+                  $ref: '#/components/examples/DeviceIntegrationWindowsSecurityCenterResponse'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -168,8 +156,8 @@ paths:
             - okta.deviceIntegrations.manage
       tags:
         - DeviceIntegrations
-    parameters:
-      - $ref: '#/components/parameters/pathDeviceIntegrationId'
+      parameters:
+        - $ref: '#/components/parameters/pathDeviceIntegrationId'
 components:
   schemas:
     DeviceIntegrations:
@@ -195,50 +183,30 @@ components:
           $ref: '#/components/schemas/LinksSelfAndLifecycle'
     DeviceIntegrationsMetadata:
       description: The metadata of the device integration
-      oneOf:
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - CHROME
-            serviceAccountName:
-              type: string
-            serviceAccountEmail:
-              type: string
-          required:
-            - type
-            - serviceAccountName
-            - serviceAccountEmail
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - WORKSPACE_ONE
-            provider:
-              type: string
-            enrollmentUrl:
-              type: string
-            idpId:
-              type: string
-          required:
-            - type
-            - provider
-            - enrollmentUrl
-            - idpId
-        - type: object
-          properties:
-            type:
-              type: string
-              enum:
-                - DEVICE_IDP
-            idpId:
-              type: string
-          required:
-            - type
-            - idpId
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - CHROME
+        serviceAccountName:
+          type: string
+        serviceAccountEmail:
+          type: string
+        provider:
+          type: string
+        enrollmentUrl:
+          type: string
+        idpId:
+          type: string
+      required:
+        - type
+        - serviceAccountName
+        - serviceAccountEmail
+        - provider
+        - enrollmentUrl
+        - idpId
     DeviceIntegrationsName:
       description: The namespace of the device integration
       type: string
@@ -265,14 +233,16 @@ components:
         - ACTIVE
         - DEACTIVATED
     LinksSelfAndLifecycle:
-      allOf:
-        - $ref: '#/components/schemas/LinksSelf'
-        - type: object
-          properties:
-            activate:
-              $ref: '#/components/schemas/HrefObjectActivateLink'
-            deactivate:
-              $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HrefObjectSelfLink'
+        activate:
+          $ref: '#/components/schemas/HrefObjectActivateLink'
+        deactivate:
+          $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      readOnly: true
     Error:
       title: Error
       type: object
@@ -286,49 +256,22 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
           $ref: '#/components/schemas/HrefObjectSelfLink'
       readOnly: true
     HrefObjectActivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to activate the resource
-    HrefObjectDeactivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to deactivate the resource
-    ErrorCause:
-      type: object
-      properties:
-        errorSummary:
-          type: string
-    HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -345,15 +288,97 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to activate the resource
+    HrefObjectDeactivateLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to deactivate the resource
+    ErrorCause:
+      type: object
+      properties:
+        errorSummary:
+          type: string
+    HrefObjectSelfLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -372,6 +397,13 @@ components:
         - GET
         - POST
         - PUT
+    ListDeviceIntegrationsResponse:
+      type: object
+      properties:
+        device_integrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeviceIntegrations'
   responses:
     ErrorInvalidToken401:
       description: Unauthorized
@@ -431,14 +463,12 @@ components:
           idpId: 0oa2owlGX5l74kjr60g4
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/dindyfy1f7Pv1eoVF0g4
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/dindyfy1f7Pv1eoVF0g4
             hints:
               allow:
                 - GET
           activate:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/dindyfy1f7Pv1eoVF0g4/lifecycle/activate
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/dindyfy1f7Pv1eoVF0g4/lifecycle/activate
             hints:
               allow:
                 - POST
@@ -452,14 +482,12 @@ components:
         platform: WINDOWS
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/dinjihtR8qWZZF6qe0g4
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/dinjihtR8qWZZF6qe0g4
             hints:
               allow:
                 - GET
           activate:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/dinjihtR8qWZZF6qe0g4/lifecycle/activate
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/dinjihtR8qWZZF6qe0g4/lifecycle/activate
             hints:
               allow:
                 - POST
@@ -474,18 +502,15 @@ components:
         metadata:
           type: CHROME
           serviceAccountName: okta-gci-00o158oxTmBNgrgyM0g4
-          serviceAccountEmail: >-
-            okta-gci-00o158oxTmBNgrgyM0g4@vocal-invention-346218.iam.gserviceaccount.com
+          serviceAccountEmail: okta-gci-00o158oxTmBNgrgyM0g4@vocal-invention-346218.iam.gserviceaccount.com
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/din15gaNrC7BvlBgx0g4
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/din15gaNrC7BvlBgx0g4
             hints:
               allow:
                 - GET
           deactivate:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/din15gaNrC7BvlBgx0g4/lifecycle/deactivate
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/din15gaNrC7BvlBgx0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -502,14 +527,12 @@ components:
           idpId: 0oa2owlGX5l74kjr60g4
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/dindyfzlaerjWVdqt0g4
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/dindyfzlaerjWVdqt0g4
             hints:
               allow:
                 - GET
           deactivate:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/dindyfzlaerjWVdqt0g4/lifecycle/deactivate
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/dindyfzlaerjWVdqt0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -523,14 +546,12 @@ components:
         platform: MACOS
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9vBwN1c5
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9vBwN1c5
             hints:
               allow:
                 - GET
           deactivate:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9vBwN1c5/lifecycle/deactivate
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9vBwN1c5/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -544,14 +565,12 @@ components:
         platform: ANDROID
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9kjr60g4
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9kjr60g4
             hints:
               allow:
                 - GET
           deactivate:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9kjr60g4/lifecycle/deactivate
+            href: https://your-subdomain.okta.com/api/v1/device-integrations/din9lzd33mvS9kjr60g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -592,7 +611,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

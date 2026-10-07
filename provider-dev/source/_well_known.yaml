@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: _well_known API
   description: okta _well_known API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /.well-known/app-authenticator-configuration:
     get:
@@ -11,9 +11,7 @@ paths:
         isGenerallyAvailable: false
         SKUs: []
       summary: Retrieve the well-known app authenticator configuration
-      description: >-
-        Retrieves the well-known app authenticator configuration. Includes an
-        app authenticator's settings, supported methods, and other details.
+      description: Retrieves the well-known app authenticator configuration. Includes an app authenticator's settings, supported methods, and other details.
       operationId: getWellKnownAppAuthenticatorConfiguration
       parameters:
         - name: oauthClientId
@@ -28,13 +26,10 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/WellKnownAppAuthenticatorConfiguration'
+                $ref: '#/components/schemas/GetWellKnownAppAuthenticatorConfigurationResponse'
               examples:
                 AuthenticatorConfiguration:
-                  $ref: >-
-                    #/components/examples/WellKnownAppAuthenticatorConfigurationCustomApp
+                  $ref: '#/components/examples/WellKnownAppAuthenticatorConfigurationCustomApp'
         '400':
           $ref: '#/components/responses/ErrorMissingRequiredParameter400'
         '429':
@@ -42,16 +37,18 @@ paths:
       security: []
       tags:
         - Authenticator
+      x-stackql-bare-array-wrap:
+        wrapperKey: well_known_app_authenticator_configuration
+        wrapperName: GetWellKnownAppAuthenticatorConfigurationResponse
+        mediaType: application/json
+        scalar: false
   /.well-known/apple-app-site-association:
     get:
       summary: Retrieve the customized apple-app-site-association URI content
-      description: >-
+      description: |-
         Retrieves the content of the `apple-app-site-assocation` well-known URI
 
-
-        > **Note:**  When serving this URI, Okta adds `authsrv` content to
-        provide a seamless experience for Okta Verify. You can't modify the
-        content in the `authsrv` object.
+        > **Note:**  When serving this URI, Okta adds `authsrv` content to provide a seamless experience for Okta Verify. You can't modify the content in the `authsrv` object.
       operationId: getAppleAppSiteAssociationWellKnownURI
       responses:
         '200':
@@ -69,7 +66,7 @@ paths:
       tags:
         - AssociatedDomainCustomizations
     x-okta-lifecycle:
-      lifecycle: EA
+      lifecycle: LIMITED_GA
       isGenerallyAvailable: false
       SKUs:
         - Okta Identity Engine
@@ -84,7 +81,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicAssetLinksWellKnownURI'
+                $ref: '#/components/schemas/GetAssetLinksWellKnownURIResponse'
               examples:
                 Response:
                   $ref: '#/components/examples/PublicAssetLinksWellKnownURIResponse'
@@ -95,17 +92,21 @@ paths:
       security: []
       tags:
         - AssociatedDomainCustomizations
+      x-stackql-bare-array-wrap:
+        wrapperKey: asset_links_well_known_uri
+        wrapperName: GetAssetLinksWellKnownURIResponse
+        mediaType: application/json
+        scalar: true
+        columnName: asset_links_well_known_uri
     x-okta-lifecycle:
-      lifecycle: EA
+      lifecycle: LIMITED_GA
       isGenerallyAvailable: false
       SKUs:
         - Okta Identity Engine
   /.well-known/okta-organization:
     get:
       summary: Retrieve the Org metadata
-      description: >-
-        Retrieves the org metadata, which includes the org ID, configured custom
-        domains, and authentication pipeline
+      description: Retrieves the org metadata, which includes the org ID, configured custom domains, and authentication pipeline
       operationId: getWellknownOrgMetadata
       responses:
         '200':
@@ -116,8 +117,7 @@ paths:
                 $ref: '#/components/schemas/WellKnownOrgMetadata'
               examples:
                 Identity Engine org with a custom domain:
-                  $ref: >-
-                    #/components/examples/WellKnownOrgMetadataResponseCustomUrlOie
+                  $ref: '#/components/examples/WellKnownOrgMetadataResponseCustomUrlOie'
                 Classic Engine org:
                   $ref: '#/components/examples/WellKnownOrgMetadataResponseClassic'
         '429':
@@ -132,11 +132,7 @@ paths:
   /.well-known/ssf-configuration:
     get:
       summary: Retrieve the SSF transmitter metadata
-      description: >-
-        Retrieves SSF Transmitter configuration metadata. This includes all
-        supported endpoints and key information about certain properties of the
-        Okta org as the transmitter, such as `delivery_methods_supported`,
-        `issuer`, and `jwks_uri`.
+      description: Retrieves SSF transmitter configuration metadata. This includes all supported endpoints and key information about certain properties of the Okta org as the transmitter, such as `delivery_methods_supported`, `issuer`, and `jwks_uri`.
       operationId: getWellknownSsfMetadata
       responses:
         '200':
@@ -187,7 +183,7 @@ paths:
       tags:
         - AssociatedDomainCustomizations
     x-okta-lifecycle:
-      lifecycle: EA
+      lifecycle: LIMITED_GA
       isGenerallyAvailable: false
       SKUs:
         - Okta Identity Engine
@@ -233,15 +229,18 @@ components:
           enum:
             - app
     PublicAppleAppSiteWellKnownURI:
-      description: The well-known URI content in JSON object format
-      type: object
+      x-okta-ignore-redocly-rules-for-sdk: true
+      description: The well-known URI content in JSON object format (opaque JSON object)
+      type: string
     PublicAssetLinksWellKnownURI:
+      x-okta-ignore-redocly-rules-for-sdk: true
       description: The well-known URI content in a JSON array of objects format
+      items:
+        type: string
+        description: (opaque JSON object)
       type: array
-      properties:
-        items:
-          type: object
     WellKnownOrgMetadata:
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         id:
@@ -251,53 +250,86 @@ components:
           $ref: '#/components/schemas/PipelineType'
         _links:
           type: object
-          description: >-
-            Specifies link relations (see [Web
-            Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for this
-            object using the [JSON Hypertext Application
-            Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-            specification
+          description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for this object using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification
           readOnly: true
           properties:
             alternate:
-              allOf:
-                - $ref: '#/components/schemas/HrefObject'
-                - description: Link to the custom domain org URL
+              x-okta-ignore-redocly-rules-for-sdk: true
+              title: Link Object
+              additionalProperties: true
+              type: object
+              properties:
+                hints:
+                  $ref: '#/components/schemas/HrefHints'
+                  readOnly: true
+                href:
+                  type: string
+                  description: Link URI
+                name:
+                  type: string
+                  description: Link name
+                  readOnly: true
+                templated:
+                  type: boolean
+                  description: Indicates whether the link object's `href` property is a URI template.
+                  readOnly: true
+                type:
+                  type: string
+                  description: The media type of the link. If omitted, it is implicitly `application/json`.
+                  readOnly: true
+              required:
+                - href
+              description: Link to the custom domain org URL
             organization:
-              allOf:
-                - $ref: '#/components/schemas/HrefObject'
-                - description: Link to the org URL
+              x-okta-ignore-redocly-rules-for-sdk: true
+              title: Link Object
+              additionalProperties: true
+              type: object
+              properties:
+                hints:
+                  $ref: '#/components/schemas/HrefHints'
+                  readOnly: true
+                href:
+                  type: string
+                  description: Link URI
+                name:
+                  type: string
+                  description: Link name
+                  readOnly: true
+                templated:
+                  type: boolean
+                  description: Indicates whether the link object's `href` property is a URI template.
+                  readOnly: true
+                type:
+                  type: string
+                  description: The media type of the link. If omitted, it is implicitly `application/json`.
+                  readOnly: true
+              required:
+                - href
+              description: Link to the org URL
     WellKnownSSFMetadata:
-      title: Shared Signals Framework Metadata
-      description: >-
-        Metadata about Okta as a transmitter and relevant information for
-        configuration.
+      title: Shared signals framework metadata
+      description: Metadata about Okta as a transmitter and relevant information for configuration.
       type: object
       properties:
         authorization_schemes:
           type: array
-          description: >-
-            An array of JSON objects that specify the authorization scheme
-            properties supported by the transmitter
+          description: An array of JSON objects that specify the authorization scheme properties supported by the transmitter
           items:
             $ref: '#/components/schemas/WellKnownSSFMetadataSpecUrn'
         configuration_endpoint:
           type: string
           format: uri
-          description: The URL of the SSF Stream configuration endpoint
+          description: The URL of the SSF stream configuration endpoint
           example: https://{yourOktaDomain}/api/v1/ssf/stream
         default_subjects:
           type: string
-          description: >-
-            A string that indicates the default behavior of newly created
-            streams
+          description: A string that indicates the default behavior of newly created streams
           enum:
             - ALL
             - NONE
           x-enumDescriptions:
-            ALL: >-
-              Indicates that any subjects that are appropriate for the stream
-              are added to the stream by default.
+            ALL: Indicates that any subjects that are appropriate for the stream are added to the stream by default.
             NONE: Indicates that no subjects are added by default
         delivery_methods_supported:
           type: array
@@ -310,31 +342,26 @@ components:
             - urn:ietf:rfc:8935
         issuer:
           type: string
-          description: >-
-            The issuer used in Security Event Tokens. This value is set as `iss`
-            in the claim.
+          description: The issuer used in security event tokens. This value is set as `iss` in the claim.
           example: https://{yourOktaDomain}
         jwks_uri:
           type: string
-          description: >-
-            The URL of the JSON Web Key Set (JWKS) that contains the signing
-            keys for validating the signatures of Security Event Tokens (SETs)
+          description: The URL of the JSON Web Key Set (JWKS) that contains the signing keys for validating the signatures of security event tokens (SETs)
           format: uri
           example: https://{yourOktaDomain}/oauth2/v1/keys
         spec_version:
           type: string
-          description: >-
-            The version identifying the implementer's draft or final
-            specification implemented by the transmitter
+          description: The version identifying the implementer's draft or final specification implemented by the transmitter
           example: 1_0-ID3
         verification_endpoint:
           type: string
           format: uri
-          description: The URL of the SSF Stream verification endpoint
+          description: The URL of the SSF stream verification endpoint
           example: https://{yourOktaDomain}/api/v1/ssf/stream/verification
     PublicWebauthnSiteWellKnownURI:
-      description: The well-known URI content in JSON object format
-      type: object
+      x-okta-ignore-redocly-rules-for-sdk: true
+      description: The well-known URI content in JSON object format (opaque JSON object)
+      type: string
     AuthenticatorKeyEnum:
       description: A human-readable string that identifies the authenticator
       type: string
@@ -362,6 +389,7 @@ components:
         - PREFERRED
         - REQUIRED
     SupportedMethods:
+      x-okta-ignore-redocly-rules-for-sdk: true
       description: The supported methods of an authenticator
       type: object
       properties:
@@ -381,8 +409,11 @@ components:
               items:
                 $ref: '#/components/schemas/AuthenticatorMethodTransactionType'
         status:
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
           description: The status of the authenticator method
-          $ref: '#/components/schemas/LifecycleStatus'
         type:
           type: string
           description: The type of authenticator method
@@ -401,18 +432,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     PipelineType:
       description: The Okta authentication pipeline of the org
       type: string
@@ -420,11 +446,10 @@ components:
         - idx
         - v1
       x-enumDescriptions:
-        idx: >-
-          [Identity
-          Engine](https://help.okta.com/okta_help.htm?type=oie&id=ext-get-started-oie)
+        idx: '[Identity Engine](https://help.okta.com/okta_help.htm?type=oie&id=ext-get-started-oie)'
         v1: '[Classic Engine](https://help.okta.com/en-us/content/index-admin.htm)'
     HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -441,15 +466,11 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -502,6 +523,23 @@ components:
         - GET
         - POST
         - PUT
+    GetWellKnownAppAuthenticatorConfigurationResponse:
+      type: object
+      properties:
+        well_known_app_authenticator_configuration:
+          type: array
+          items:
+            $ref: '#/components/schemas/WellKnownAppAuthenticatorConfiguration'
+    GetAssetLinksWellKnownURIResponse:
+      type: object
+      properties:
+        asset_links_well_known_uri:
+          type: array
+          items:
+            type: object
+            properties:
+              asset_links_well_known_uri:
+                type: string
   responses:
     ErrorMissingRequiredParameter400:
       description: Bad Request
@@ -550,6 +588,7 @@ components:
               $ref: '#/components/examples/ErrorAccessDenied'
   examples:
     WellKnownAppAuthenticatorConfigurationCustomApp:
+      summary: Retrieve app authenticator configuration
       value:
         - authenticatorId: aut22f6xzargnJZYE3l7
           orgId: 00o1vhf34q20MfCFC3l7
@@ -665,7 +704,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

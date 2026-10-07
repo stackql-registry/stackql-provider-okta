@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: okta_personal_settings API
   description: okta okta_personal_settings API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /okta-personal-settings/api/v1/edit-feature:
     put:
@@ -73,9 +73,7 @@ paths:
         isGenerallyAvailable: true
     put:
       summary: Replace the blocked email domains
-      description: >-
-        Replaces the list of blocked email domains which are excluded from app
-        migration
+      description: Replaces the list of blocked email domains which are excluded from app migration
       operationId: replaceBlockedEmailDomains
       requestBody:
         content:
@@ -110,9 +108,7 @@ paths:
 components:
   schemas:
     OktaPersonalAdminFeatureSettings:
-      description: >-
-        Defines a list of Okta Personal settings that can be enabled or disabled
-        for the org
+      description: Defines a list of Okta Personal settings that can be enabled or disabled for the org
       type: object
       properties:
         enableEnduserEntryPoints:
@@ -120,18 +116,17 @@ components:
           description: Allow entry points for an Okta Personal account in a Workforce org
         enableExportApps:
           type: boolean
-          description: >-
-            Allow users to migrate apps from a Workforce account to an Okta
-            Personal account
+          description: Allow users to migrate apps from a Workforce account to an Okta Personal account
     PersonalAppsBlockList:
-      description: >-
-        Defines a list of email domains with a subset of the properties for each
-        domain
+      x-okta-ignore-redocly-rules-for-sdk: true
+      description: Defines a list of email domains with a subset of the properties for each domain
       type: object
       properties:
         domains:
-          type: array
           description: List of blocked email domains
+          type: array
+          items:
+            type: string
     Error:
       title: Error
       type: object
@@ -145,18 +140,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
@@ -171,9 +161,7 @@ components:
             Unauthorized:
               value:
                 errorCode: E0000015
-                errorSummary: >-
-                  You do not have permission to access the feature you are
-                  requesting
+                errorSummary: You do not have permission to access the feature you are requesting
                 errorLink: E0000015
                 errorId: oaeStOuPPxDRUm3PJhf-tL7bQ
                 errorCauses: []
@@ -245,7 +233,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

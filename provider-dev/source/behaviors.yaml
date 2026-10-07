@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: behaviors API
   description: okta behaviors API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/behaviors:
     get:
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BehaviorRule'
+                $ref: '#/components/schemas/ListBehaviorDetectionRulesResponse'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '429':
@@ -31,6 +29,11 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: behavior_detection_rules
+        wrapperName: ListBehaviorDetectionRulesResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a behavior detection rule
       description: Creates a new behavior detection rule
@@ -114,6 +117,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathBehaviorId'
     put:
       summary: Replace a behavior detection rule
       description: Replaces a Behavior Detection Rule by `behaviorId`
@@ -169,6 +174,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathBehaviorId'
     delete:
       summary: Delete a behavior detection rule
       description: Deletes a Behavior Detection Rule by `behaviorId`
@@ -198,8 +205,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathBehaviorId'
+      parameters:
+        - $ref: '#/components/parameters/pathBehaviorId'
   /api/v1/behaviors/{behaviorId}/lifecycle/activate:
     post:
       summary: Activate a behavior detection rule
@@ -230,8 +237,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathBehaviorId'
+      parameters:
+        - $ref: '#/components/parameters/pathBehaviorId'
   /api/v1/behaviors/{behaviorId}/lifecycle/deactivate:
     post:
       summary: Deactivate a behavior detection rule
@@ -262,8 +269,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathBehaviorId'
+      parameters:
+        - $ref: '#/components/parameters/pathBehaviorId'
 components:
   schemas:
     BehaviorRule:
@@ -302,6 +309,7 @@ components:
           ANOMALOUS_IP: '#/components/schemas/BehaviorRuleAnomalousIP'
           ANOMALOUS_DEVICE: '#/components/schemas/BehaviorRuleAnomalousDevice'
           VELOCITY: '#/components/schemas/BehaviorRuleVelocity'
+          ANOMALOUS_ASN: '#/components/schemas/BehaviorRuleASN'
     Error:
       title: Error
       type: object
@@ -315,18 +323,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     LifecycleStatus:
       type: string
       enum:
@@ -339,14 +342,9 @@ components:
         - ANOMALOUS_IP
         - ANOMALOUS_LOCATION
         - VELOCITY
+        - ANOMALOUS_ASN
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
@@ -358,10 +356,7 @@ components:
         errorSummary:
           type: string
     HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -378,15 +373,38 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -405,6 +423,13 @@ components:
         - GET
         - POST
         - PUT
+    ListBehaviorDetectionRulesResponse:
+      type: object
+      properties:
+        behavior_detection_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/BehaviorRule'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -503,7 +528,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

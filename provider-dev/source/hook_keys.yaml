@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: hook_keys API
   description: okta hook_keys API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/hook-keys:
     get:
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/HookKey'
+                $ref: '#/components/schemas/ListHookKeysResponse'
               examples:
                 ResponseExample:
                   $ref: '#/components/examples/ListAllKeysResponse'
@@ -34,27 +32,26 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: hook_keys
+        wrapperName: ListHookKeysResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a key
-      description: >-
-        Creates a key for use with other parts of the application, such as
-        inline hooks
+      description: |-
+        Creates a key for use with other parts of the application, such as inline hooks
 
+        > **Note:**  Use the key name to access this key for inline hook operations.
 
-        > **Note:**  Use the key name to access this key for inline hook
-        operations.
+        The total number of keys that you can create in an Okta org is limited to 50.
 
-
-        The total number of keys that you can create in an Okta org is limited
-        to 50.
-
-         The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the 
-         key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when 
-         invoking other CRUD operations. The `keyId` provided in the response is the alias of the public key that you can use to get 
+         The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the
+         key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when
+         invoking other CRUD operations. The `keyId` provided in the response is the alias of the public key that you can use to get
          details of the public key data in a separate call.
 
-        > **Note:** The keyId is the alias of the public key that you can use to
-        retrieve the public key.
+        > **Note:** The keyId is the alias of the public key that you can use to retrieve the public key.
       operationId: createHookKey
       x-codegen-request-body-name: keyRequest
       requestBody:
@@ -121,18 +118,15 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathPublicKeyId'
+      parameters:
+        - $ref: '#/components/parameters/pathPublicKeyId'
   /api/v1/hook-keys/{id}:
     get:
       summary: Retrieve a key by ID
-      description: >-
+      description: |-
         Retrieves the public portion of the Key object using the `id` parameter
 
-
-        >**Note:** The `?expand=publickey` query parameter optionally returns
-        the full object including the details of the public key in the response
-        body's `_embedded` property.
+        >**Note:** The `?expand=publickey` query parameter optionally returns the full object including the details of the public key in the response body's `_embedded` property.
       operationId: getHookKey
       parameters:
         - name: id
@@ -167,15 +161,12 @@ paths:
         isGenerallyAvailable: true
     put:
       summary: Replace a key
-      description: >-
+      description: |-
         Replaces a key by `id`
-
 
         This request replaces existing properties after passing validation.
 
-
-        > **Note:** The only parameter that you can update is the name of the
-        key, which must be unique at all times.
+        > **Note:** The only parameter that you can update is the name of the key, which must be unique at all times.
       operationId: replaceHookKey
       x-codegen-request-body-name: keyRequest
       requestBody:
@@ -211,14 +202,14 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathHookKeyId'
     delete:
       summary: Delete a key
-      description: >
+      description: |
         Deletes a key by `id`. After being deleted, the key is unrecoverable.
 
-
-        As a safety precaution, only keys that aren't being used are eligible
-        for deletion.
+        As a safety precaution, only keys that aren't being used are eligible for deletion.
       operationId: deleteHookKey
       responses:
         '204':
@@ -239,19 +230,16 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathHookKeyId'
+      parameters:
+        - $ref: '#/components/parameters/pathHookKeyId'
 components:
   schemas:
     HookKey:
       title: HookKeyInstance
-      description: >-
-        The `id` property in the response as `id` serves as the unique ID for
-        the key, which you can specify when invoking other CRUD operations. 
+      description: |-
+        The `id` property in the response as `id` serves as the unique ID for the key, which you can specify when invoking other CRUD operations. 
 
-
-        The `keyId` provided in the response is the alias of the public key that
-        you can use to get details of the public key data in a separate call.
+        The `keyId` provided in the response is the alias of the public key that you can use to get details of the public key data in a separate call.
       type: object
       properties:
         created:
@@ -343,9 +331,7 @@ components:
         _embedded:
           $ref: '#/components/schemas/_embedded'
     _embedded:
-      description: >-
-        The Public Key Details are defined in the `_embedded` property of the
-        Key object.
+      description: The Public Key Details are defined in the `_embedded` property of the Key object.
       type: object
       properties:
         alg:
@@ -392,23 +378,25 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
         errorSummary:
           type: string
+    ListHookKeysResponse:
+      type: object
+      properties:
+        hook_keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/HookKey'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -494,8 +482,7 @@ components:
           kid: 7fbc27fd-e3df-4522-86bf-1930110256ad
           use: 'null'
           e: AQAB
-          'n': >-
-            2naqCnv6r4xNQs7207lRtKQvdtnlVND-8k5iYBIiqoKGY3CqUmRm1jleoOniiQoMkFX8Wj2DmVqr002efF3vOQ7_gjtTatBTVUNbNIQLybun4dkVoUtfP7pRc5SLpcP3eGPRVar734ZrpQXzmCEdpqBt3jrVjwYjNE5DqOjbYXFJtMsy8CWE9LRJ3kyHEoHPzo22dG_vMrXH0_sAQoCk_4TgNCbvyzVmGVYXI_BkUnp0hv2pR4bQVRYzGB9dKJdctOh8zULqc_EJ8tiYsS05YnF7whrWEyARK0rH-e4d4W-OmBTga_zhY4kJ4NsoQ4PyvcatZkxjPO92QHQOFDnf3w`
+          'n': 2naqCnv6r4xNQs7207lRtKQvdtnlVND-8k5iYBIiqoKGY3CqUmRm1jleoOniiQoMkFX8Wj2DmVqr002efF3vOQ7_gjtTatBTVUNbNIQLybun4dkVoUtfP7pRc5SLpcP3eGPRVar734ZrpQXzmCEdpqBt3jrVjwYjNE5DqOjbYXFJtMsy8CWE9LRJ3kyHEoHPzo22dG_vMrXH0_sAQoCk_4TgNCbvyzVmGVYXI_BkUnp0hv2pR4bQVRYzGB9dKJdctOh8zULqc_EJ8tiYsS05YnF7whrWEyARK0rH-e4d4W-OmBTga_zhY4kJ4NsoQ4PyvcatZkxjPO92QHQOFDnf3w`
     RetrievePublicKeyResponse:
       summary: Retrieve public key response example
       value:
@@ -505,8 +492,7 @@ components:
           kid: 7fbc27fd-e3df-4522-86bf-1930110256ad
           use: null
           e: AQAB
-          'n': >-
-            2naqCnv6r4xNQs7207lRtKQvdtnlVND-8k5iYBIiqoKGY3CqUmRm1jleoOniiQoMkFX8Wj2DmVqr002efF3vOQ7_gjtTatBTVUNbNIQLybun4dkVoUtfP7pRc5SLpcP3eGPRVar734ZrpQXzmCEdpqBt3jrVjwYjNE5DqOjbYXFJtMsy8CWE9LRJ3kyHEoHPzo22dG_vMrXH0_sAQoCk_4TgNCbvyzVmGVYXI_BkUnp0hv2pR4bQVRYzGB9dKJdctOh8zULqc_EJ8tiYsS05YnF7whrWEyARK0rH-e4d4W-OmBTga_zhY4kJ4NsoQ4PyvcatZkxjPO92QHQOFDnf3w`
+          'n': 2naqCnv6r4xNQs7207lRtKQvdtnlVND-8k5iYBIiqoKGY3CqUmRm1jleoOniiQoMkFX8Wj2DmVqr002efF3vOQ7_gjtTatBTVUNbNIQLybun4dkVoUtfP7pRc5SLpcP3eGPRVar734ZrpQXzmCEdpqBt3jrVjwYjNE5DqOjbYXFJtMsy8CWE9LRJ3kyHEoHPzo22dG_vMrXH0_sAQoCk_4TgNCbvyzVmGVYXI_BkUnp0hv2pR4bQVRYzGB9dKJdctOh8zULqc_EJ8tiYsS05YnF7whrWEyARK0rH-e4d4W-OmBTga_zhY4kJ4NsoQ4PyvcatZkxjPO92QHQOFDnf3w`
     RetrieveKeyResponse:
       summary: Retrieve a key by ID response example
       value:
@@ -562,7 +548,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

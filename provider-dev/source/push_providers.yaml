@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: push_providers API
   description: okta push_providers API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/push-providers:
     get:
@@ -32,8 +32,7 @@ paths:
                       fileName: fileName.p8
                     _links:
                       self:
-                        href: >-
-                          https://your-subdomain.okta.com/api/v1/push-providers/{pushProviderId}
+                        href: https://your-subdomain.okta.com/api/v1/push-providers/{pushProviderId}
                         hints:
                           allow:
                             - DELETE
@@ -48,17 +47,14 @@ paths:
                       fileName: fileName.json
                     _links:
                       self:
-                        href: >-
-                          https://your-subdomain.okta.com/api/v1/push-providers/{pushProviderId}
+                        href: https://your-subdomain.okta.com/api/v1/push-providers/{pushProviderId}
                         hints:
                           allow:
                             - DELETE
                             - GET
                             - PUT
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PushProvider'
+                $ref: '#/components/schemas/ListPushProvidersResponse'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '429':
@@ -70,15 +66,17 @@ paths:
       tags:
         - PushProvider
       x-okta-lifecycle:
-        lifecycle: LIMITED_GA
+        lifecycle: GA
         isGenerallyAvailable: false
-        SKUs:
-          - Okta Identity Engine
+        SKUs: []
+      x-stackql-bare-array-wrap:
+        wrapperKey: push_providers
+        wrapperName: ListPushProvidersResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a push provider
-      description: >-
-        Creates a new push provider. Each Push Provider must have a unique
-        `name`.
+      description: Creates a new push provider. Each Push Provider must have a unique `name`.
       operationId: createPushProvider
       x-codegen-request-body-name: pushProvider
       requestBody:
@@ -117,10 +115,9 @@ paths:
       tags:
         - PushProvider
       x-okta-lifecycle:
-        lifecycle: LIMITED_GA
+        lifecycle: GA
         isGenerallyAvailable: false
-        SKUs:
-          - Okta Identity Engine
+        SKUs: []
   /api/v1/push-providers/{pushProviderId}:
     get:
       summary: Retrieve a push provider
@@ -151,10 +148,11 @@ paths:
       tags:
         - PushProvider
       x-okta-lifecycle:
-        lifecycle: LIMITED_GA
+        lifecycle: GA
         isGenerallyAvailable: false
-        SKUs:
-          - Okta Identity Engine
+        SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/pathPushProviderId'
     put:
       summary: Replace a push provider
       description: Replaces a push provider by `pushProviderId`
@@ -198,16 +196,14 @@ paths:
       tags:
         - PushProvider
       x-okta-lifecycle:
-        lifecycle: LIMITED_GA
+        lifecycle: GA
         isGenerallyAvailable: false
-        SKUs:
-          - Okta Identity Engine
+        SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/pathPushProviderId'
     delete:
       summary: Delete a push provider
-      description: >-
-        Deletes a push provider by `pushProviderId`. If the push provider is
-        currently being used in the org by a custom authenticator, the delete
-        will not be allowed.
+      description: Deletes a push provider by `pushProviderId`. If the push provider is currently being used in the org by a custom authenticator, the delete will not be allowed.
       operationId: deletePushProvider
       responses:
         '204':
@@ -225,8 +221,7 @@ paths:
                 $ref: '#/components/schemas/Error'
               examples:
                 Cannot remove push provider in use by a custom app authenticator:
-                  $ref: >-
-                    #/components/examples/ErrorPushProviderUsedByCustomAppAuthenticator
+                  $ref: '#/components/examples/ErrorPushProviderUsedByCustomAppAuthenticator'
         '429':
           $ref: '#/components/responses/ErrorTooManyRequests429'
       security:
@@ -236,12 +231,11 @@ paths:
       tags:
         - PushProvider
       x-okta-lifecycle:
-        lifecycle: LIMITED_GA
+        lifecycle: GA
         isGenerallyAvailable: false
-        SKUs:
-          - Okta Identity Engine
-    parameters:
-      - $ref: '#/components/parameters/pathPushProviderId'
+        SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/pathPushProviderId'
 components:
   schemas:
     ProviderType:
@@ -286,26 +280,15 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
@@ -317,10 +300,7 @@ components:
         errorSummary:
           type: string
     HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -337,15 +317,38 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -364,6 +367,13 @@ components:
         - GET
         - POST
         - PUT
+    ListPushProvidersResponse:
+      type: object
+      properties:
+        push_providers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushProvider'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -417,9 +427,7 @@ components:
         configuration:
           keyId: KEY_ID
           teamId: TEAM_ID
-          tokenSigningKey: >-
-            -----BEGIN PRIVATE KEY-----\nPRIVATE_KEY\n-----END PRIVATE
-            KEY-----\n
+          tokenSigningKey: '-----BEGIN PRIVATE KEY-----\nPRIVATE_KEY\n-----END PRIVATE KEY-----\n'
           fileName: fileName.p8
     PushProviderFCMRequest:
       value:
@@ -430,16 +438,13 @@ components:
             type: service_account
             project_id: PROJECT_ID
             private_key_id: KEY_ID
-            private_key: >-
-              -----BEGIN PRIVATE KEY-----\nPRIVATE_KEY\n-----END PRIVATE
-              KEY-----\n
+            private_key: '-----BEGIN PRIVATE KEY-----\nPRIVATE_KEY\n-----END PRIVATE KEY-----\n'
             client_email: SERVICE_ACCOUNT_EMAIL
             client_id: CLIENT_ID
             auth_uri: https://accounts.google.com/o/oauth2/auth
             token_uri: https://accounts.google.com/o/oauth2/token
             auth_provider_x509_cert_url: https://www.googleapis.com/oauth2/v1/certs
-            client_x509_cert_url: >-
-              https://www.googleapis.com/robot/v1/metadata/x509/SERVICE_ACCOUNT_EMAIL
+            client_x509_cert_url: https://www.googleapis.com/robot/v1/metadata/x509/SERVICE_ACCOUNT_EMAIL
           fileName: fileName.json
     PushProviderAPNsResponse:
       value:
@@ -453,8 +458,7 @@ components:
           fileName: fileName.p8
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/push-providers/ppctekcmngGaqeiBxB0g4
+            href: https://your-subdomain.okta.com/api/v1/push-providers/ppctekcmngGaqeiBxB0g4
             hints:
               allow:
                 - DELETE
@@ -471,8 +475,7 @@ components:
           fileName: fileName.p8
         _links:
           self:
-            href: >-
-              https://your-subdomain.okta.com/api/v1/push-providers/ppctekcmngGaqeiBxB0g4
+            href: https://your-subdomain.okta.com/api/v1/push-providers/ppctekcmngGaqeiBxB0g4
             hints:
               allow:
                 - DELETE
@@ -481,9 +484,7 @@ components:
     ErrorPushProviderUsedByCustomAppAuthenticator:
       value:
         errorCode: E0000187
-        errorSummary: >-
-          Cannot delete push provider because it is being used by a custom app
-          authenticator.
+        errorSummary: Cannot delete push provider because it is being used by a custom app authenticator.
         errorLink: E0000187
         errorId: oaenwA1ra80S9W-pvbh4m6haA
         errorCauses: []
@@ -524,7 +525,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

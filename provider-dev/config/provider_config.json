@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "credentialsenvvar": "OKTA_API_TOKEN",
+    "type": "api_key",
+    "valuePrefix": "SSWS "
+  }
+}

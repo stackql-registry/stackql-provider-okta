@@ -1,0 +1,35 @@
+/*+ exists */
+SELECT id FROM okta.groups.groups
+WHERE subdomain = '{{ subdomain }}'
+AND JSON_EXTRACT(profile, '$.name') = '{{ group_name }}'
+
+/*+ create */
+INSERT INTO okta.groups.groups (
+profile,
+subdomain
+)
+SELECT
+'{"name": "{{ group_name }}", "description": "{{ group_description }}"}',
+'{{ subdomain }}'
+
+/*+ update */
+REPLACE okta.groups.groups
+SET profile = '{"name": "{{ group_name }}", "description": "{{ group_description }}"}'
+WHERE groupId = '{{ this.id }}'
+AND subdomain = '{{ subdomain }}'
+
+/*+ statecheck, retries=3, retry_delay=5 */
+SELECT COUNT(*) as count FROM okta.groups.groups
+WHERE subdomain = '{{ subdomain }}'
+AND JSON_EXTRACT(profile, '$.name') = '{{ group_name }}'
+AND JSON_EXTRACT(profile, '$.description') = '{{ group_description }}'
+
+/*+ exports */
+SELECT id as group_id FROM okta.groups.groups
+WHERE subdomain = '{{ subdomain }}'
+AND JSON_EXTRACT(profile, '$.name') = '{{ group_name }}'
+
+/*+ delete */
+DELETE FROM okta.groups.groups
+WHERE groupId = '{{ this.id }}'
+AND subdomain = '{{ subdomain }}'

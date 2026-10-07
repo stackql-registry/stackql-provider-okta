@@ -2,14 +2,12 @@ openapi: 3.0.3
 info:
   title: templates API
   description: okta templates API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/templates/sms:
     get:
       summary: List all SMS templates
-      description: >-
-        Lists all custom SMS templates. A subset of templates can be returned
-        that match a template type.
+      description: Lists all custom SMS templates. A subset of templates can be returned that match a template type.
       operationId: listSmsTemplates
       parameters:
         - name: templateType
@@ -22,9 +20,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SmsTemplate'
+                $ref: '#/components/schemas/ListSmsTemplatesResponse'
               examples:
                 SMS Template List response:
                   $ref: '#/components/examples/SMSTemplateListResponse'
@@ -41,6 +37,11 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: sms_templates
+        wrapperName: ListSmsTemplatesResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create an SMS template
       description: Creates a new custom SMS template
@@ -110,6 +111,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathTemplateId'
     post:
       summary: Update an SMS template
       description: |
@@ -156,6 +159,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathTemplateId'
     put:
       summary: Replace an SMS template
       description: |
@@ -199,6 +204,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathTemplateId'
     delete:
       summary: Delete an SMS template
       description: Deletes an SMS template
@@ -222,8 +229,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathTemplateId'
+      parameters:
+        - $ref: '#/components/parameters/pathTemplateId'
 components:
   schemas:
     SmsTemplateType:
@@ -254,9 +261,7 @@ components:
           minLength: 1
         template:
           type: string
-          description: >-
-            Text of the Template, including any
-            [macros](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)
+          description: Text of the Template, including any [macros](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)
           maxLength: 161
           minLength: 1
         translations:
@@ -264,17 +269,12 @@ components:
         type:
           $ref: '#/components/schemas/SmsTemplateType'
     SmsTemplateTranslations:
-      description: >
-        - Template translations are optionally provided when you want to
-        localize the SMS messages. Translations are provided as an object that
-        contains `key:value` pairs: the language and the translated Template
-        text. The key portion is a two-letter country code that conforms to [ISO
-        639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The
-        value is the translated SMS Template.
-
-        - Just like with regular SMS Templates, the length of the SMS message
-        can't exceed 160 characters.
-      type: object
+      x-okta-ignore-redocly-rules-for-sdk: true
+      description: |-
+        - Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains `key:value` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template.
+        - Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters.
+         (opaque JSON object)
+      type: string
       x-okta-extensible: true
     Error:
       title: Error
@@ -289,23 +289,25 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
         errorSummary:
           type: string
+    ListSmsTemplatesResponse:
+      type: object
+      properties:
+        sms_templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/SmsTemplate'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -440,7 +442,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.
