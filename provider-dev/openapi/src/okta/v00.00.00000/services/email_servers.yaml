@@ -137,7 +137,7 @@ paths:
 
         > **Note:** When you update an SMTP server configuration that uses OAuth
         2.0 authentication, the
-        [`authType`](#components/schemas/BaseEmailServer/properties/authType)
+        [`authType`](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/EmailServer/)
         property is required in the request body.
       operationId: updateEmailServer
       requestBody:

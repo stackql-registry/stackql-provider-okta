@@ -142,6 +142,12 @@ for (const filename of fs.readdirSync(SERVICES_DIR)) {
   // (idempotent: rewritten links start with https:// and no longer match)
   text = text.replace(/\]\(\/openapi\//g, `](${DOCS_BASE}/openapi/`);
 
+  // the same links written without the leading slash
+  text = text.replace(/\]\(openapi\//g, `](${DOCS_BASE}/openapi/`);
+
+  // JSON-pointer anchors into the spec itself -> the API reference tag page
+  text = text.replaceAll('(#components/schemas/BaseEmailServer/properties/authType)', `(${DOCS_BASE}/openapi/okta-management/management/tag/EmailServer/)`);
+
   // orphaned anchors: (/#something) -> https://developer.okta.com/docs/api#something
   text = text.replace(/\(\/(#[^)]*)\)/g, `${DOCS_BASE}$1`);
 

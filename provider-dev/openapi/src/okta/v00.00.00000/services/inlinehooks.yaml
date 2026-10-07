@@ -17,7 +17,7 @@ paths:
           | `com.okta.oauth2.tokens.transform` | [Token inline hook](https://developer.okta.com/docs/api/openapi/okta-management/management/management/inlinehook/createtokeninlinehook)               |
           | `com.okta.saml.tokens.transform`   | [SAML assertion inline hook](https://developer.okta.com/docs/api/openapi/okta-management/management/management/inlinehook/createsamlassertioninlinehook)       |
           | `com.okta.telephony.provider`      | [Telephony inline hook](https://developer.okta.com/docs/api/openapi/okta-management/management/management/inlinehook/createtelephonyinlinehook) |
-          | `com.okta.user.credential.password.import` | [Password import inline hook](openapi/okta-management/management/management/inlinehook/createpasswordimportinlinehook)|
+          | `com.okta.user.credential.password.import` | [Password import inline hook](https://developer.okta.com/docs/api/openapi/okta-management/management/management/inlinehook/createpasswordimportinlinehook)|
           | `com.okta.user.pre-registration`   | [Registration inline hook](https://developer.okta.com/docs/api/openapi/okta-management/management/management/inlinehook/create-registration-hook) |
       operationId: listInlineHooks
       parameters:

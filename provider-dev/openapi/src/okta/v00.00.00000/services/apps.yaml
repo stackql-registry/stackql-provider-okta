@@ -2722,7 +2722,7 @@ paths:
           in: query
           description: |-
             Specifies a filter for a list of assigned groups returned based on their names. The value of `q` is matched against the group `name`.
-            This filter only supports the `startsWith` operation that matches the `q` string against the beginning of the [group name](openapi/okta-management/management/group#tag/Group/operation/listGroups!c=200&path=profile/name&t=response).
+            This filter only supports the `startsWith` operation that matches the `q` string against the beginning of the [group name](https://developer.okta.com/docs/api/openapi/okta-management/management/group#tag/Group/operation/listGroups!c=200&path=profile/name&t=response).
           schema:
             type: string
             example: test
@@ -4651,7 +4651,7 @@ components:
       properties:
         id:
           type: string
-          description: ID of the [group](openapi/okta-management/management/group)
+          description: ID of the [group](https://developer.okta.com/docs/api/openapi/okta-management/management/group)
           readOnly: true
           example: 00g4hb1HChfUriNgW0g4
         lastUpdated:
@@ -4673,7 +4673,7 @@ components:
           type: object
           description: |-
             Embedded resource related to the Application Group using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification.
-            If the `expand=group` query parameter is specified, then the [group](openapi/okta-management/management/group) object is embedded. 
+            If the `expand=group` query parameter is specified, then the [group](https://developer.okta.com/docs/api/openapi/okta-management/management/group) object is embedded. 
             If the `expand=metadata` query parameter is specified, then the group assignment metadata is embedded.
           additionalProperties:
             type: object
@@ -6962,7 +6962,7 @@ components:
     queryGroupAssignmentWithMetadataExpand:
       name: expand
       in: query
-      description: An optional query parameter to return the corresponding assigned [group](openapi/okta-management/management/group) or the group assignment metadata details in the `_embedded` property.
+      description: An optional query parameter to return the corresponding assigned [group](https://developer.okta.com/docs/api/openapi/okta-management/management/group) or the group assignment metadata details in the `_embedded` property.
       schema:
         type: string
         example: metadata
@@ -6984,7 +6984,7 @@ components:
     queryGroupAssignmentWithGroupExpand:
       name: expand
       in: query
-      description: An optional query parameter to return the corresponding assigned [group](openapi/okta-management/management/group) or the group assignment metadata details in the `_embedded` property.
+      description: An optional query parameter to return the corresponding assigned [group](https://developer.okta.com/docs/api/openapi/okta-management/management/group) or the group assignment metadata details in the `_embedded` property.
       schema:
         type: string
         example: group
