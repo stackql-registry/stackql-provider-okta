@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>classifications</code> resource
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>classifications</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="classifications" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.classifications" /></td></tr>
 </tbody></table>
@@ -56,7 +57,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of user classification</td>
+    <td>The type of user classification (LITE, STANDARD)</td>
 </tr>
 </tbody>
 </table>
@@ -81,14 +82,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_user_classification"><CopyableCode code="get_user_classification" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a user's classification</td>
 </tr>
 <tr>
     <td><a href="#replace_user_classification"><CopyableCode code="replace_user_classification" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the user's classification</td>
 </tr>
@@ -111,7 +112,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +139,8 @@ SELECT
 lastUpdated,
 type
 FROM okta.users.classifications
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -155,13 +162,13 @@ Replaces the user's classification
 ```sql
 REPLACE okta.users.classifications
 SET 
-data__type = '{{ type }}'
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+userId = '{{ userId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 lastUpdated,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>

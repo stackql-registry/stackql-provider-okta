@@ -16,6 +16,7 @@ SOURCE_DIR   := provider-dev/source
 CONFIG_DIR   := provider-dev/config
 PROVIDER_OUT := provider-dev/openapi/src/okta
 PROVIDER_DIR := $(PROVIDER_OUT)/v00.00.00000
+SOURCE_PROJECT ?= https://github.com/stackql-registry/stackql-provider-okta
 
 .PHONY: all refresh deps download-spec split normalize mappings provider docs site serve smoke-test smoke-test-live crud-test clean
 
@@ -64,7 +65,8 @@ docs:
 	  --provider-name okta \
 	  --provider-dir ./$(PROVIDER_DIR) \
 	  --output-dir ./website \
-	  --provider-data-dir ./provider-dev/docgen/provider-data
+	  --provider-data-dir ./provider-dev/docgen/provider-data \
+	  --source-project $(SOURCE_PROJECT)
 
 site:
 	cd website && yarn build

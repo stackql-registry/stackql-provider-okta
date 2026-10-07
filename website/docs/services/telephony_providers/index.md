@@ -1,9 +1,9 @@
 ---
-title: risk
+title: telephony_providers
 hide_title: false
 hide_table_of_contents: false
 keywords:
-  - risk
+  - telephony_providers
   - okta
   - stackql
   - infrastructure-as-code
@@ -14,20 +14,20 @@ custom_edit_url: null
 image: /img/stackql-okta-provider-featured-image.png
 ---
 
-risk service documentation.
+telephony_providers service documentation.
 
 :::info[Service Summary]
 
-total resources: __2__  
+total resources: __1__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/risk/risk_events/">risk_events</a>
+<a href="/services/telephony_providers/telephony_providers/">telephony_providers</a>
 </div>
 <div class="providerDocColumn">
-<a href="/services/risk/risk_providers/">risk_providers</a>
+
 </div>
 </div>

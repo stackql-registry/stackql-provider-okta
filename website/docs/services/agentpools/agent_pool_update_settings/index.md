@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>agent_pool_update_settings</co
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>agent_pool_update_settings</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="agent_pool_update_settings" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.agentpools.agent_pool_update_settings" /></td></tr>
 </tbody></table>
@@ -51,7 +52,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="agentType" /></td>
     <td><code>string</code></td>
-    <td>Agent types that are being monitored</td>
+    <td>Agent types that are being monitored (AD, IWA, LDAP, MFA, OPP, RUM, Radius)</td>
 </tr>
 <tr>
     <td><CopyableCode code="continueOnError" /></td>
@@ -81,7 +82,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="releaseChannel" /></td>
     <td><code>string</code></td>
-    <td>Release channel for auto-update</td>
+    <td>Release channel for auto-update (BETA, EA, GA, TEST)</td>
 </tr>
 </tbody>
 </table>
@@ -106,14 +107,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_agent_pools_update_settings"><CopyableCode code="get_agent_pools_update_settings" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-poolId"><code>poolId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the current state of the agent pool update instance settings</td>
 </tr>
 <tr>
     <td><a href="#update_agent_pools_update_settings"><CopyableCode code="update_agent_pools_update_settings" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-poolId"><code>poolId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-agentType"><code>agentType</code></a></td>
     <td></td>
     <td>Updates an agent pool update instance settings</td>
 </tr>
@@ -133,10 +134,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-poolId">
+    <td><CopyableCode code="poolId" /></td>
+    <td><code>string</code></td>
+    <td>ID of the agent pool for which the settings apply to</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -163,7 +169,8 @@ poolId,
 poolName,
 releaseChannel
 FROM okta.agentpools.agent_pool_update_settings
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE poolId = '{{ poolId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -185,14 +192,16 @@ Updates an agent pool update instance settings
 ```sql
 UPDATE okta.agentpools.agent_pool_update_settings
 SET 
-data__agentType = '{{ agentType }}',
-data__continueOnError = {{ continueOnError }},
-data__latestVersion = '{{ latestVersion }}',
-data__minimalSupportedVersion = '{{ minimalSupportedVersion }}',
-data__poolName = '{{ poolName }}',
-data__releaseChannel = '{{ releaseChannel }}'
+agentType = '{{ agentType }}',
+continueOnError = {{ continueOnError }},
+latestVersion = '{{ latestVersion }}',
+minimalSupportedVersion = '{{ minimalSupportedVersion }}',
+poolName = '{{ poolName }}',
+releaseChannel = '{{ releaseChannel }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+poolId = '{{ poolId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND agentType = '{{ agentType }}' --required
 RETURNING
 agentType,
 continueOnError,
@@ -200,8 +209,7 @@ latestVersion,
 minimalSupportedVersion,
 poolId,
 poolName,
-releaseChannel
-;
+releaseChannel;
 ```
 </TabItem>
 </Tabs>

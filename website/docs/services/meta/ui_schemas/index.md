@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>ui_schemas</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>ui_schemas</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="ui_schemas" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.meta.ui_schemas" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>ui_schemas</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_uischemas"
+    defaultValue="get_uischema"
     values={[
-        { label: 'list_uischemas', value: 'list_uischemas' },
-        { label: 'get_uischema', value: 'get_uischema' }
+        { label: 'get_uischema', value: 'get_uischema' },
+        { label: 'list_uischemas', value: 'list_uischemas' }
     ]}
 >
-<TabItem value="list_uischemas">
+<TabItem value="get_uischema">
 
 <table>
 <thead>
@@ -77,7 +78,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_uischema">
+<TabItem value="list_uischemas">
 
 <table>
 <thead>
@@ -134,18 +135,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_uischema"><CopyableCode code="get_uischema" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a UI Schema by `id`</td>
+</tr>
+<tr>
     <td><a href="#list_uischemas"><CopyableCode code="list_uischemas" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all UI Schemas in your org</td>
-</tr>
-<tr>
-    <td><a href="#get_uischema"><CopyableCode code="get_uischema" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a UI Schema by `id`</td>
 </tr>
 <tr>
     <td><a href="#create_uischema"><CopyableCode code="create_uischema" /></a></td>
@@ -157,14 +158,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#replace_uischemas"><CopyableCode code="replace_uischemas" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a UI Schema by `id`</td>
 </tr>
 <tr>
     <td><a href="#delete_uischemas"><CopyableCode code="delete_uischemas" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a UI Schema by `id`</td>
 </tr>
@@ -184,10 +185,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-id">
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>The unique ID of the UI Schema</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -195,15 +201,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_uischemas"
+    defaultValue="get_uischema"
     values={[
-        { label: 'list_uischemas', value: 'list_uischemas' },
-        { label: 'get_uischema', value: 'get_uischema' }
+        { label: 'get_uischema', value: 'get_uischema' },
+        { label: 'list_uischemas', value: 'list_uischemas' }
     ]}
 >
-<TabItem value="list_uischemas">
+<TabItem value="get_uischema">
 
-Lists all UI Schemas in your org
+Retrieves a UI Schema by `id`
 
 ```sql
 SELECT
@@ -213,13 +219,14 @@ created,
 lastUpdated,
 uiSchema
 FROM okta.meta.ui_schemas
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE id = '{{ id }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_uischema">
+<TabItem value="list_uischemas">
 
-Retrieves a UI Schema by `id`
+Lists all UI Schemas in your org
 
 ```sql
 SELECT
@@ -251,7 +258,7 @@ Creates an input for an enrollment form
 
 ```sql
 INSERT INTO okta.meta.ui_schemas (
-data__uiSchema,
+uiSchema,
 subdomain
 )
 SELECT 
@@ -268,19 +275,27 @@ uiSchema
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: ui_schemas
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the ui_schemas resource.
     - name: uiSchema
-      value: object
-      description: >
+      description: |
         Properties of the UI schema
-        
-```
+      value:
+        buttonLabel: "{{ buttonLabel }}"
+        elements:
+          - label: "{{ label }}"
+            options:
+              format: "{{ format }}"
+            scope: "{{ scope }}"
+            type: "{{ type }}"
+        label: "{{ label }}"
+        type: "{{ type }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -300,16 +315,16 @@ Replaces a UI Schema by `id`
 ```sql
 REPLACE okta.meta.ui_schemas
 SET 
-data__uiSchema = '{{ uiSchema }}'
+uiSchema = '{{ uiSchema }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+id = '{{ id }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 _links,
 created,
 lastUpdated,
-uiSchema
-;
+uiSchema;
 ```
 </TabItem>
 </Tabs>
@@ -329,7 +344,8 @@ Deletes a UI Schema by `id`
 
 ```sql
 DELETE FROM okta.meta.ui_schemas
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE id = '{{ id }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

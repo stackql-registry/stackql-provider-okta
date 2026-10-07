@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>api_tokens</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>api_tokens</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="api_tokens" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.api_tokens.api_tokens" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>api_tokens</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_api_tokens"
+    defaultValue="get_api_token"
     values={[
-        { label: 'list_api_tokens', value: 'list_api_tokens' },
-        { label: 'get_api_token', value: 'get_api_token' }
+        { label: 'get_api_token', value: 'get_api_token' },
+        { label: 'list_api_tokens', value: 'list_api_tokens' }
     ]}
 >
-<TabItem value="list_api_tokens">
+<TabItem value="get_api_token">
 
 <table>
 <thead>
@@ -102,7 +103,9 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_api_token">
+<TabItem value="list_api_tokens">
+
+An API token for an Okta User. This token is NOT scoped any further and can be used for any API the user has permissions to call.
 
 <table>
 <thead>
@@ -184,6 +187,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_api_token"><CopyableCode code="get_api_token" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-apiTokenId"><code>apiTokenId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves the metadata for an active API token by `apiTokenId`</td>
+</tr>
+<tr>
     <td><a href="#list_api_tokens"><CopyableCode code="list_api_tokens" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -191,18 +201,18 @@ The following methods are available for this resource:
     <td>Lists all the metadata of the active API tokens</td>
 </tr>
 <tr>
-    <td><a href="#get_api_token"><CopyableCode code="get_api_token" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves the metadata for an active API token by `apiTokenId`</td>
-</tr>
-<tr>
     <td><a href="#upsert_api_token"><CopyableCode code="upsert_api_token" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiTokenId"><code>apiTokenId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Upserts an API Token Network Condition by `apiTokenId`</td>
+</tr>
+<tr>
+    <td><a href="#revoke_api_token"><CopyableCode code="revoke_api_token" /></a></td>
+    <td><CopyableCode code="delete" /></td>
+    <td><a href="#parameter-apiTokenId"><code>apiTokenId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Revokes an API token by `apiTokenId`</td>
 </tr>
 <tr>
     <td><a href="#revoke_current_api_token"><CopyableCode code="revoke_current_api_token" /></a></td>
@@ -210,13 +220,6 @@ The following methods are available for this resource:
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Revokes the API token provided in the Authorization header</td>
-</tr>
-<tr>
-    <td><a href="#revoke_api_token"><CopyableCode code="revoke_api_token" /></a></td>
-    <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Revokes an API token by `apiTokenId`</td>
 </tr>
 </tbody>
 </table>
@@ -234,10 +237,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-apiTokenId">
+    <td><CopyableCode code="apiTokenId" /></td>
+    <td><code>string</code></td>
+    <td>id of the API Token</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -245,15 +253,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_api_tokens"
+    defaultValue="get_api_token"
     values={[
-        { label: 'list_api_tokens', value: 'list_api_tokens' },
-        { label: 'get_api_token', value: 'get_api_token' }
+        { label: 'get_api_token', value: 'get_api_token' },
+        { label: 'list_api_tokens', value: 'list_api_tokens' }
     ]}
 >
-<TabItem value="list_api_tokens">
+<TabItem value="get_api_token">
 
-Lists all the metadata of the active API tokens
+Retrieves the metadata for an active API token by `apiTokenId`
 
 ```sql
 SELECT
@@ -268,13 +276,14 @@ network,
 tokenWindow,
 userId
 FROM okta.api_tokens.api_tokens
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE apiTokenId = '{{ apiTokenId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_api_token">
+<TabItem value="list_api_tokens">
 
-Retrieves the metadata for an active API token by `apiTokenId`
+Lists all the metadata of the active API tokens
 
 ```sql
 SELECT
@@ -311,11 +320,12 @@ Upserts an API Token Network Condition by `apiTokenId`
 ```sql
 REPLACE okta.api_tokens.api_tokens
 SET 
-data__name = '{{ name }}',
-data__network = '{{ network }}',
-data__userId = '{{ userId }}'
+name = '{{ name }}',
+network = '{{ network }}',
+userId = '{{ userId }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+apiTokenId = '{{ apiTokenId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -326,8 +336,7 @@ expiresAt,
 lastUpdated,
 network,
 tokenWindow,
-userId
-;
+userId;
 ```
 </TabItem>
 </Tabs>
@@ -336,25 +345,26 @@ userId
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="revoke_current_api_token"
+    defaultValue="revoke_api_token"
     values={[
-        { label: 'revoke_current_api_token', value: 'revoke_current_api_token' },
-        { label: 'revoke_api_token', value: 'revoke_api_token' }
+        { label: 'revoke_api_token', value: 'revoke_api_token' },
+        { label: 'revoke_current_api_token', value: 'revoke_current_api_token' }
     ]}
 >
-<TabItem value="revoke_current_api_token">
-
-Revokes the API token provided in the Authorization header
-
-```sql
-DELETE FROM okta.api_tokens.api_tokens
-WHERE subdomain = '{{ subdomain }}' --required
-;
-```
-</TabItem>
 <TabItem value="revoke_api_token">
 
 Revokes an API token by `apiTokenId`
+
+```sql
+DELETE FROM okta.api_tokens.api_tokens
+WHERE apiTokenId = '{{ apiTokenId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+;
+```
+</TabItem>
+<TabItem value="revoke_current_api_token">
+
+Revokes the API token provided in the Authorization header
 
 ```sql
 DELETE FROM okta.api_tokens.api_tokens

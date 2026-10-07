@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>role_resource_set_binding_membe
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>role_resource_set_binding_members</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="role_resource_set_binding_members" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.iam.role_resource_set_binding_members" /></td></tr>
 </tbody></table>
@@ -32,36 +33,12 @@ Creates, updates, deletes, gets or lists a <code>role_resource_set_binding_membe
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_members_of_binding"
+    defaultValue="get_member_of_binding"
     values={[
-        { label: 'list_members_of_binding', value: 'list_members_of_binding' },
-        { label: 'get_member_of_binding', value: 'get_member_of_binding' }
+        { label: 'get_member_of_binding', value: 'get_member_of_binding' },
+        { label: 'list_members_of_binding', value: 'list_members_of_binding' }
     ]}
 >
-<TabItem value="list_members_of_binding">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="members" /></td>
-    <td><code>array</code></td>
-    <td>The members of the role resource set binding. If there are more than 100 members for the binding, then the `_links.next` resource is returned with the next list of members.</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_member_of_binding">
 
 <table>
@@ -96,6 +73,30 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
+<TabItem value="list_members_of_binding">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="members" /></td>
+    <td><code>array</code></td>
+    <td>The members of the role resource set binding. If there are more than 100 members for the binding, then the `_links.next` resource is returned with the next list of members.</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
 </Tabs>
 
 ## Methods
@@ -114,30 +115,30 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_members_of_binding"><CopyableCode code="list_members_of_binding" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td><a href="#parameter-after"><code>after</code></a></td>
-    <td>Lists all members of a role resource set binding with pagination support</td>
-</tr>
-<tr>
     <td><a href="#get_member_of_binding"><CopyableCode code="get_member_of_binding" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-resourceSetIdOrLabel"><code>resourceSetIdOrLabel</code></a>, <a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-memberId"><code>memberId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a member (identified by `memberId`) that belongs to a role resource set binding</td>
 </tr>
 <tr>
+    <td><a href="#list_members_of_binding"><CopyableCode code="list_members_of_binding" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-resourceSetIdOrLabel"><code>resourceSetIdOrLabel</code></a>, <a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-after"><code>after</code></a></td>
+    <td>Lists all members of a role resource set binding with pagination support</td>
+</tr>
+<tr>
     <td><a href="#add_members_to_binding"><CopyableCode code="add_members_to_binding" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-resourceSetIdOrLabel"><code>resourceSetIdOrLabel</code></a>, <a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Adds more members to a role resource set binding</td>
 </tr>
 <tr>
     <td><a href="#unassign_member_from_binding"><CopyableCode code="unassign_member_from_binding" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-resourceSetIdOrLabel"><code>resourceSetIdOrLabel</code></a>, <a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-memberId"><code>memberId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Unassigns a member (identified by `memberId`) from a role resource set binding</td>
 </tr>
@@ -157,15 +158,30 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-memberId">
+    <td><CopyableCode code="memberId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the member</td>
+</tr>
+<tr id="parameter-resourceSetIdOrLabel">
+    <td><CopyableCode code="resourceSetIdOrLabel" /></td>
+    <td><code>string</code></td>
+    <td>`id` or `label` of the resource set</td>
+</tr>
+<tr id="parameter-roleIdOrLabel">
+    <td><CopyableCode code="roleIdOrLabel" /></td>
+    <td><code>string</code></td>
+    <td>`id` or `label` of the role</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 </tbody>
 </table>
@@ -173,26 +189,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_members_of_binding"
+    defaultValue="get_member_of_binding"
     values={[
-        { label: 'list_members_of_binding', value: 'list_members_of_binding' },
-        { label: 'get_member_of_binding', value: 'get_member_of_binding' }
+        { label: 'get_member_of_binding', value: 'get_member_of_binding' },
+        { label: 'list_members_of_binding', value: 'list_members_of_binding' }
     ]}
 >
-<TabItem value="list_members_of_binding">
-
-Lists all members of a role resource set binding with pagination support
-
-```sql
-SELECT
-_links,
-members
-FROM okta.iam.role_resource_set_binding_members
-WHERE subdomain = '{{ subdomain }}' -- required
-AND after = '{{ after }}'
-;
-```
-</TabItem>
 <TabItem value="get_member_of_binding">
 
 Retrieves a member (identified by `memberId`) that belongs to a role resource set binding
@@ -204,7 +206,26 @@ _links,
 created,
 lastUpdated
 FROM okta.iam.role_resource_set_binding_members
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE resourceSetIdOrLabel = '{{ resourceSetIdOrLabel }}' -- required
+AND roleIdOrLabel = '{{ roleIdOrLabel }}' -- required
+AND memberId = '{{ memberId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_members_of_binding">
+
+Lists all members of a role resource set binding with pagination support
+
+```sql
+SELECT
+_links,
+members
+FROM okta.iam.role_resource_set_binding_members
+WHERE resourceSetIdOrLabel = '{{ resourceSetIdOrLabel }}' -- required
+AND roleIdOrLabel = '{{ roleIdOrLabel }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND after = '{{ after }}'
 ;
 ```
 </TabItem>
@@ -226,12 +247,13 @@ Adds more members to a role resource set binding
 ```sql
 UPDATE okta.iam.role_resource_set_binding_members
 SET 
-data__additions = '{{ additions }}'
+additions = '{{ additions }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+resourceSetIdOrLabel = '{{ resourceSetIdOrLabel }}' --required
+AND roleIdOrLabel = '{{ roleIdOrLabel }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
-_links
-;
+_links;
 ```
 </TabItem>
 </Tabs>
@@ -251,7 +273,10 @@ Unassigns a member (identified by `memberId`) from a role resource set binding
 
 ```sql
 DELETE FROM okta.iam.role_resource_set_binding_members
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE resourceSetIdOrLabel = '{{ resourceSetIdOrLabel }}' --required
+AND roleIdOrLabel = '{{ roleIdOrLabel }}' --required
+AND memberId = '{{ memberId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

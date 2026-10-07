@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>support_cases</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>support_cases</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="support_cases" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.org.support_cases" /></td></tr>
 </tbody></table>
@@ -83,7 +84,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#update_okta_support_case"><CopyableCode code="update_okta_support_case" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-caseNumber"><code>caseNumber</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Updates access to the org for an Okta Support case:<br /><br />* You can enable, disable, or extend access to your org for an Okta Support case.<br /><br />* You can approve Okta Support access to your org for self-assigned cases. A self-assigned case is created and assigned by the same Okta Support user.</td>
 </tr>
@@ -103,10 +104,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-caseNumber">
+    <td><CopyableCode code="caseNumber" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -149,16 +155,16 @@ Updates access to the org for an Okta Support case:<br /><br />* You can enable,
 ```sql
 UPDATE okta.org.support_cases
 SET 
-data__impersonation = '{{ impersonation }}',
-data__selfAssigned = '{{ selfAssigned }}'
+impersonation = '{{ impersonation }}',
+selfAssigned = '{{ selfAssigned }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+caseNumber = '{{ caseNumber }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 caseNumber,
 impersonation,
 selfAssigned,
-subject
-;
+subject;
 ```
 </TabItem>
 </Tabs>

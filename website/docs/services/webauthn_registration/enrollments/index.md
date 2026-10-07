@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>enrollments</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>enrollments</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="enrollments" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.webauthn_registration.enrollments" /></td></tr>
 </tbody></table>
@@ -38,6 +39,8 @@ The following fields are returned by `SELECT` queries:
     ]}
 >
 <TabItem value="list_web_authn_preregistration_factors">
+
+User factor variant used for WebAuthn preregistration factors
 
 <table>
 <thead>
@@ -66,7 +69,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="factorType" /></td>
     <td><code>string</code></td>
-    <td>Type of factor</td>
+    <td>Type of factor (call, email, push, question, signed_nonce, sms, token, token:hardware, token:hotp, token:software:totp, u2f, web, webauthn)</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -75,18 +78,18 @@ The following fields are returned by `SELECT` queries:
 </tr>
 <tr>
     <td><CopyableCode code="profile" /></td>
-    <td><code>object</code></td>
-    <td>Specific attributes related to the factor</td>
+    <td><code>string</code></td>
+    <td>Specific attributes related to the factor (opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="provider" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (CUSTOM, DUO, FIDO, GOOGLE, OKTA, RSA, SYMANTEC, YUBICO)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Status of the factor (example: ACTIVE)</td>
+    <td>Status of the factor (ACTIVE, DISABLED, ENROLLED, EXPIRED, INACTIVE, NOT_SETUP, PENDING_ACTIVATION) (example: ACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="vendorName" /></td>
@@ -116,14 +119,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_web_authn_preregistration_factors"><CopyableCode code="list_web_authn_preregistration_factors" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all WebAuthn preregistration factors for the specified user</td>
 </tr>
 <tr>
     <td><a href="#delete_web_authn_preregistration_factor"><CopyableCode code="delete_web_authn_preregistration_factor" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-authenticatorEnrollmentId"><code>authenticatorEnrollmentId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a specific WebAuthn preregistration factor for a user</td>
 </tr>
@@ -158,7 +161,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#assign_fulfillment_error_web_authn_preregistration_factor"><CopyableCode code="assign_fulfillment_error_web_authn_preregistration_factor" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-authenticatorEnrollmentId"><code>authenticatorEnrollmentId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Assigns the fulfillment error status to a WebAuthn preregistration factor for a user. The `/mark-error` path indicates that the specific `FULFILLMENT_ERRORED` AuthFactor status is set on the enrollment.</td>
 </tr>
@@ -178,10 +181,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-authenticatorEnrollmentId">
+    <td><CopyableCode code="authenticatorEnrollmentId" /></td>
+    <td><code>string</code></td>
+    <td>ID for a WebAuthn preregistration factor in Okta</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 </tbody>
 </table>
@@ -210,7 +223,8 @@ provider,
 status,
 vendorName
 FROM okta.webauthn_registration.enrollments
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -231,7 +245,9 @@ Deletes a specific WebAuthn preregistration factor for a user
 
 ```sql
 DELETE FROM okta.webauthn_registration.enrollments
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE userId = '{{ userId }}' --required
+AND authenticatorEnrollmentId = '{{ authenticatorEnrollmentId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -325,6 +341,8 @@ Assigns the fulfillment error status to a WebAuthn preregistration factor for a 
 
 ```sql
 EXEC okta.webauthn_registration.enrollments.assign_fulfillment_error_web_authn_preregistration_factor 
+@userId='{{ userId }}' --required, 
+@authenticatorEnrollmentId='{{ authenticatorEnrollmentId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

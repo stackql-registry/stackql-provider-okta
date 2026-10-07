@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>current_configuration</code> re
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>current_configuration</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="current_configuration" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.threats.current_configuration" /></td></tr>
 </tbody></table>
@@ -56,7 +57,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="action" /></td>
     <td><code>string</code></td>
-    <td>Specifies how Okta responds to authentication requests from suspicious IP addresses (example: none)</td>
+    <td>Specifies how Okta responds to authentication requests from suspicious IP addresses (none, audit, block) (example: none)</td>
 </tr>
 <tr>
     <td><CopyableCode code="created" /></td>
@@ -66,7 +67,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="excludeZones" /></td>
     <td><code>array</code></td>
-    <td>Accepts a list of [Network Zone](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/NetworkZone/) IDs. IPs in the excluded network zones aren't logged or blocked. This ensures that traffic from known, trusted IPs isn't accidentally logged or blocked.</td>
+    <td>Accepts a list of [Network Zone](https://developer.okta.com/docs/api/openapi/okta-management/management/networkzone/) IDs. IPs in the excluded network zones aren't logged or blocked. This ensures that traffic from known, trusted IPs isn't accidentally logged or blocked.</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -103,7 +104,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#update_configuration"><CopyableCode code="update_configuration" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__action"><code>data__action</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-action"><code>action</code></a></td>
     <td></td>
     <td>Updates the ThreatInsight configuration for the org</td>
 </tr>
@@ -126,7 +127,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -173,18 +174,17 @@ Updates the ThreatInsight configuration for the org
 ```sql
 UPDATE okta.threats.current_configuration
 SET 
-data__action = '{{ action }}',
-data__excludeZones = '{{ excludeZones }}'
+action = '{{ action }}',
+excludeZones = '{{ excludeZones }}'
 WHERE 
 subdomain = '{{ subdomain }}' --required
-AND data__action = '{{ action }}' --required
+AND action = '{{ action }}' --required
 RETURNING
 _links,
 action,
 created,
 excludeZones,
-lastUpdated
-;
+lastUpdated;
 ```
 </TabItem>
 </Tabs>

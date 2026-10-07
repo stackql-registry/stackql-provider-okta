@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>brands</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>brands</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="brands" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.brands" /></td></tr>
 </tbody></table>
@@ -32,15 +33,15 @@ Creates, updates, deletes, gets or lists a <code>brands</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_brands"
+    defaultValue="get_brand"
     values={[
-        { label: 'list_brands', value: 'list_brands' },
-        { label: 'get_brand', value: 'get_brand' }
+        { label: 'get_brand', value: 'get_brand' },
+        { label: 'list_brands', value: 'list_brands' }
     ]}
 >
-<TabItem value="list_brands">
+<TabItem value="get_brand">
 
-Successfully returned the list of brands
+Successfully retrieved the brand
 
 <table>
 <thead>
@@ -60,6 +61,16 @@ Successfully returned the list of brands
     <td><CopyableCode code="name" /></td>
     <td><code>string</code></td>
     <td>The name of the Brand</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_embedded" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
 </tr>
 <tr>
     <td><CopyableCode code="agreeToCustomPrivacyPolicy" /></td>
@@ -99,9 +110,7 @@ Successfully returned the list of brands
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_brand">
-
-Successfully retrieved the brand
+<TabItem value="list_brands">
 
 <table>
 <thead>
@@ -121,6 +130,16 @@ Successfully retrieved the brand
     <td><CopyableCode code="name" /></td>
     <td><code>string</code></td>
     <td>The name of the Brand</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_embedded" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
 </tr>
 <tr>
     <td><CopyableCode code="agreeToCustomPrivacyPolicy" /></td>
@@ -178,6 +197,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_brand"><CopyableCode code="get_brand" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
+    <td>Retrieves a brand by `brandId`</td>
+</tr>
+<tr>
     <td><a href="#list_brands"><CopyableCode code="list_brands" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -185,30 +211,23 @@ The following methods are available for this resource:
     <td>Lists all the brands in your org</td>
 </tr>
 <tr>
-    <td><a href="#get_brand"><CopyableCode code="get_brand" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td><a href="#parameter-expand"><code>expand</code></a></td>
-    <td>Retrieves a brand by `brandId`</td>
-</tr>
-<tr>
     <td><a href="#create_brand"><CopyableCode code="create_brand" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a></td>
     <td></td>
     <td>Creates a new brand in your org</td>
 </tr>
 <tr>
     <td><a href="#replace_brand"><CopyableCode code="replace_brand" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a></td>
     <td></td>
     <td>Replaces a brand by `brandId`<br /><br />Passing an invalid `brandId` returns a `404 Not Found` status code with the error code `E0000007`.<br /><br />Not providing `agreeToCustomPrivacyPolicy` with `customPrivacyPolicyUrl` returns a `400 Bad Request` status code with the error code `E0000001`.<br /><br /></td>
 </tr>
 <tr>
     <td><a href="#delete_brand"><CopyableCode code="delete_brand" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a brand by `brandId`</td>
 </tr>
@@ -228,15 +247,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-expand">
     <td><CopyableCode code="expand" /></td>
@@ -259,12 +283,36 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_brands"
+    defaultValue="get_brand"
     values={[
-        { label: 'list_brands', value: 'list_brands' },
-        { label: 'get_brand', value: 'get_brand' }
+        { label: 'get_brand', value: 'get_brand' },
+        { label: 'list_brands', value: 'list_brands' }
     ]}
 >
+<TabItem value="get_brand">
+
+Retrieves a brand by `brandId`
+
+```sql
+SELECT
+id,
+name,
+_embedded,
+_links,
+agreeToCustomPrivacyPolicy,
+customPrivacyPolicyUrl,
+defaultApp,
+emailDomainId,
+isDefault,
+locale,
+removePoweredByOkta
+FROM okta.brands.brands
+WHERE brandId = '{{ brandId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND expand = '{{ expand }}'
+;
+```
+</TabItem>
 <TabItem value="list_brands">
 
 Lists all the brands in your org
@@ -273,6 +321,8 @@ Lists all the brands in your org
 SELECT
 id,
 name,
+_embedded,
+_links,
 agreeToCustomPrivacyPolicy,
 customPrivacyPolicyUrl,
 defaultApp,
@@ -286,27 +336,6 @@ AND expand = '{{ expand }}'
 AND after = '{{ after }}'
 AND limit = '{{ limit }}'
 AND q = '{{ q }}'
-;
-```
-</TabItem>
-<TabItem value="get_brand">
-
-Retrieves a brand by `brandId`
-
-```sql
-SELECT
-id,
-name,
-agreeToCustomPrivacyPolicy,
-customPrivacyPolicyUrl,
-defaultApp,
-emailDomainId,
-isDefault,
-locale,
-removePoweredByOkta
-FROM okta.brands.brands
-WHERE subdomain = '{{ subdomain }}' -- required
-AND expand = '{{ expand }}'
 ;
 ```
 </TabItem>
@@ -328,7 +357,7 @@ Creates a new brand in your org
 
 ```sql
 INSERT INTO okta.brands.brands (
-data__name,
+name,
 subdomain
 )
 SELECT 
@@ -349,19 +378,19 @@ removePoweredByOkta
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: brands
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the brands resource.
     - name: name
-      value: string
-      description: >
-        The name of the Brand
-        
-```
+      value: "{{ name }}"
+      description: |
+        The name of the brand
+        > **Note:** You can't use the reserved \`DRAPP_DOMAIN_BRAND\` name.
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -381,16 +410,17 @@ Replaces a brand by `brandId`<br /><br />Passing an invalid `brandId` returns a 
 ```sql
 REPLACE okta.brands.brands
 SET 
-data__agreeToCustomPrivacyPolicy = {{ agreeToCustomPrivacyPolicy }},
-data__customPrivacyPolicyUrl = '{{ customPrivacyPolicyUrl }}',
-data__defaultApp = '{{ defaultApp }}',
-data__emailDomainId = '{{ emailDomainId }}',
-data__locale = '{{ locale }}',
-data__name = '{{ name }}',
-data__removePoweredByOkta = {{ removePoweredByOkta }}
+agreeToCustomPrivacyPolicy = {{ agreeToCustomPrivacyPolicy }},
+customPrivacyPolicyUrl = '{{ customPrivacyPolicyUrl }}',
+defaultApp = '{{ defaultApp }}',
+emailDomainId = '{{ emailDomainId }}',
+locale = '{{ locale }}',
+name = '{{ name }}',
+removePoweredByOkta = {{ removePoweredByOkta }}
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__name = '{{ name }}' --required
+brandId = '{{ brandId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND name = '{{ name }}' --required
 RETURNING
 id,
 name,
@@ -400,8 +430,7 @@ defaultApp,
 emailDomainId,
 isDefault,
 locale,
-removePoweredByOkta
-;
+removePoweredByOkta;
 ```
 </TabItem>
 </Tabs>
@@ -421,7 +450,8 @@ Deletes a brand by `brandId`
 
 ```sql
 DELETE FROM okta.brands.brands
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE brandId = '{{ brandId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

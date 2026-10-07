@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>app_links</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>app_links</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="app_links" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.app_links" /></td></tr>
 </tbody></table>
@@ -121,9 +122,9 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_app_links"><CopyableCode code="list_app_links" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Lists all app links for all direct or indirect (through group membership) assigned apps.<br /><br />&gt; **Note:** To list all apps in an org, use the [List all applications endpoint in the Applications API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications).</td>
+    <td>Lists all app links for all direct or indirect (through group membership) assigned apps<br /><br />&gt; **Note:** To list all apps in an org, use the [List all applications endpoint in the Applications API](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/application/other/listapplications).</td>
 </tr>
 </tbody>
 </table>
@@ -141,10 +142,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-id">
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -159,7 +165,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="list_app_links">
 
-Lists all app links for all direct or indirect (through group membership) assigned apps.<br /><br />&gt; **Note:** To list all apps in an org, use the [List all applications endpoint in the Applications API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications).
+Lists all app links for all direct or indirect (through group membership) assigned apps<br /><br />&gt; **Note:** To list all apps in an org, use the [List all applications endpoint in the Applications API](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/application/other/listapplications).
 
 ```sql
 SELECT
@@ -174,7 +180,8 @@ linkUrl,
 logoUrl,
 sortOrder
 FROM okta.users.app_links
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE id = '{{ id }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

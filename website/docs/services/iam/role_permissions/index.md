@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>role_permissions</code> resourc
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>role_permissions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="role_permissions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.iam.role_permissions" /></td></tr>
 </tbody></table>
@@ -32,31 +33,12 @@ Creates, updates, deletes, gets or lists a <code>role_permissions</code> resourc
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_role_permissions"
+    defaultValue="get_role_permission"
     values={[
-        { label: 'list_role_permissions', value: 'list_role_permissions' },
-        { label: 'get_role_permission', value: 'get_role_permission' }
+        { label: 'get_role_permission', value: 'get_role_permission' },
+        { label: 'list_role_permissions', value: 'list_role_permissions' }
     ]}
 >
-<TabItem value="list_role_permissions">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="permissions" /></td>
-    <td><code>array</code></td>
-    <td>Array of permissions assigned to the role. See [Permissions](https://developer.okta.com/docs/api/openapi/okta-management/guides/permissions).</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_role_permission">
 
 <table>
@@ -96,6 +78,25 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
+<TabItem value="list_role_permissions">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="permissions" /></td>
+    <td><code>array</code></td>
+    <td>Array of permissions assigned to the role. See [Permissions](https://developer.okta.com/docs/api/openapi/okta-management/guides/permissions).</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
 </Tabs>
 
 ## Methods
@@ -114,37 +115,37 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_role_permissions"><CopyableCode code="list_role_permissions" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all permissions for a custom role by `roleIdOrLabel`</td>
-</tr>
-<tr>
     <td><a href="#get_role_permission"><CopyableCode code="get_role_permission" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-permissionType"><code>permissionType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a permission (identified by `permissionType`) for a custom role</td>
 </tr>
 <tr>
+    <td><a href="#list_role_permissions"><CopyableCode code="list_role_permissions" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all permissions for a custom role by `roleIdOrLabel`</td>
+</tr>
+<tr>
     <td><a href="#create_role_permission"><CopyableCode code="create_role_permission" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-permissionType"><code>permissionType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Creates a permission (specified by `permissionType`) for a custom role</td>
 </tr>
 <tr>
     <td><a href="#replace_role_permission"><CopyableCode code="replace_role_permission" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-permissionType"><code>permissionType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a permission (specified by `permissionType`) for a custom role</td>
 </tr>
 <tr>
     <td><a href="#delete_role_permission"><CopyableCode code="delete_role_permission" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-permissionType"><code>permissionType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a permission (identified by `permissionType`) from a custom role</td>
 </tr>
@@ -164,10 +165,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-permissionType">
+    <td><CopyableCode code="permissionType" /></td>
+    <td><code>string</code></td>
+    <td>An Okta [permission](https://developer.okta.com/docs/api/openapi/okta-management/guides/permissions)</td>
+</tr>
+<tr id="parameter-roleIdOrLabel">
+    <td><CopyableCode code="roleIdOrLabel" /></td>
+    <td><code>string</code></td>
+    <td>`id` or `label` of the role</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -175,24 +186,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_role_permissions"
+    defaultValue="get_role_permission"
     values={[
-        { label: 'list_role_permissions', value: 'list_role_permissions' },
-        { label: 'get_role_permission', value: 'get_role_permission' }
+        { label: 'get_role_permission', value: 'get_role_permission' },
+        { label: 'list_role_permissions', value: 'list_role_permissions' }
     ]}
 >
-<TabItem value="list_role_permissions">
-
-Lists all permissions for a custom role by `roleIdOrLabel`
-
-```sql
-SELECT
-permissions
-FROM okta.iam.role_permissions
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_role_permission">
 
 Retrieves a permission (identified by `permissionType`) for a custom role
@@ -205,7 +204,22 @@ created,
 label,
 lastUpdated
 FROM okta.iam.role_permissions
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE roleIdOrLabel = '{{ roleIdOrLabel }}' -- required
+AND permissionType = '{{ permissionType }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_role_permissions">
+
+Lists all permissions for a custom role by `roleIdOrLabel`
+
+```sql
+SELECT
+permissions
+FROM okta.iam.role_permissions
+WHERE roleIdOrLabel = '{{ roleIdOrLabel }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -227,30 +241,41 @@ Creates a permission (specified by `permissionType`) for a custom role
 
 ```sql
 INSERT INTO okta.iam.role_permissions (
-data__conditions,
+conditions,
+roleIdOrLabel,
+permissionType,
 subdomain
 )
 SELECT 
 '{{ conditions }}',
+'{{ roleIdOrLabel }}',
+'{{ permissionType }}',
 '{{ subdomain }}'
 ;
 ```
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: role_permissions
   props:
+    - name: roleIdOrLabel
+      value: "{{ roleIdOrLabel }}"
+      description: Required parameter for the role_permissions resource.
+    - name: permissionType
+      value: "{{ permissionType }}"
+      description: Required parameter for the role_permissions resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the role_permissions resource.
     - name: conditions
-      value: object
-      description: >
+      description: |
         Conditions for further restricting a permission. See [Permission conditions](https://help.okta.com/okta_help.htm?type=oie&id=ext-permission-conditions).
-        
-```
+      value:
+        exclude: "{{ exclude }}"
+        include: "{{ include }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -270,16 +295,17 @@ Replaces a permission (specified by `permissionType`) for a custom role
 ```sql
 REPLACE okta.iam.role_permissions
 SET 
-data__conditions = '{{ conditions }}'
+conditions = '{{ conditions }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+roleIdOrLabel = '{{ roleIdOrLabel }}' --required
+AND permissionType = '{{ permissionType }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 _links,
 conditions,
 created,
 label,
-lastUpdated
-;
+lastUpdated;
 ```
 </TabItem>
 </Tabs>
@@ -299,7 +325,9 @@ Deletes a permission (identified by `permissionType`) from a custom role
 
 ```sql
 DELETE FROM okta.iam.role_permissions
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE roleIdOrLabel = '{{ roleIdOrLabel }}' --required
+AND permissionType = '{{ permissionType }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>linked_objects</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>linked_objects</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="linked_objects" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.linked_objects" /></td></tr>
 </tbody></table>
@@ -38,6 +39,8 @@ The following fields are returned by `SELECT` queries:
     ]}
 >
 <TabItem value="list_linked_objects_for_user">
+
+Link objects
 
 <table>
 <thead>
@@ -76,21 +79,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_linked_objects_for_user"><CopyableCode code="list_linked_objects_for_user" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userIdOrLogin"><code>userIdOrLogin</code></a>, <a href="#parameter-relationshipName"><code>relationshipName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists either the `self` link for the primary user or all associated users in the relationship specified by `relationshipName`. If the specified user isn't associated in any relationship, an empty array is returned.<br /><br />Use `me` instead of `id` to specify the current session user.</td>
 </tr>
 <tr>
     <td><a href="#assign_linked_object_value_for_primary"><CopyableCode code="assign_linked_object_value_for_primary" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userIdOrLogin"><code>userIdOrLogin</code></a>, <a href="#parameter-primaryRelationshipName"><code>primaryRelationshipName</code></a>, <a href="#parameter-primaryUserId"><code>primaryUserId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Assigns the first user as the `associated` and the second user as the `primary` for the specified relationship.<br /><br />If the first user is already associated with a different `primary` for this relationship, the previous link is removed. A linked object relationship can specify only one primary user for an associated user.</td>
 </tr>
 <tr>
     <td><a href="#delete_linked_object_for_user"><CopyableCode code="delete_linked_object_for_user" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userIdOrLogin"><code>userIdOrLogin</code></a>, <a href="#parameter-relationshipName"><code>relationshipName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes any existing relationship between the `associated` and `primary` user. For the `associated` user, this is specified by the ID. The `primary` name specifies the relationship.<br /><br />The operation is successful if the relationship is deleted. The operation is also successful if the specified user isn't in the `associated` relationship for any instance of the specified `primary` and thus, no relationship is found.</td>
 </tr>
@@ -110,10 +113,30 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-primaryRelationshipName">
+    <td><CopyableCode code="primaryRelationshipName" /></td>
+    <td><code>string</code></td>
+    <td>Name of the `primary` relationship being assigned</td>
+</tr>
+<tr id="parameter-primaryUserId">
+    <td><CopyableCode code="primaryUserId" /></td>
+    <td><code>string</code></td>
+    <td>User ID to be assigned to the `primary` relationship for the `associated` user</td>
+</tr>
+<tr id="parameter-relationshipName">
+    <td><CopyableCode code="relationshipName" /></td>
+    <td><code>string</code></td>
+    <td>Name of the `primary` or `associated` relationship being queried</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userIdOrLogin">
+    <td><CopyableCode code="userIdOrLogin" /></td>
+    <td><code>string</code></td>
+    <td>If for the `self` link, this is the ID of the user for whom you want to get the primary user ID. If for the `associated` relation, this is the user ID or login value of the user assigned the associated relationship.  This can be `me` to represent the current session user.</td>
 </tr>
 </tbody>
 </table>
@@ -134,7 +157,9 @@ Lists either the `self` link for the primary user or all associated users in the
 SELECT
 _links
 FROM okta.users.linked_objects
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userIdOrLogin = '{{ userIdOrLogin }}' -- required
+AND relationshipName = '{{ relationshipName }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -158,8 +183,10 @@ REPLACE okta.users.linked_objects
 SET 
 -- No updatable properties
 WHERE 
-subdomain = '{{ subdomain }}' --required
-;
+userIdOrLogin = '{{ userIdOrLogin }}' --required
+AND primaryRelationshipName = '{{ primaryRelationshipName }}' --required
+AND primaryUserId = '{{ primaryUserId }}' --required
+AND subdomain = '{{ subdomain }}' --required;
 ```
 </TabItem>
 </Tabs>
@@ -179,7 +206,9 @@ Deletes any existing relationship between the `associated` and `primary` user. F
 
 ```sql
 DELETE FROM okta.users.linked_objects
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE userIdOrLogin = '{{ userIdOrLogin }}' --required
+AND relationshipName = '{{ relationshipName }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>governance_bundles</code> resou
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>governance_bundles</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="governance_bundles" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.iam.governance_bundles" /></td></tr>
 </tbody></table>
@@ -32,36 +33,12 @@ Creates, updates, deletes, gets or lists a <code>governance_bundles</code> resou
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_governance_bundles"
+    defaultValue="get_governance_bundle"
     values={[
-        { label: 'list_governance_bundles', value: 'list_governance_bundles' },
-        { label: 'get_governance_bundle', value: 'get_governance_bundle' }
+        { label: 'get_governance_bundle', value: 'get_governance_bundle' },
+        { label: 'list_governance_bundles', value: 'list_governance_bundles' }
     ]}
 >
-<TabItem value="list_governance_bundles">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code></code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="bundles" /></td>
-    <td><code>array</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_governance_bundle">
 
 <table>
@@ -76,32 +53,56 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="id" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>Governance bundle ID</td>
 </tr>
 <tr>
     <td><CopyableCode code="name" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>Name of the governance bundle</td>
 </tr>
 <tr>
     <td><CopyableCode code="_links" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>Link relations available</td>
 </tr>
 <tr>
     <td><CopyableCode code="description" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>Description of the governance bundle</td>
 </tr>
 <tr>
     <td><CopyableCode code="orn" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>The governance bundle resource, in [ORN format](https://developer.okta.com/docs/api/openapi/okta-management/guides/roles/#okta-resource-name-orn)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>Status of the governance bundle</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_governance_bundles">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="bundles" /></td>
+    <td><code>array</code></td>
+    <td>List of governance bundles</td>
 </tr>
 </tbody>
 </table>
@@ -124,39 +125,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_governance_bundle"><CopyableCode code="get_governance_bundle" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-bundleId"><code>bundleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a governance bundle for the Admin Console</td>
+</tr>
+<tr>
     <td><a href="#list_governance_bundles"><CopyableCode code="list_governance_bundles" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
-    <td>Lists all Governance Bundles for the Admin Console in your org</td>
-</tr>
-<tr>
-    <td><a href="#get_governance_bundle"><CopyableCode code="get_governance_bundle" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a Governance Bundle from RAMP</td>
+    <td>Lists all governance bundles for the Admin Console in your org</td>
 </tr>
 <tr>
     <td><a href="#create_governance_bundle"><CopyableCode code="create_governance_bundle" /></a></td>
     <td><CopyableCode code="insert" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Creates a Governance Bundle for the Admin Console in RAMP</td>
+    <td>Creates a governance bundle of entitlements for the Admin Console</td>
 </tr>
 <tr>
     <td><a href="#replace_governance_bundle"><CopyableCode code="replace_governance_bundle" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-bundleId"><code>bundleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Replaces a Governance Bundle in RAMP</td>
+    <td>Replaces the properties of a governance bundle for the Admin Console</td>
 </tr>
 <tr>
     <td><a href="#delete_governance_bundle"><CopyableCode code="delete_governance_bundle" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-bundleId"><code>bundleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Deletes a Governance Bundle from RAMP</td>
+    <td>Deletes an Admin Console governance bundle</td>
 </tr>
 </tbody>
 </table>
@@ -174,15 +175,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-bundleId">
+    <td><CopyableCode code="bundleId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of a bundle</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -195,30 +201,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_governance_bundles"
+    defaultValue="get_governance_bundle"
     values={[
-        { label: 'list_governance_bundles', value: 'list_governance_bundles' },
-        { label: 'get_governance_bundle', value: 'get_governance_bundle' }
+        { label: 'get_governance_bundle', value: 'get_governance_bundle' },
+        { label: 'list_governance_bundles', value: 'list_governance_bundles' }
     ]}
 >
-<TabItem value="list_governance_bundles">
-
-Lists all Governance Bundles for the Admin Console in your org
-
-```sql
-SELECT
-_links,
-bundles
-FROM okta.iam.governance_bundles
-WHERE subdomain = '{{ subdomain }}' -- required
-AND after = '{{ after }}'
-AND limit = '{{ limit }}'
-;
-```
-</TabItem>
 <TabItem value="get_governance_bundle">
 
-Retrieves a Governance Bundle from RAMP
+Retrieves a governance bundle for the Admin Console
 
 ```sql
 SELECT
@@ -229,7 +220,23 @@ description,
 orn,
 status
 FROM okta.iam.governance_bundles
+WHERE bundleId = '{{ bundleId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_governance_bundles">
+
+Lists all governance bundles for the Admin Console in your org
+
+```sql
+SELECT
+_links,
+bundles
+FROM okta.iam.governance_bundles
 WHERE subdomain = '{{ subdomain }}' -- required
+AND after = '{{ after }}'
+AND limit = '{{ limit }}'
 ;
 ```
 </TabItem>
@@ -247,13 +254,13 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="create_governance_bundle">
 
-Creates a Governance Bundle for the Admin Console in RAMP
+Creates a governance bundle of entitlements for the Admin Console
 
 ```sql
 INSERT INTO okta.iam.governance_bundles (
-data__description,
-data__entitlements,
-data__name,
+description,
+entitlements,
+name,
 subdomain
 )
 SELECT 
@@ -273,20 +280,29 @@ status
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: governance_bundles
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the governance_bundles resource.
     - name: description
-      value: string
+      value: "{{ description }}"
+      description: |
+        Description of the governance bundle
     - name: entitlements
-      value: array
+      description: |
+        List of entitlements to include in the governance bundle
+      value:
+        - resourceSets: "{{ resourceSets }}"
+          role: "{{ role }}"
+          targets: "{{ targets }}"
     - name: name
-      value: string
-```
+      value: "{{ name }}"
+      description: |
+        Name of the governance bundle
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -301,24 +317,24 @@ status
 >
 <TabItem value="replace_governance_bundle">
 
-Replaces a Governance Bundle in RAMP
+Replaces the properties of a governance bundle for the Admin Console
 
 ```sql
 REPLACE okta.iam.governance_bundles
 SET 
-data__description = '{{ description }}',
-data__entitlements = '{{ entitlements }}',
-data__name = '{{ name }}'
+description = '{{ description }}',
+entitlements = '{{ entitlements }}',
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+bundleId = '{{ bundleId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
 _links,
 description,
 orn,
-status
-;
+status;
 ```
 </TabItem>
 </Tabs>
@@ -334,11 +350,12 @@ status
 >
 <TabItem value="delete_governance_bundle">
 
-Deletes a Governance Bundle from RAMP
+Deletes an Admin Console governance bundle
 
 ```sql
 DELETE FROM okta.iam.governance_bundles
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE bundleId = '{{ bundleId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

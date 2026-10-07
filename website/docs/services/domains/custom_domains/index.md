@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>custom_domains</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>custom_domains</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="custom_domains" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.domains.custom_domains" /></td></tr>
 </tbody></table>
@@ -32,31 +33,12 @@ Creates, updates, deletes, gets or lists a <code>custom_domains</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_custom_domains"
+    defaultValue="get_custom_domain"
     values={[
-        { label: 'list_custom_domains', value: 'list_custom_domains' },
-        { label: 'get_custom_domain', value: 'get_custom_domain' }
+        { label: 'get_custom_domain', value: 'get_custom_domain' },
+        { label: 'list_custom_domains', value: 'list_custom_domains' }
     ]}
 >
-<TabItem value="list_custom_domains">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="domains" /></td>
-    <td><code>array</code></td>
-    <td>Each element of the array defines an individual domain.</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_custom_domain">
 
 <table>
@@ -86,7 +68,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="certificateSourceType" /></td>
     <td><code>string</code></td>
-    <td>Certificate source type that indicates whether the certificate is provided by the user or Okta.</td>
+    <td>Certificate source type that indicates whether the certificate is provided by the user or Okta. (MANUAL, OKTA_MANAGED)</td>
 </tr>
 <tr>
     <td><CopyableCode code="dnsRecords" /></td>
@@ -106,7 +88,26 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="validationStatus" /></td>
     <td><code>string</code></td>
-    <td>Status of the domain (example: VERIFIED)</td>
+    <td>Status of the domain (COMPLETED, IN_PROGRESS, NOT_STARTED, VERIFIED) (example: VERIFIED)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_custom_domains">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="domains" /></td>
+    <td><code>array</code></td>
+    <td>Each element of the array defines an individual domain</td>
 </tr>
 </tbody>
 </table>
@@ -129,6 +130,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_custom_domain"><CopyableCode code="get_custom_domain" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-domainId"><code>domainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a custom domain by `domainId`</td>
+</tr>
+<tr>
     <td><a href="#list_custom_domains"><CopyableCode code="list_custom_domains" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -136,46 +144,39 @@ The following methods are available for this resource:
     <td>Lists all verified custom domains for the org</td>
 </tr>
 <tr>
-    <td><a href="#get_custom_domain"><CopyableCode code="get_custom_domain" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a custom domain by `domainId`</td>
-</tr>
-<tr>
     <td><a href="#create_custom_domain"><CopyableCode code="create_custom_domain" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__certificateSourceType"><code>data__certificateSourceType</code></a>, <a href="#parameter-data__domain"><code>data__domain</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-certificateSourceType"><code>certificateSourceType</code></a>, <a href="#parameter-domain"><code>domain</code></a></td>
     <td></td>
     <td>Creates your custom domain</td>
 </tr>
 <tr>
     <td><a href="#replace_custom_domain"><CopyableCode code="replace_custom_domain" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__brandId"><code>data__brandId</code></a></td>
+    <td><a href="#parameter-domainId"><code>domainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-brandId"><code>brandId</code></a></td>
     <td></td>
     <td>Replaces a custom domain's brand</td>
 </tr>
 <tr>
     <td><a href="#delete_custom_domain"><CopyableCode code="delete_custom_domain" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-domainId"><code>domainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a custom domain by `domainId`</td>
 </tr>
 <tr>
     <td><a href="#upsert_certificate"><CopyableCode code="upsert_certificate" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-certificate"><code>certificate</code></a>, <a href="#parameter-certificateChain"><code>certificateChain</code></a>, <a href="#parameter-privateKey"><code>privateKey</code></a>, <a href="#parameter-type"><code>type</code></a></td>
+    <td><a href="#parameter-domainId"><code>domainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-certificate"><code>certificate</code></a>, <a href="#parameter-certificateChain"><code>certificateChain</code></a>, <a href="#parameter-privateKey"><code>privateKey</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td></td>
     <td>Upserts (creates or renews) the `MANUAL` certificate for the custom domain<br /><br />&gt; **Notes:**<br />&gt; * If the existing `certificateSourceType` is `OKTA_MANAGED`, this operation changes the source type to `MANUAL`. Okta no longer manages and renews certificates for this domain after you provide a user-managed certificate.<br />&gt; * Okta supports TLS certificates and private keys that are PEM-encoded and 2048, 3072, or 4096 bits. See the [Custom domain guide](https://developer.okta.com/docs/guides/custom-url-domain/main/) for more details.</td>
 </tr>
 <tr>
     <td><a href="#verify_domain"><CopyableCode code="verify_domain" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-domainId"><code>domainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Verifies the custom domain and validity of DNS records by `domainId`. Furthermore, if the `certificateSourceType` in the domain is `OKTA_MANAGED`, then an attempt is made to obtain and install a certificate. After a certificate is obtained and installed by Okta, Okta manages the certificate including certificate renewal.</td>
+    <td>Verifies the custom domain and validity of DNS records by `domainId`. Verify your custom domain to confirm that you own or control the domain and that you have properly configured the required DNS records. Furthermore, if the `certificateSourceType` in the domain is `OKTA_MANAGED`, then an attempt is made to obtain and install a certificate. After a certificate is obtained and installed by Okta, Okta manages the certificate including certificate renewal.<br /><br />Verify your custom domain after you've [created it](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/CustomDomain/#tag/CustomDomain/operation/createCustomDomain) and after you've added your DNS records to your domain provider. Okta doesn't verify your domain automatically. You must use the API to verify your custom domain if you change your DNS records or if you encounter issues with domain validation.<br /><br />&gt; **Note:** DNS record changes can take time to propagate. If you recently updated your DNS records, you may need to wait before verifying your custom domain. If you encounter issues with domain verification, double-check your DNS records and ensure that they're correctly configured. See [Update your DNS records](https://developer.okta.com/docs/guides/custom-url-domain/main/#update-your-dns-txt).</td>
 </tr>
 </tbody>
 </table>
@@ -193,10 +194,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-domainId">
+    <td><CopyableCode code="domainId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Domain</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -204,24 +210,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_custom_domains"
+    defaultValue="get_custom_domain"
     values={[
-        { label: 'list_custom_domains', value: 'list_custom_domains' },
-        { label: 'get_custom_domain', value: 'get_custom_domain' }
+        { label: 'get_custom_domain', value: 'get_custom_domain' },
+        { label: 'list_custom_domains', value: 'list_custom_domains' }
     ]}
 >
-<TabItem value="list_custom_domains">
-
-Lists all verified custom domains for the org
-
-```sql
-SELECT
-domains
-FROM okta.domains.custom_domains
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_custom_domain">
 
 Retrieves a custom domain by `domainId`
@@ -236,6 +230,19 @@ dnsRecords,
 domain,
 publicCertificate,
 validationStatus
+FROM okta.domains.custom_domains
+WHERE domainId = '{{ domainId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_custom_domains">
+
+Lists all verified custom domains for the org
+
+```sql
+SELECT
+domains
 FROM okta.domains.custom_domains
 WHERE subdomain = '{{ subdomain }}' -- required
 ;
@@ -259,8 +266,8 @@ Creates your custom domain
 
 ```sql
 INSERT INTO okta.domains.custom_domains (
-data__certificateSourceType,
-data__domain,
+certificateSourceType,
+domain,
 subdomain
 )
 SELECT 
@@ -281,25 +288,24 @@ validationStatus
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: custom_domains
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the custom_domains resource.
     - name: certificateSourceType
-      value: string
-      description: >
+      value: "{{ certificateSourceType }}"
+      description: |
         Certificate source type that indicates whether the certificate is provided by the user or Okta.
-        
       valid_values: ['MANUAL', 'OKTA_MANAGED']
     - name: domain
-      value: string
-      description: >
+      value: "{{ domain }}"
+      description: |
         Custom domain name
-        
-```
+        > **Note:** You can't use the reserved \`drapp.{yourOrgSubDomain}.okta.com\` domain.
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -319,10 +325,11 @@ Replaces a custom domain's brand
 ```sql
 REPLACE okta.domains.custom_domains
 SET 
-data__brandId = '{{ brandId }}'
+brandId = '{{ brandId }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__brandId = '{{ brandId }}' --required
+domainId = '{{ domainId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND brandId = '{{ brandId }}' --required
 RETURNING
 id,
 _links,
@@ -331,8 +338,7 @@ certificateSourceType,
 dnsRecords,
 domain,
 publicCertificate,
-validationStatus
-;
+validationStatus;
 ```
 </TabItem>
 </Tabs>
@@ -352,7 +358,8 @@ Deletes a custom domain by `domainId`
 
 ```sql
 DELETE FROM okta.domains.custom_domains
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE domainId = '{{ domainId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -374,6 +381,7 @@ Upserts (creates or renews) the `MANUAL` certificate for the custom domain<br />
 
 ```sql
 EXEC okta.domains.custom_domains.upsert_certificate 
+@domainId='{{ domainId }}' --required, 
 @subdomain='{{ subdomain }}' --required 
 @@json=
 '{
@@ -387,10 +395,11 @@ EXEC okta.domains.custom_domains.upsert_certificate
 </TabItem>
 <TabItem value="verify_domain">
 
-Verifies the custom domain and validity of DNS records by `domainId`. Furthermore, if the `certificateSourceType` in the domain is `OKTA_MANAGED`, then an attempt is made to obtain and install a certificate. After a certificate is obtained and installed by Okta, Okta manages the certificate including certificate renewal.
+Verifies the custom domain and validity of DNS records by `domainId`. Verify your custom domain to confirm that you own or control the domain and that you have properly configured the required DNS records. Furthermore, if the `certificateSourceType` in the domain is `OKTA_MANAGED`, then an attempt is made to obtain and install a certificate. After a certificate is obtained and installed by Okta, Okta manages the certificate including certificate renewal.<br /><br />Verify your custom domain after you've [created it](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/CustomDomain/#tag/CustomDomain/operation/createCustomDomain) and after you've added your DNS records to your domain provider. Okta doesn't verify your domain automatically. You must use the API to verify your custom domain if you change your DNS records or if you encounter issues with domain validation.<br /><br />&gt; **Note:** DNS record changes can take time to propagate. If you recently updated your DNS records, you may need to wait before verifying your custom domain. If you encounter issues with domain verification, double-check your DNS records and ensure that they're correctly configured. See [Update your DNS records](https://developer.okta.com/docs/guides/custom-url-domain/main/#update-your-dns-txt).
 
 ```sql
 EXEC okta.domains.custom_domains.verify_domain 
+@domainId='{{ domainId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

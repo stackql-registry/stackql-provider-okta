@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>instances</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>instances</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="instances" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.integrations.instances" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>instances</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_api_service_integration_instances"
+    defaultValue="get_api_service_integration_instance"
     values={[
-        { label: 'list_api_service_integration_instances', value: 'list_api_service_integration_instances' },
-        { label: 'get_api_service_integration_instance', value: 'get_api_service_integration_instance' }
+        { label: 'get_api_service_integration_instance', value: 'get_api_service_integration_instance' },
+        { label: 'list_api_service_integration_instances', value: 'list_api_service_integration_instances' }
     ]}
 >
-<TabItem value="list_api_service_integration_instances">
+<TabItem value="get_api_service_integration_instance">
 
 <table>
 <thead>
@@ -97,7 +98,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_api_service_integration_instance">
+<TabItem value="list_api_service_integration_instances">
 
 <table>
 <thead>
@@ -174,6 +175,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_api_service_integration_instance"><CopyableCode code="get_api_service_integration_instance" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves an API Service Integration instance by `id`</td>
+</tr>
+<tr>
     <td><a href="#list_api_service_integration_instances"><CopyableCode code="list_api_service_integration_instances" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -181,23 +189,16 @@ The following methods are available for this resource:
     <td>Lists all API Service Integration instances with a pagination option</td>
 </tr>
 <tr>
-    <td><a href="#get_api_service_integration_instance"><CopyableCode code="get_api_service_integration_instance" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves an API Service Integration instance by `id`</td>
-</tr>
-<tr>
     <td><a href="#create_api_service_integration_instance"><CopyableCode code="create_api_service_integration_instance" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__type"><code>data__type</code></a>, <a href="#parameter-data__grantedScopes"><code>data__grantedScopes</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-type"><code>type</code></a>, <a href="#parameter-grantedScopes"><code>grantedScopes</code></a></td>
     <td></td>
     <td>Creates and authorizes an API Service Integration instance</td>
 </tr>
 <tr>
     <td><a href="#delete_api_service_integration_instance"><CopyableCode code="delete_api_service_integration_instance" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes an API Service Integration instance by `id`. This operation also revokes access to scopes that were previously granted to this API Service Integration instance.</td>
 </tr>
@@ -217,15 +218,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-apiServiceId">
+    <td><CopyableCode code="apiServiceId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the API Service Integration instance (example: 000lr2rLjZ6NsGn1P0g3)</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 </tbody>
 </table>
@@ -233,12 +239,33 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_api_service_integration_instances"
+    defaultValue="get_api_service_integration_instance"
     values={[
-        { label: 'list_api_service_integration_instances', value: 'list_api_service_integration_instances' },
-        { label: 'get_api_service_integration_instance', value: 'get_api_service_integration_instance' }
+        { label: 'get_api_service_integration_instance', value: 'get_api_service_integration_instance' },
+        { label: 'list_api_service_integration_instances', value: 'list_api_service_integration_instances' }
     ]}
 >
+<TabItem value="get_api_service_integration_instance">
+
+Retrieves an API Service Integration instance by `id`
+
+```sql
+SELECT
+id,
+name,
+_links,
+configGuideUrl,
+createdAt,
+createdBy,
+grantedScopes,
+properties,
+type
+FROM okta.integrations.instances
+WHERE apiServiceId = '{{ apiServiceId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_api_service_integration_instances">
 
 Lists all API Service Integration instances with a pagination option
@@ -260,26 +287,6 @@ AND after = '{{ after }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_api_service_integration_instance">
-
-Retrieves an API Service Integration instance by `id`
-
-```sql
-SELECT
-id,
-name,
-_links,
-configGuideUrl,
-createdAt,
-createdBy,
-grantedScopes,
-properties,
-type
-FROM okta.integrations.instances
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 </Tabs>
 
 
@@ -298,9 +305,9 @@ Creates and authorizes an API Service Integration instance
 
 ```sql
 INSERT INTO okta.integrations.instances (
-data__grantedScopes,
-data__properties,
-data__type,
+grantedScopes,
+properties,
+type,
 subdomain
 )
 SELECT 
@@ -324,29 +331,27 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: instances
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the instances resource.
     - name: grantedScopes
-      value: array
-      description: >
+      value:
+        - "{{ grantedScopes }}"
+      description: |
         The list of Okta management scopes granted to the API Service Integration instance. See [Okta management OAuth 2.0 scopes]https://developer.okta.com/docs/api/oauth2/#okta-admin-management.
-        
     - name: properties
-      value: object
-      description: >
+      value: "{{ properties }}"
+      description: |
         App instance properties
-        
     - name: type
-      value: string
-      description: >
-        The type of the API service integration. This string is an underscore-concatenated, lowercased API service integration name. For example, `my_api_log_integration`.
-        
-```
+      value: "{{ type }}"
+      description: |
+        The type of the API service integration. This string is an underscore-concatenated, lowercased API service integration name. For example, \`my_api_log_integration\`.
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -365,7 +370,8 @@ Deletes an API Service Integration instance by `id`. This operation also revokes
 
 ```sql
 DELETE FROM okta.integrations.instances
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE apiServiceId = '{{ apiServiceId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>csrs</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>csrs</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="csrs" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.apps.csrs" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>csrs</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_csrs_for_application"
+    defaultValue="get_csr_for_application"
     values={[
-        { label: 'list_csrs_for_application', value: 'list_csrs_for_application' },
-        { label: 'get_csr_for_application', value: 'get_csr_for_application' }
+        { label: 'get_csr_for_application', value: 'get_csr_for_application' },
+        { label: 'list_csrs_for_application', value: 'list_csrs_for_application' }
     ]}
 >
-<TabItem value="list_csrs_for_application">
+<TabItem value="get_csr_for_application">
 
 <table>
 <thead>
@@ -77,7 +78,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_csr_for_application">
+<TabItem value="list_csrs_for_application">
 
 <table>
 <thead>
@@ -134,39 +135,39 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_csrs_for_application"><CopyableCode code="list_csrs_for_application" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all Certificate Signing Requests for an application</td>
-</tr>
-<tr>
     <td><a href="#get_csr_for_application"><CopyableCode code="get_csr_for_application" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-csrId"><code>csrId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Retrieves a Certificate Signing Request (CSR) for the app by `csrId`.<br /><br />Returns a Base64-encoded CSR in DER format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.</td>
+    <td>Retrieves a certificate signing request (CSR) for the app by `csrId`.<br /><br />Returns a Base64-encoded CSR in DER format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.</td>
+</tr>
+<tr>
+    <td><a href="#list_csrs_for_application"><CopyableCode code="list_csrs_for_application" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all certificate signing requests for an app</td>
 </tr>
 <tr>
     <td><a href="#revoke_csr_from_application"><CopyableCode code="revoke_csr_from_application" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-csrId"><code>csrId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Revokes a Certificate Signing Request and deletes the key pair from the app</td>
+    <td>Revokes a certificate signing request and deletes the key pair from the app</td>
 </tr>
 <tr>
     <td><a href="#generate_csr_for_application"><CopyableCode code="generate_csr_for_application" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Generates a new key pair and returns the Certificate Signing Request(CSR) for it. The information in a CSR is used by the Certificate Authority (CA) to verify and create your certificate. It also contains the public key that is included in your certificate.<br /><br />Returns CSR in `pkcs#10` format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.<br />&gt; **Note:** The key pair isn't listed in the Key Credentials for the app until it's published.</td>
+    <td>Generates a new key pair and returns the certificate signing request (CSR) for it. The information in a CSR is used by the Certificate Authority (CA) to verify and create your certificate. It also contains the public key that's included in your certificate.<br /><br />Returns CSR in `pkcs#10` format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.<br />&gt; **Note:** The key pair isn't listed in the key credentials for the app until it's published.</td>
 </tr>
 <tr>
     <td><a href="#publish_csr_from_application"><CopyableCode code="publish_csr_from_application" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-csrId"><code>csrId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Publishes a Certificate Signing Request (CSR) for the app with a signed X.509 certificate and adds it into the Application Key Credentials.<br />&gt; **Note:** Publishing a certificate completes the lifecycle of the CSR and it's no longer accessible.</td>
+    <td>Publishes a certificate signing request (CSR) for the app with a signed X.509 certificate and adds it into the application key credentials.<br />&gt; **Note:** Publishing a certificate completes the lifecycle of the CSR and it's no longer accessible.</td>
 </tr>
 </tbody>
 </table>
@@ -184,10 +185,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appId">
+    <td><CopyableCode code="appId" /></td>
+    <td><code>string</code></td>
+    <td>Application ID</td>
+</tr>
+<tr id="parameter-csrId">
+    <td><CopyableCode code="csrId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the CSR</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -195,15 +206,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_csrs_for_application"
+    defaultValue="get_csr_for_application"
     values={[
-        { label: 'list_csrs_for_application', value: 'list_csrs_for_application' },
-        { label: 'get_csr_for_application', value: 'get_csr_for_application' }
+        { label: 'get_csr_for_application', value: 'get_csr_for_application' },
+        { label: 'list_csrs_for_application', value: 'list_csrs_for_application' }
     ]}
 >
-<TabItem value="list_csrs_for_application">
+<TabItem value="get_csr_for_application">
 
-Lists all Certificate Signing Requests for an application
+Retrieves a certificate signing request (CSR) for the app by `csrId`.<br /><br />Returns a Base64-encoded CSR in DER format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.
 
 ```sql
 SELECT
@@ -213,13 +224,15 @@ created,
 csr,
 kty
 FROM okta.apps.csrs
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE appId = '{{ appId }}' -- required
+AND csrId = '{{ csrId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_csr_for_application">
+<TabItem value="list_csrs_for_application">
 
-Retrieves a Certificate Signing Request (CSR) for the app by `csrId`.<br /><br />Returns a Base64-encoded CSR in DER format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.
+Lists all certificate signing requests for an app
 
 ```sql
 SELECT
@@ -229,7 +242,8 @@ created,
 csr,
 kty
 FROM okta.apps.csrs
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE appId = '{{ appId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -246,11 +260,13 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="revoke_csr_from_application">
 
-Revokes a Certificate Signing Request and deletes the key pair from the app
+Revokes a certificate signing request and deletes the key pair from the app
 
 ```sql
 DELETE FROM okta.apps.csrs
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE appId = '{{ appId }}' --required
+AND csrId = '{{ csrId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -268,10 +284,11 @@ WHERE subdomain = '{{ subdomain }}' --required
 >
 <TabItem value="generate_csr_for_application">
 
-Generates a new key pair and returns the Certificate Signing Request(CSR) for it. The information in a CSR is used by the Certificate Authority (CA) to verify and create your certificate. It also contains the public key that is included in your certificate.<br /><br />Returns CSR in `pkcs#10` format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.<br />&gt; **Note:** The key pair isn't listed in the Key Credentials for the app until it's published.
+Generates a new key pair and returns the certificate signing request (CSR) for it. The information in a CSR is used by the Certificate Authority (CA) to verify and create your certificate. It also contains the public key that's included in your certificate.<br /><br />Returns CSR in `pkcs#10` format if the `Accept` media type is `application/pkcs10` or a CSR object if the `Accept` media type is `application/json`.<br />&gt; **Note:** The key pair isn't listed in the key credentials for the app until it's published.
 
 ```sql
 EXEC okta.apps.csrs.generate_csr_for_application 
+@appId='{{ appId }}' --required, 
 @subdomain='{{ subdomain }}' --required 
 @@json=
 '{
@@ -283,10 +300,12 @@ EXEC okta.apps.csrs.generate_csr_for_application
 </TabItem>
 <TabItem value="publish_csr_from_application">
 
-Publishes a Certificate Signing Request (CSR) for the app with a signed X.509 certificate and adds it into the Application Key Credentials.<br />&gt; **Note:** Publishing a certificate completes the lifecycle of the CSR and it's no longer accessible.
+Publishes a certificate signing request (CSR) for the app with a signed X.509 certificate and adds it into the application key credentials.<br />&gt; **Note:** Publishing a certificate completes the lifecycle of the CSR and it's no longer accessible.
 
 ```sql
 EXEC okta.apps.csrs.publish_csr_from_application 
+@appId='{{ appId }}' --required, 
+@csrId='{{ csrId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

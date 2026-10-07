@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>connections</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>connections</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="connections" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.apps.connections" /></td></tr>
 </tbody></table>
@@ -56,7 +57,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="authScheme" /></td>
     <td><code>string</code></td>
-    <td>A token is used to authenticate with the app. This property is only returned for the `TOKEN` authentication scheme.</td>
+    <td>A token is used to authenticate with the app. This property is only returned for the `TOKEN` authentication scheme. (TOKEN)</td>
 </tr>
 <tr>
     <td><CopyableCode code="baseUrl" /></td>
@@ -71,7 +72,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Provisioning connection status (default: DISABLED)</td>
+    <td>Provisioning connection status (DISABLED, ENABLED, UNKNOWN) (default: DISABLED)</td>
 </tr>
 </tbody>
 </table>
@@ -96,35 +97,35 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_default_provisioning_connection_for_application"><CopyableCode code="get_default_provisioning_connection_for_application" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the default provisioning connection for an app</td>
 </tr>
 <tr>
     <td><a href="#update_default_provisioning_connection_for_application"><CopyableCode code="update_default_provisioning_connection_for_application" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-profile"><code>profile</code></a></td>
     <td><a href="#parameter-activate"><code>activate</code></a></td>
     <td>Updates the default provisioning connection for an app</td>
 </tr>
 <tr>
     <td><a href="#activate_default_provisioning_connection_for_application"><CopyableCode code="activate_default_provisioning_connection_for_application" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates the default provisioning connection for an app</td>
 </tr>
 <tr>
     <td><a href="#deactivate_default_provisioning_connection_for_application"><CopyableCode code="deactivate_default_provisioning_connection_for_application" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates the default provisioning connection for an app</td>
 </tr>
 <tr>
     <td><a href="#verify_provisioning_connection_for_application"><CopyableCode code="verify_provisioning_connection_for_application" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-code"><code>code</code></a>, <a href="#parameter-state"><code>state</code></a></td>
     <td>Verifies the OAuth 2.0-based connection as part of the OAuth 2.0 consent flow. The validation of the consent flow is the last step of the provisioning setup for an OAuth 2.0-based connection.<br />Currently, this operation only supports `office365`,`google`, `zoomus`, and `slack` apps.<br /></td>
 </tr>
@@ -144,14 +145,24 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appId">
+    <td><CopyableCode code="appId" /></td>
+    <td><code>string</code></td>
+    <td>Application ID</td>
+</tr>
+<tr id="parameter-appName">
+    <td><CopyableCode code="appName" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-activate">
     <td><CopyableCode code="activate" /></td>
-    <td><code>boolean</code></td>
+    <td><code>string</code></td>
     <td>Activates the provisioning connection</td>
 </tr>
 <tr id="parameter-code">
@@ -187,7 +198,8 @@ baseUrl,
 profile,
 status
 FROM okta.apps.connections
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE appId = '{{ appId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -209,17 +221,19 @@ Updates the default provisioning connection for an app
 ```sql
 UPDATE okta.apps.connections
 SET 
--- No updatable properties
+baseUrl = '{{ baseUrl }}',
+profile = '{{ profile }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND activate = {{ activate}}
+appId = '{{ appId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND profile = '{{ profile }}' --required
+AND activate = '{{ activate}}'
 RETURNING
 _links,
 authScheme,
 baseUrl,
 profile,
-status
-;
+status;
 ```
 </TabItem>
 </Tabs>
@@ -241,6 +255,7 @@ Activates the default provisioning connection for an app
 
 ```sql
 EXEC okta.apps.connections.activate_default_provisioning_connection_for_application 
+@appId='{{ appId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -251,6 +266,7 @@ Deactivates the default provisioning connection for an app
 
 ```sql
 EXEC okta.apps.connections.deactivate_default_provisioning_connection_for_application 
+@appId='{{ appId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -261,6 +277,8 @@ Verifies the OAuth 2.0-based connection as part of the OAuth 2.0 consent flow. T
 
 ```sql
 EXEC okta.apps.connections.verify_provisioning_connection_for_application 
+@appName='{{ appName }}' --required, 
+@appId='{{ appId }}' --required, 
 @subdomain='{{ subdomain }}' --required, 
 @code='{{ code }}', 
 @state='{{ state }}'

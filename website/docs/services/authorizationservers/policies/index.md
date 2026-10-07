@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>policies</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>policies</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="policies" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authorizationservers.policies" /></td></tr>
 </tbody></table>
@@ -32,81 +33,12 @@ Creates, updates, deletes, gets or lists a <code>policies</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_authorization_server_policies"
+    defaultValue="get_authorization_server_policy"
     values={[
-        { label: 'list_authorization_server_policies', value: 'list_authorization_server_policies' },
-        { label: 'get_authorization_server_policy', value: 'get_authorization_server_policy' }
+        { label: 'get_authorization_server_policy', value: 'get_authorization_server_policy' },
+        { label: 'list_authorization_server_policies', value: 'list_authorization_server_policies' }
     ]}
 >
-<TabItem value="list_authorization_server_policies">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>ID of the Policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Name of the Policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="conditions" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the Policy was created</td>
-</tr>
-<tr>
-    <td><CopyableCode code="description" /></td>
-    <td><code>string</code></td>
-    <td>Description of the Policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the Policy was last updated</td>
-</tr>
-<tr>
-    <td><CopyableCode code="priority" /></td>
-    <td><code>integer</code></td>
-    <td>Specifies the order in which this Policy is evaluated in relation to the other Policies in a custom authorization server</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>Specifies whether requests have access to this Policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="system" /></td>
-    <td><code>boolean</code></td>
-    <td>Specifies whether Okta created this Policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>Indicates that the Policy is an authorization server Policy</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_authorization_server_policy">
 
 <table>
@@ -161,7 +93,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Specifies whether requests have access to this Policy</td>
+    <td>Specifies whether requests have access to this Policy (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="system" /></td>
@@ -171,7 +103,76 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Indicates that the Policy is an authorization server Policy</td>
+    <td>Indicates that the Policy is an authorization server Policy (OAUTH_AUTHORIZATION_POLICY)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_authorization_server_policies">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>ID of the Policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Name of the Policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="conditions" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the Policy was created</td>
+</tr>
+<tr>
+    <td><CopyableCode code="description" /></td>
+    <td><code>string</code></td>
+    <td>Description of the Policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the Policy was last updated</td>
+</tr>
+<tr>
+    <td><CopyableCode code="priority" /></td>
+    <td><code>integer</code></td>
+    <td>Specifies the order in which this Policy is evaluated in relation to the other Policies in a custom authorization server</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>Specifies whether requests have access to this Policy (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="system" /></td>
+    <td><code>boolean</code></td>
+    <td>Specifies whether Okta created this Policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>Indicates that the Policy is an authorization server Policy (OAUTH_AUTHORIZATION_POLICY)</td>
 </tr>
 </tbody>
 </table>
@@ -194,51 +195,51 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_authorization_server_policies"><CopyableCode code="list_authorization_server_policies" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all policies</td>
-</tr>
-<tr>
     <td><a href="#get_authorization_server_policy"><CopyableCode code="get_authorization_server_policy" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a policy</td>
 </tr>
 <tr>
+    <td><a href="#list_authorization_server_policies"><CopyableCode code="list_authorization_server_policies" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all policies</td>
+</tr>
+<tr>
     <td><a href="#create_authorization_server_policy"><CopyableCode code="create_authorization_server_policy" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Creates a policy</td>
 </tr>
 <tr>
     <td><a href="#replace_authorization_server_policy"><CopyableCode code="replace_authorization_server_policy" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a policy</td>
 </tr>
 <tr>
     <td><a href="#delete_authorization_server_policy"><CopyableCode code="delete_authorization_server_policy" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a policy</td>
 </tr>
 <tr>
     <td><a href="#activate_authorization_server_policy"><CopyableCode code="activate_authorization_server_policy" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates an authorization server policy</td>
 </tr>
 <tr>
     <td><a href="#deactivate_authorization_server_policy"><CopyableCode code="deactivate_authorization_server_policy" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates an authorization server policy</td>
 </tr>
@@ -258,10 +259,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-authServerId">
+    <td><CopyableCode code="authServerId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Authorization Server</td>
+</tr>
+<tr id="parameter-policyId">
+    <td><CopyableCode code="policyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -269,34 +280,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_authorization_server_policies"
+    defaultValue="get_authorization_server_policy"
     values={[
-        { label: 'list_authorization_server_policies', value: 'list_authorization_server_policies' },
-        { label: 'get_authorization_server_policy', value: 'get_authorization_server_policy' }
+        { label: 'get_authorization_server_policy', value: 'get_authorization_server_policy' },
+        { label: 'list_authorization_server_policies', value: 'list_authorization_server_policies' }
     ]}
 >
-<TabItem value="list_authorization_server_policies">
-
-Lists all policies
-
-```sql
-SELECT
-id,
-name,
-_links,
-conditions,
-created,
-description,
-lastUpdated,
-priority,
-status,
-system,
-type
-FROM okta.authorizationservers.policies
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_authorization_server_policy">
 
 Retrieves a policy
@@ -315,7 +304,32 @@ status,
 system,
 type
 FROM okta.authorizationservers.policies
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE authServerId = '{{ authServerId }}' -- required
+AND policyId = '{{ policyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_authorization_server_policies">
+
+Lists all policies
+
+```sql
+SELECT
+id,
+name,
+_links,
+conditions,
+created,
+description,
+lastUpdated,
+priority,
+status,
+system,
+type
+FROM okta.authorizationservers.policies
+WHERE authServerId = '{{ authServerId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -337,14 +351,15 @@ Creates a policy
 
 ```sql
 INSERT INTO okta.authorizationservers.policies (
-data__id,
-data__type,
-data__name,
-data__conditions,
-data__description,
-data__priority,
-data__status,
-data__system,
+id,
+type,
+name,
+conditions,
+description,
+priority,
+status,
+system,
+authServerId,
 subdomain
 )
 SELECT 
@@ -356,6 +371,7 @@ SELECT
 {{ priority }},
 '{{ status }}',
 {{ system }},
+'{{ authServerId }}',
 '{{ subdomain }}'
 RETURNING
 id,
@@ -374,53 +390,52 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: policies
   props:
+    - name: authServerId
+      value: "{{ authServerId }}"
+      description: Required parameter for the policies resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the policies resource.
     - name: id
-      value: string
-      description: >
+      value: "{{ id }}"
+      description: |
         ID of the Policy
-        
     - name: type
-      value: string
-      description: >
+      value: "{{ type }}"
+      description: |
         Indicates that the Policy is an authorization server Policy
-        
       valid_values: ['OAUTH_AUTHORIZATION_POLICY']
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Name of the Policy
-        
     - name: conditions
-      value: object
+      value:
+        clients:
+          include:
+            - "{{ include }}"
     - name: description
-      value: string
-      description: >
+      value: "{{ description }}"
+      description: |
         Description of the Policy
-        
     - name: priority
-      value: integer
-      description: >
+      value: {{ priority }}
+      description: |
         Specifies the order in which this Policy is evaluated in relation to the other Policies in a custom authorization server
-        
     - name: status
-      value: string
-      description: >
+      value: "{{ status }}"
+      description: |
         Specifies whether requests have access to this Policy
-        
       valid_values: ['ACTIVE', 'INACTIVE']
     - name: system
-      value: boolean
-      description: >
+      value: {{ system }}
+      description: |
         Specifies whether Okta created this Policy
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -440,16 +455,18 @@ Replaces a policy
 ```sql
 REPLACE okta.authorizationservers.policies
 SET 
-data__id = '{{ id }}',
-data__type = '{{ type }}',
-data__name = '{{ name }}',
-data__conditions = '{{ conditions }}',
-data__description = '{{ description }}',
-data__priority = {{ priority }},
-data__status = '{{ status }}',
-data__system = {{ system }}
+id = '{{ id }}',
+type = '{{ type }}',
+name = '{{ name }}',
+conditions = '{{ conditions }}',
+description = '{{ description }}',
+priority = {{ priority }},
+status = '{{ status }}',
+system = {{ system }}
 WHERE 
-subdomain = '{{ subdomain }}' --required
+authServerId = '{{ authServerId }}' --required
+AND policyId = '{{ policyId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -461,8 +478,7 @@ lastUpdated,
 priority,
 status,
 system,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -482,7 +498,9 @@ Deletes a policy
 
 ```sql
 DELETE FROM okta.authorizationservers.policies
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE authServerId = '{{ authServerId }}' --required
+AND policyId = '{{ policyId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -504,6 +522,8 @@ Activates an authorization server policy
 
 ```sql
 EXEC okta.authorizationservers.policies.activate_authorization_server_policy 
+@authServerId='{{ authServerId }}' --required, 
+@policyId='{{ policyId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -514,6 +534,8 @@ Deactivates an authorization server policy
 
 ```sql
 EXEC okta.authorizationservers.policies.deactivate_authorization_server_policy 
+@authServerId='{{ authServerId }}' --required, 
+@policyId='{{ policyId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

@@ -18,13 +18,14 @@ devices service documentation.
 
 :::info[Service Summary]
 
-total resources: __2__  
+total resources: __3__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
+<a href="/services/devices/device_os_accounts/">device_os_accounts</a><br />
 <a href="/services/devices/device_users/">device_users</a>
 </div>
 <div class="providerDocColumn">

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>linked_object_definitions</code
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>linked_object_definitions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="linked_object_definitions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.meta.linked_object_definitions" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>linked_object_definitions</code
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_linked_object_definitions"
+    defaultValue="get_linked_object_definition"
     values={[
-        { label: 'list_linked_object_definitions', value: 'list_linked_object_definitions' },
-        { label: 'get_linked_object_definition', value: 'get_linked_object_definition' }
+        { label: 'get_linked_object_definition', value: 'get_linked_object_definition' },
+        { label: 'list_linked_object_definitions', value: 'list_linked_object_definitions' }
     ]}
 >
-<TabItem value="list_linked_object_definitions">
+<TabItem value="get_linked_object_definition">
 
 <table>
 <thead>
@@ -67,7 +68,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_linked_object_definition">
+<TabItem value="list_linked_object_definitions">
 
 <table>
 <thead>
@@ -114,18 +115,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_linked_object_definition"><CopyableCode code="get_linked_object_definition" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-linkedObjectName"><code>linkedObjectName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a Linked Object definition</td>
+</tr>
+<tr>
     <td><a href="#list_linked_object_definitions"><CopyableCode code="list_linked_object_definitions" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all Linked Object definitions</td>
-</tr>
-<tr>
-    <td><a href="#get_linked_object_definition"><CopyableCode code="get_linked_object_definition" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a Linked Object definition</td>
 </tr>
 <tr>
     <td><a href="#create_linked_object_definition"><CopyableCode code="create_linked_object_definition" /></a></td>
@@ -137,7 +138,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#delete_linked_object_definition"><CopyableCode code="delete_linked_object_definition" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-linkedObjectName"><code>linkedObjectName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes the Linked Object definition specified by either the `primary` or `associated` name. The entire definition is removed, regardless of which name that you specify.</td>
 </tr>
@@ -157,10 +158,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-linkedObjectName">
+    <td><CopyableCode code="linkedObjectName" /></td>
+    <td><code>string</code></td>
+    <td>Primary or Associated name</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -168,15 +174,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_linked_object_definitions"
+    defaultValue="get_linked_object_definition"
     values={[
-        { label: 'list_linked_object_definitions', value: 'list_linked_object_definitions' },
-        { label: 'get_linked_object_definition', value: 'get_linked_object_definition' }
+        { label: 'get_linked_object_definition', value: 'get_linked_object_definition' },
+        { label: 'list_linked_object_definitions', value: 'list_linked_object_definitions' }
     ]}
 >
-<TabItem value="list_linked_object_definitions">
+<TabItem value="get_linked_object_definition">
 
-Lists all Linked Object definitions
+Retrieves a Linked Object definition
 
 ```sql
 SELECT
@@ -184,13 +190,14 @@ _links,
 associated,
 primary
 FROM okta.meta.linked_object_definitions
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE linkedObjectName = '{{ linkedObjectName }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_linked_object_definition">
+<TabItem value="list_linked_object_definitions">
 
-Retrieves a Linked Object definition
+Lists all Linked Object definitions
 
 ```sql
 SELECT
@@ -220,9 +227,9 @@ Creates a Linked Object definition
 
 ```sql
 INSERT INTO okta.meta.linked_object_definitions (
-data__associated,
-data__primary,
-data___links,
+associated,
+primary,
+_links,
 subdomain
 )
 SELECT 
@@ -239,23 +246,32 @@ primary
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: linked_object_definitions
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the linked_object_definitions resource.
     - name: associated
-      value: object
+      value:
+        description: "{{ description }}"
+        name: "{{ name }}"
+        title: "{{ title }}"
+        type: "{{ type }}"
     - name: primary
-      value: object
+      value:
+        description: "{{ description }}"
+        name: "{{ name }}"
+        title: "{{ title }}"
+        type: "{{ type }}"
     - name: _links
-      value: object
-      description: >
+      description: |
         Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the current status of an application using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
-        
-```
+      value:
+        self:
+          href: "{{ href }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -274,7 +290,8 @@ Deletes the Linked Object definition specified by either the `primary` or `assoc
 
 ```sql
 DELETE FROM okta.meta.linked_object_definitions
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE linkedObjectName = '{{ linkedObjectName }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

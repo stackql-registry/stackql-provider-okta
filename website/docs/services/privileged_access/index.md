@@ -18,16 +18,16 @@ privileged_access service documentation.
 
 :::info[Service Summary]
 
-total resources: __1__  
+total resources: __2__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
-<a href="/services/privileged_access/service_accounts/">service_accounts</a>
+<a href="/services/privileged_access/okta_service_accounts/">okta_service_accounts</a>
 </div>
 <div class="providerDocColumn">
-
+<a href="/services/privileged_access/service_accounts/">service_accounts</a>
 </div>
 </div>

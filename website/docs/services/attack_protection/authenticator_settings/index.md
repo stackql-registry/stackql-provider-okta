@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>authenticator_settings</code> 
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>authenticator_settings</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="authenticator_settings" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.attack_protection.authenticator_settings" /></td></tr>
 </tbody></table>
@@ -106,7 +107,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -149,12 +150,11 @@ Replaces the Authenticator Settings for an org
 ```sql
 REPLACE okta.attack_protection.authenticator_settings
 SET 
-data__verifyKnowledgeSecondWhen2faRequired = {{ verifyKnowledgeSecondWhen2faRequired }}
+verifyKnowledgeSecondWhen2faRequired = {{ verifyKnowledgeSecondWhen2faRequired }}
 WHERE 
 subdomain = '{{ subdomain }}' --required
 RETURNING
-verifyKnowledgeSecondWhen2faRequired
-;
+verifyKnowledgeSecondWhen2faRequired;
 ```
 </TabItem>
 </Tabs>

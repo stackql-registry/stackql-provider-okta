@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>federated_claims</code> resourc
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>federated_claims</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="federated_claims" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.apps.federated_claims" /></td></tr>
 </tbody></table>
@@ -32,12 +33,36 @@ Creates, updates, deletes, gets or lists a <code>federated_claims</code> resourc
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_federated_claims"
+    defaultValue="get_federated_claim"
     values={[
-        { label: 'list_federated_claims', value: 'list_federated_claims' },
-        { label: 'get_federated_claim', value: 'get_federated_claim' }
+        { label: 'get_federated_claim', value: 'get_federated_claim' },
+        { label: 'list_federated_claims', value: 'list_federated_claims' }
     ]}
 >
+<TabItem value="get_federated_claim">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>The name of the claim to be used in the produced token (example: role)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="expression" /></td>
+    <td><code>string</code></td>
+    <td>The Okta Expression Language expression to be evaluated at runtime (example: appuser.entitlements.role)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
 <TabItem value="list_federated_claims">
 
 <table>
@@ -77,30 +102,6 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_federated_claim">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>The name of the claim to be used in the produced token (example: role)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="expression" /></td>
-    <td><code>string</code></td>
-    <td>The Okta Expression Language expression to be evaluated at runtime (example: appuser.entitlements.role)</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 </Tabs>
 
 ## Methods
@@ -119,37 +120,37 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_federated_claims"><CopyableCode code="list_federated_claims" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all federated claims for your app</td>
-</tr>
-<tr>
     <td><a href="#get_federated_claim"><CopyableCode code="get_federated_claim" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-claimId"><code>claimId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a federated claim by `claimId`</td>
 </tr>
 <tr>
+    <td><a href="#list_federated_claims"><CopyableCode code="list_federated_claims" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all federated claims for your app</td>
+</tr>
+<tr>
     <td><a href="#create_federated_claim"><CopyableCode code="create_federated_claim" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Creates a claim that will be included in tokens produced by federation protocols (for example: OIDC `id_tokens` or SAML Assertions)</td>
 </tr>
 <tr>
     <td><a href="#replace_federated_claim"><CopyableCode code="replace_federated_claim" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-claimId"><code>claimId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a claim that will be included in tokens produced by federation protocols (for example: OIDC `id_tokens` or SAML Assertions)</td>
 </tr>
 <tr>
     <td><a href="#delete_federated_claim"><CopyableCode code="delete_federated_claim" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-claimId"><code>claimId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a federated claim by `claimId`</td>
 </tr>
@@ -169,10 +170,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appId">
+    <td><CopyableCode code="appId" /></td>
+    <td><code>string</code></td>
+    <td>Application ID</td>
+</tr>
+<tr id="parameter-claimId">
+    <td><CopyableCode code="claimId" /></td>
+    <td><code>string</code></td>
+    <td>The unique `id` of the federated claim (example: ofc2f4zrZbs8nUa7p0g4)</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -180,12 +191,27 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_federated_claims"
+    defaultValue="get_federated_claim"
     values={[
-        { label: 'list_federated_claims', value: 'list_federated_claims' },
-        { label: 'get_federated_claim', value: 'get_federated_claim' }
+        { label: 'get_federated_claim', value: 'get_federated_claim' },
+        { label: 'list_federated_claims', value: 'list_federated_claims' }
     ]}
 >
+<TabItem value="get_federated_claim">
+
+Retrieves a federated claim by `claimId`
+
+```sql
+SELECT
+name,
+expression
+FROM okta.apps.federated_claims
+WHERE appId = '{{ appId }}' -- required
+AND claimId = '{{ claimId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_federated_claims">
 
 Lists all federated claims for your app
@@ -198,20 +224,8 @@ created,
 expression,
 lastUpdated
 FROM okta.apps.federated_claims
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
-<TabItem value="get_federated_claim">
-
-Retrieves a federated claim by `claimId`
-
-```sql
-SELECT
-name,
-expression
-FROM okta.apps.federated_claims
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE appId = '{{ appId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -233,13 +247,15 @@ Creates a claim that will be included in tokens produced by federation protocols
 
 ```sql
 INSERT INTO okta.apps.federated_claims (
-data__expression,
-data__name,
+expression,
+name,
+appId,
 subdomain
 )
 SELECT 
 '{{ expression }}',
 '{{ name }}',
+'{{ appId }}',
 '{{ subdomain }}'
 RETURNING
 id,
@@ -252,24 +268,25 @@ lastUpdated
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: federated_claims
   props:
+    - name: appId
+      value: "{{ appId }}"
+      description: Required parameter for the federated_claims resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the federated_claims resource.
     - name: expression
-      value: string
-      description: >
+      value: "{{ expression }}"
+      description: |
         The Okta Expression Language expression to be evaluated at runtime
-        
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         The name of the claim to be used in the produced token
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -289,17 +306,18 @@ Replaces a claim that will be included in tokens produced by federation protocol
 ```sql
 REPLACE okta.apps.federated_claims
 SET 
-data__expression = '{{ expression }}',
-data__name = '{{ name }}'
+expression = '{{ expression }}',
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+appId = '{{ appId }}' --required
+AND claimId = '{{ claimId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
 created,
 expression,
-lastUpdated
-;
+lastUpdated;
 ```
 </TabItem>
 </Tabs>
@@ -319,7 +337,9 @@ Deletes a federated claim by `claimId`
 
 ```sql
 DELETE FROM okta.apps.federated_claims
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE appId = '{{ appId }}' --required
+AND claimId = '{{ claimId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

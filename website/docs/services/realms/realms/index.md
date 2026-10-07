@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>realms</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>realms</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="realms" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.realms.realms" /></td></tr>
 </tbody></table>
@@ -32,56 +33,12 @@ Creates, updates, deletes, gets or lists a <code>realms</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_realms"
+    defaultValue="get_realm"
     values={[
-        { label: 'list_realms', value: 'list_realms' },
-        { label: 'get_realm', value: 'get_realm' }
+        { label: 'get_realm', value: 'get_realm' },
+        { label: 'list_realms', value: 'list_realms' }
     ]}
 >
-<TabItem value="list_realms">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>Unique ID for the realm</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the realm was created</td>
-</tr>
-<tr>
-    <td><CopyableCode code="isDefault" /></td>
-    <td><code>boolean</code></td>
-    <td>Indicates the default realm. Existing users will start out in the default realm and can be moved to other realms individually or through realm assignments. See [Realms Assignments API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/RealmAssignment/).</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the realm was updated</td>
-</tr>
-<tr>
-    <td><CopyableCode code="profile" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_realm">
 
 <table>
@@ -111,7 +68,51 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="isDefault" /></td>
     <td><code>boolean</code></td>
-    <td>Indicates the default realm. Existing users will start out in the default realm and can be moved to other realms individually or through realm assignments. See [Realms Assignments API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/RealmAssignment/).</td>
+    <td>Indicates the default realm. Existing users will start out in the default realm and can be moved to other realms individually or through realm assignments. See [Realms Assignments API](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/realmassignment/).</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the realm was updated</td>
+</tr>
+<tr>
+    <td><CopyableCode code="profile" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_realms">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>Unique ID for the realm</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the realm was created</td>
+</tr>
+<tr>
+    <td><CopyableCode code="isDefault" /></td>
+    <td><code>boolean</code></td>
+    <td>Indicates the default realm. Existing users will start out in the default realm and can be moved to other realms individually or through realm assignments. See [Realms Assignments API](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/realmassignment/).</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -144,18 +145,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_realm"><CopyableCode code="get_realm" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-realmId"><code>realmId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a realm</td>
+</tr>
+<tr>
     <td><a href="#list_realms"><CopyableCode code="list_realms" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-after"><code>after</code></a>, <a href="#parameter-search"><code>search</code></a>, <a href="#parameter-sortBy"><code>sortBy</code></a>, <a href="#parameter-sortOrder"><code>sortOrder</code></a></td>
-    <td>Lists all Realms</td>
-</tr>
-<tr>
-    <td><a href="#get_realm"><CopyableCode code="get_realm" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a realm</td>
+    <td>Lists all realms.<br /><br />&gt; **Note:** The `search` parameter results are sourced from an eventually consistent datasource and may not reflect the latest information.</td>
 </tr>
 <tr>
     <td><a href="#create_realm"><CopyableCode code="create_realm" /></a></td>
@@ -167,14 +168,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#replace_realm"><CopyableCode code="replace_realm" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-realmId"><code>realmId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the realm profile</td>
 </tr>
 <tr>
     <td><a href="#delete_realm"><CopyableCode code="delete_realm" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-realmId"><code>realmId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a realm permanently. This operation can only be performed after disassociating other entities like users and identity providers from a realm.</td>
 </tr>
@@ -194,15 +195,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-realmId">
+    <td><CopyableCode code="realmId" /></td>
+    <td><code>string</code></td>
+    <td>ID of the realm</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -222,7 +228,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-sortOrder">
     <td><CopyableCode code="sortOrder" /></td>
     <td><code>string</code></td>
-    <td>Specifies the sort order: `asc` or `desc` (for search queries only). This parameter is ignored if `sortBy` isn't present.</td>
+    <td>Specifies sort order: `asc` or `desc` (for search queries only). This parameter is ignored if `sortBy` isn't present.</td>
 </tr>
 </tbody>
 </table>
@@ -230,15 +236,33 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_realms"
+    defaultValue="get_realm"
     values={[
-        { label: 'list_realms', value: 'list_realms' },
-        { label: 'get_realm', value: 'get_realm' }
+        { label: 'get_realm', value: 'get_realm' },
+        { label: 'list_realms', value: 'list_realms' }
     ]}
 >
+<TabItem value="get_realm">
+
+Retrieves a realm
+
+```sql
+SELECT
+id,
+_links,
+created,
+isDefault,
+lastUpdated,
+profile
+FROM okta.realms.realms
+WHERE realmId = '{{ realmId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_realms">
 
-Lists all Realms
+Lists all realms.<br /><br />&gt; **Note:** The `search` parameter results are sourced from an eventually consistent datasource and may not reflect the latest information.
 
 ```sql
 SELECT
@@ -255,23 +279,6 @@ AND after = '{{ after }}'
 AND search = '{{ search }}'
 AND sortBy = '{{ sortBy }}'
 AND sortOrder = '{{ sortOrder }}'
-;
-```
-</TabItem>
-<TabItem value="get_realm">
-
-Retrieves a realm
-
-```sql
-SELECT
-id,
-_links,
-created,
-isDefault,
-lastUpdated,
-profile
-FROM okta.realms.realms
-WHERE subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -293,7 +300,7 @@ Creates a new realm
 
 ```sql
 INSERT INTO okta.realms.realms (
-data__profile,
+profile,
 subdomain
 )
 SELECT 
@@ -311,16 +318,20 @@ profile
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: realms
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the realms resource.
     - name: profile
-      value: object
-```
+      value:
+        domains:
+          - "{{ domains }}"
+        name: "{{ name }}"
+        realmType: "{{ realmType }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -340,17 +351,17 @@ Replaces the realm profile
 ```sql
 REPLACE okta.realms.realms
 SET 
-data__profile = '{{ profile }}'
+profile = '{{ profile }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+realmId = '{{ realmId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 _links,
 created,
 isDefault,
 lastUpdated,
-profile
-;
+profile;
 ```
 </TabItem>
 </Tabs>
@@ -370,7 +381,8 @@ Deletes a realm permanently. This operation can only be performed after disassoc
 
 ```sql
 DELETE FROM okta.realms.realms
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE realmId = '{{ realmId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

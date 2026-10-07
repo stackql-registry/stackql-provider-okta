@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>support_aerial_consent</code> r
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>support_aerial_consent</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="support_aerial_consent" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.org.support_aerial_consent" /></td></tr>
 </tbody></table>
@@ -98,7 +99,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#grant_aerial_consent"><CopyableCode code="grant_aerial_consent" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__accountId"><code>data__accountId</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-accountId"><code>accountId</code></a></td>
     <td></td>
     <td>Grants an Okta Aerial account consent to manage your org. If the org is a child org, consent is taken from the parent org. Grant calls directly to the child are not allowed.</td>
 </tr>
@@ -128,7 +129,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -174,7 +175,7 @@ Grants an Okta Aerial account consent to manage your org. If the org is a child 
 
 ```sql
 INSERT INTO okta.org.support_aerial_consent (
-data__accountId,
+accountId,
 subdomain
 )
 SELECT 
@@ -190,19 +191,18 @@ grantedDate
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: support_aerial_consent
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the support_aerial_consent resource.
     - name: accountId
-      value: string
-      description: >
+      value: "{{ accountId }}"
+      description: |
         The unique ID of the Aerial account
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 

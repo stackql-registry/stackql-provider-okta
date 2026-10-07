@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>policy_apps</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>policy_apps</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="policy_apps" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.policies.policy_apps" /></td></tr>
 </tbody></table>
@@ -56,7 +57,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="_embedded" /></td>
     <td><code>object</code></td>
-    <td>Embedded resources related to the app using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. If the `expand=user/&#123;userId&#125;` query parameter is specified, then the assigned [Application User](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/ApplicationUsers/) is embedded.</td>
+    <td>Embedded resources related to the app using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. If the `expand=user/&#123;userId&#125;` query parameter is specified, then the assigned [Application User](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/applicationusers) is embedded.</td>
 </tr>
 <tr>
     <td><CopyableCode code="_links" /></td>
@@ -74,9 +75,14 @@ The following fields are returned by `SELECT` queries:
     <td>Timestamp when the application object was created</td>
 </tr>
 <tr>
+    <td><CopyableCode code="expressConfiguration" /></td>
+    <td><code>object</code></td>
+    <td>&lt;div class="x-lifecycle-container"&gt;&lt;x-lifecycle class="oie"&gt;&lt;/x-lifecycle&gt;&lt;/div&gt; Indicates which Express Configuration capabilities the app supports and has enabled</td>
+</tr>
+<tr>
     <td><CopyableCode code="features" /></td>
     <td><code>array</code></td>
-    <td>Enabled app features &gt; **Note:** See [Application Features](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/ApplicationFeatures/) for app provisioning features. </td>
+    <td>Enabled app features &gt; **Note:** See [Application Features](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/applicationfeatures/) for app provisioning features. </td>
 </tr>
 <tr>
     <td><CopyableCode code="label" /></td>
@@ -106,12 +112,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="signOnMode" /></td>
     <td><code>string</code></td>
-    <td>Authentication mode for the app  | signOnMode | Description | | ---------- | ----------- | | AUTO_LOGIN | Secure Web Authentication (SWA) | | BASIC_AUTH | HTTP Basic Authentication with Okta Browser Plugin | | BOOKMARK | Just a bookmark (no-authentication) | | BROWSER_PLUGIN | Secure Web Authentication (SWA) with Okta Browser Plugin | | OPENID_CONNECT | Federated Authentication with OpenID Connect (OIDC) | | SAML_1_1 | Federated Authentication with SAML 1.1 WebSSO (not supported for custom apps) | | SAML_2_0 | Federated Authentication with SAML 2.0 WebSSO | | SECURE_PASSWORD_STORE | Secure Web Authentication (SWA) with POST (plugin not required) | | WS_FEDERATION | Federated Authentication with WS-Federation Passive Requestor Profile |  Select the `signOnMode` for your custom app: </td>
+    <td>Authentication mode for the app  | signOnMode | Description | | ---------- | ----------- | | AUTO_LOGIN | Secure Web Authentication (SWA) | | BASIC_AUTH | HTTP Basic Authentication with Okta Browser Plugin | | BOOKMARK | Just a bookmark (no-authentication) | | BROWSER_PLUGIN | Secure Web Authentication (SWA) with Okta Browser Plugin | | OPENID_CONNECT | Federated Authentication with OpenID Connect (OIDC) | | SAML_1_1 | Federated Authentication with SAML 1.1 WebSSO (not supported for custom apps) | | SAML_2_0 | Federated Authentication with SAML 2.0 WebSSO | | SECURE_PASSWORD_STORE | Secure Web Authentication (SWA) with POST (plugin not required) | | WS_FEDERATION | Federated Authentication with WS-Federation Passive Requestor Profile |  Select the `signOnMode` for your custom app:  (AUTO_LOGIN, BASIC_AUTH, BOOKMARK, BROWSER_PLUGIN, OPENID_CONNECT, SAML_1_1, SAML_2_0, SECURE_PASSWORD_STORE, WS_FEDERATION)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>App instance status</td>
+    <td>App instance status (ACTIVE, DELETED, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="universalLogout" /></td>
@@ -146,9 +152,9 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_policy_apps"><CopyableCode code="list_policy_apps" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Lists all applications mapped to a policy identified by `policyId`<br /><br />&gt; **Note:** Use [List all resources mapped to a Policy](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/#tag/Policy/operation/listPolicyMappings) to list all applications mapped to a policy.</td>
+    <td>Lists all applications mapped to a policy identified by `policyId`<br /><br />&gt; **Note:** Use [List all resources mapped to a policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/policy/#tag/Policy/operation/listPolicyMappings) to list all applications mapped to a policy.</td>
 </tr>
 </tbody>
 </table>
@@ -166,10 +172,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-policyId">
+    <td><CopyableCode code="policyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -184,7 +195,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="list_policy_apps">
 
-Lists all applications mapped to a policy identified by `policyId`<br /><br />&gt; **Note:** Use [List all resources mapped to a Policy](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/#tag/Policy/operation/listPolicyMappings) to list all applications mapped to a policy.
+Lists all applications mapped to a policy identified by `policyId`<br /><br />&gt; **Note:** Use [List all resources mapped to a policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/policy/#tag/Policy/operation/listPolicyMappings) to list all applications mapped to a policy.
 
 ```sql
 SELECT
@@ -193,6 +204,7 @@ _embedded,
 _links,
 accessibility,
 created,
+expressConfiguration,
 features,
 label,
 lastUpdated,
@@ -204,7 +216,8 @@ status,
 universalLogout,
 visibility
 FROM okta.policies.policy_apps
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE policyId = '{{ policyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

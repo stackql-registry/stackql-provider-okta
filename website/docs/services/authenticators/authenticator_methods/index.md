@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>authenticator_methods</code> r
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>authenticator_methods</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="authenticator_methods" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authenticators.authenticator_methods" /></td></tr>
 </tbody></table>
@@ -32,41 +33,12 @@ Creates, updates, deletes, gets or lists an <code>authenticator_methods</code> r
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_authenticator_methods"
+    defaultValue="get_authenticator_method"
     values={[
-        { label: 'list_authenticator_methods', value: 'list_authenticator_methods' },
-        { label: 'get_authenticator_method', value: 'get_authenticator_method' }
+        { label: 'get_authenticator_method', value: 'get_authenticator_method' },
+        { label: 'list_authenticator_methods', value: 'list_authenticator_methods' }
     ]}
 >
-<TabItem value="list_authenticator_methods">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>The status of the authenticator method</td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>The type of authenticator method</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_authenticator_method">
 
 <table>
@@ -86,12 +58,41 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The status of the authenticator method</td>
+    <td>The status of the authenticator method (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of authenticator method</td>
+    <td>The type of authenticator method (cert, duo, email, idp, otp, password, push, security_question, signed_nonce, sms, totp, voice, webauthn, tac)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_authenticator_methods">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>The status of the authenticator method (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>The type of authenticator method (cert, duo, email, idp, otp, password, push, security_question, signed_nonce, sms, totp, voice, webauthn, tac)</td>
 </tr>
 </tbody>
 </table>
@@ -114,39 +115,46 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_authenticator_methods"><CopyableCode code="list_authenticator_methods" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all methods of an authenticator identified by `authenticatorId`</td>
-</tr>
-<tr>
     <td><a href="#get_authenticator_method"><CopyableCode code="get_authenticator_method" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-methodType"><code>methodType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a method identified by `methodType` of an authenticator identified by `authenticatorId`</td>
 </tr>
 <tr>
+    <td><a href="#list_authenticator_methods"><CopyableCode code="list_authenticator_methods" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all methods of an authenticator identified by `authenticatorId`</td>
+</tr>
+<tr>
     <td><a href="#replace_authenticator_method"><CopyableCode code="replace_authenticator_method" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-methodType"><code>methodType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a method of `methodType` for an authenticator identified by `authenticatorId`</td>
 </tr>
 <tr>
     <td><a href="#activate_authenticator_method"><CopyableCode code="activate_authenticator_method" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-methodType"><code>methodType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates a method for an authenticator identified by `authenticatorId` and `methodType`</td>
 </tr>
 <tr>
     <td><a href="#deactivate_authenticator_method"><CopyableCode code="deactivate_authenticator_method" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-methodType"><code>methodType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates a method for an authenticator identified by `authenticatorId` and `methodType`</td>
+</tr>
+<tr>
+    <td><a href="#verify_rp_id_domain"><CopyableCode code="verify_rp_id_domain" /></a></td>
+    <td><CopyableCode code="exec" /></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-webAuthnMethodType"><code>webAuthnMethodType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Verifies the [Relying Party identifier (RP ID)](https://www.w3.org/TR/webauthn/#relying-party-identifier) domain for the specified Passkey (FIDO2 WebAuthn) authenticator and the specific `webauthn` authenticator method</td>
 </tr>
 </tbody>
 </table>
@@ -164,10 +172,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-authenticatorId">
+    <td><CopyableCode code="authenticatorId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the authenticator</td>
+</tr>
+<tr id="parameter-methodType">
+    <td><CopyableCode code="methodType" /></td>
+    <td><code>string</code></td>
+    <td>Type of authenticator method</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-webAuthnMethodType">
+    <td><CopyableCode code="webAuthnMethodType" /></td>
+    <td><code>string</code></td>
+    <td>Type of authenticator method</td>
 </tr>
 </tbody>
 </table>
@@ -175,26 +198,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_authenticator_methods"
+    defaultValue="get_authenticator_method"
     values={[
-        { label: 'list_authenticator_methods', value: 'list_authenticator_methods' },
-        { label: 'get_authenticator_method', value: 'get_authenticator_method' }
+        { label: 'get_authenticator_method', value: 'get_authenticator_method' },
+        { label: 'list_authenticator_methods', value: 'list_authenticator_methods' }
     ]}
 >
-<TabItem value="list_authenticator_methods">
-
-Lists all methods of an authenticator identified by `authenticatorId`
-
-```sql
-SELECT
-_links,
-status,
-type
-FROM okta.authenticators.authenticator_methods
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_authenticator_method">
 
 Retrieves a method identified by `methodType` of an authenticator identified by `authenticatorId`
@@ -205,7 +214,24 @@ _links,
 status,
 type
 FROM okta.authenticators.authenticator_methods
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE authenticatorId = '{{ authenticatorId }}' -- required
+AND methodType = '{{ methodType }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_authenticator_methods">
+
+Lists all methods of an authenticator identified by `authenticatorId`
+
+```sql
+SELECT
+_links,
+status,
+type
+FROM okta.authenticators.authenticator_methods
+WHERE authenticatorId = '{{ authenticatorId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -227,15 +253,16 @@ Replaces a method of `methodType` for an authenticator identified by `authentica
 ```sql
 REPLACE okta.authenticators.authenticator_methods
 SET 
-data__status = '{{ status }}',
-data__type = '{{ type }}'
+status = '{{ status }}',
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+authenticatorId = '{{ authenticatorId }}' --required
+AND methodType = '{{ methodType }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 _links,
 status,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -247,7 +274,8 @@ type
     defaultValue="activate_authenticator_method"
     values={[
         { label: 'activate_authenticator_method', value: 'activate_authenticator_method' },
-        { label: 'deactivate_authenticator_method', value: 'deactivate_authenticator_method' }
+        { label: 'deactivate_authenticator_method', value: 'deactivate_authenticator_method' },
+        { label: 'verify_rp_id_domain', value: 'verify_rp_id_domain' }
     ]}
 >
 <TabItem value="activate_authenticator_method">
@@ -256,6 +284,8 @@ Activates a method for an authenticator identified by `authenticatorId` and `met
 
 ```sql
 EXEC okta.authenticators.authenticator_methods.activate_authenticator_method 
+@authenticatorId='{{ authenticatorId }}' --required, 
+@methodType='{{ methodType }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -266,6 +296,20 @@ Deactivates a method for an authenticator identified by `authenticatorId` and `m
 
 ```sql
 EXEC okta.authenticators.authenticator_methods.deactivate_authenticator_method 
+@authenticatorId='{{ authenticatorId }}' --required, 
+@methodType='{{ methodType }}' --required, 
+@subdomain='{{ subdomain }}' --required
+;
+```
+</TabItem>
+<TabItem value="verify_rp_id_domain">
+
+Verifies the [Relying Party identifier (RP ID)](https://www.w3.org/TR/webauthn/#relying-party-identifier) domain for the specified Passkey (FIDO2 WebAuthn) authenticator and the specific `webauthn` authenticator method
+
+```sql
+EXEC okta.authenticators.authenticator_methods.verify_rp_id_domain 
+@authenticatorId='{{ authenticatorId }}' --required, 
+@webAuthnMethodType='{{ webAuthnMethodType }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

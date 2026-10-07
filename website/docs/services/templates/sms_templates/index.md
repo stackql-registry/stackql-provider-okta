@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>sms_templates</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>sms_templates</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="sms_templates" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.templates.sms_templates" /></td></tr>
 </tbody></table>
@@ -32,61 +33,12 @@ Creates, updates, deletes, gets or lists a <code>sms_templates</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_sms_templates"
+    defaultValue="get_sms_template"
     values={[
-        { label: 'list_sms_templates', value: 'list_sms_templates' },
-        { label: 'get_sms_template', value: 'get_sms_template' }
+        { label: 'get_sms_template', value: 'get_sms_template' },
+        { label: 'list_sms_templates', value: 'list_sms_templates' }
     ]}
 >
-<TabItem value="list_sms_templates">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Human-readable name of the Template</td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="template" /></td>
-    <td><code>string</code></td>
-    <td>Text of the Template, including any [macros](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="translations" /></td>
-    <td><code>object</code></td>
-    <td>- Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains `key:value` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template. - Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters. </td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>Type of the Template</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_sms_template">
 
 <table>
@@ -121,17 +73,66 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="template" /></td>
     <td><code>string</code></td>
-    <td>Text of the Template, including any [macros](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)</td>
+    <td>Text of the Template, including any [macros](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)</td>
 </tr>
 <tr>
     <td><CopyableCode code="translations" /></td>
-    <td><code>object</code></td>
-    <td>- Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains `key:value` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template. - Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters. </td>
+    <td><code>string</code></td>
+    <td>- Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains `key:value` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template. - Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters.  (opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Type of the Template</td>
+    <td>Type of the Template (SMS_VERIFY_CODE)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_sms_templates">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Human-readable name of the Template</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="template" /></td>
+    <td><code>string</code></td>
+    <td>Text of the Template, including any [macros](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="translations" /></td>
+    <td><code>string</code></td>
+    <td>- Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains `key:value` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template. - Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters.  (opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>Type of the Template (SMS_VERIFY_CODE)</td>
 </tr>
 </tbody>
 </table>
@@ -154,18 +155,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_sms_template"><CopyableCode code="get_sms_template" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-templateId"><code>templateId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a specific template by `id`</td>
+</tr>
+<tr>
     <td><a href="#list_sms_templates"><CopyableCode code="list_sms_templates" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-templateType"><code>templateType</code></a></td>
     <td>Lists all custom SMS templates. A subset of templates can be returned that match a template type.</td>
-</tr>
-<tr>
-    <td><a href="#get_sms_template"><CopyableCode code="get_sms_template" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a specific template by `id`</td>
 </tr>
 <tr>
     <td><a href="#create_sms_template"><CopyableCode code="create_sms_template" /></a></td>
@@ -177,21 +178,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#update_sms_template"><CopyableCode code="update_sms_template" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-templateId"><code>templateId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Updates only some of the SMS Template properties:<br />  * All properties within the custom SMS Template that have values are updated.<br />  * Any translation that doesn't exist is added.<br />  * Any translation with a null or empty value is removed.<br />  * Any translation with non-empty/null value is updated.<br /></td>
 </tr>
 <tr>
     <td><a href="#replace_sms_template"><CopyableCode code="replace_sms_template" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-templateId"><code>templateId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the SMS Template<br />&gt; **Notes:** You can't update the default SMS Template.<br /></td>
 </tr>
 <tr>
     <td><a href="#delete_sms_template"><CopyableCode code="delete_sms_template" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-templateId"><code>templateId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes an SMS template</td>
 </tr>
@@ -214,7 +215,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-templateId">
+    <td><CopyableCode code="templateId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Template</td>
 </tr>
 <tr id="parameter-templateType">
     <td><CopyableCode code="templateType" /></td>
@@ -227,12 +233,31 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_sms_templates"
+    defaultValue="get_sms_template"
     values={[
-        { label: 'list_sms_templates', value: 'list_sms_templates' },
-        { label: 'get_sms_template', value: 'get_sms_template' }
+        { label: 'get_sms_template', value: 'get_sms_template' },
+        { label: 'list_sms_templates', value: 'list_sms_templates' }
     ]}
 >
+<TabItem value="get_sms_template">
+
+Retrieves a specific template by `id`
+
+```sql
+SELECT
+id,
+name,
+created,
+lastUpdated,
+template,
+translations,
+type
+FROM okta.templates.sms_templates
+WHERE templateId = '{{ templateId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_sms_templates">
 
 Lists all custom SMS templates. A subset of templates can be returned that match a template type.
@@ -249,24 +274,6 @@ type
 FROM okta.templates.sms_templates
 WHERE subdomain = '{{ subdomain }}' -- required
 AND templateType = '{{ templateType }}'
-;
-```
-</TabItem>
-<TabItem value="get_sms_template">
-
-Retrieves a specific template by `id`
-
-```sql
-SELECT
-id,
-name,
-created,
-lastUpdated,
-template,
-translations,
-type
-FROM okta.templates.sms_templates
-WHERE subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -288,10 +295,10 @@ Creates a new custom SMS template
 
 ```sql
 INSERT INTO okta.templates.sms_templates (
-data__name,
-data__template,
-data__translations,
-data__type,
+name,
+template,
+translations,
+type,
 subdomain
 )
 SELECT 
@@ -313,36 +320,33 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: sms_templates
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the sms_templates resource.
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Human-readable name of the Template
-        
     - name: template
-      value: string
-      description: >
-        Text of the Template, including any [macros](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)
-        
+      value: "{{ template }}"
+      description: |
+        Text of the Template, including any [macros](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Template/)
     - name: translations
-      value: object
-      description: >
-        - Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains `key:value` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template.
-- Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters.
-
+      value: "{{ translations }}"
+      description: |
+        - Template translations are optionally provided when you want to localize the SMS messages. Translations are provided as an object that contains \`key:value\` pairs: the language and the translated Template text. The key portion is a two-letter country code that conforms to [ISO 639-1](https://www.loc.gov/standards/iso639-2/php/code_list.php). The value is the translated SMS Template.
+        - Just like with regular SMS Templates, the length of the SMS message can't exceed 160 characters.
+        (opaque JSON object)
     - name: type
-      value: string
-      description: >
+      value: "{{ type }}"
+      description: |
         Type of the Template
-        
       valid_values: ['SMS_VERIFY_CODE']
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -362,12 +366,13 @@ Updates only some of the SMS Template properties:<br />  * All properties within
 ```sql
 UPDATE okta.templates.sms_templates
 SET 
-data__name = '{{ name }}',
-data__template = '{{ template }}',
-data__translations = '{{ translations }}',
-data__type = '{{ type }}'
+name = '{{ name }}',
+template = '{{ template }}',
+translations = '{{ translations }}',
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+templateId = '{{ templateId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -375,8 +380,7 @@ created,
 lastUpdated,
 template,
 translations,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -397,12 +401,13 @@ Replaces the SMS Template<br />&gt; **Notes:** You can't update the default SMS 
 ```sql
 REPLACE okta.templates.sms_templates
 SET 
-data__name = '{{ name }}',
-data__template = '{{ template }}',
-data__translations = '{{ translations }}',
-data__type = '{{ type }}'
+name = '{{ name }}',
+template = '{{ template }}',
+translations = '{{ translations }}',
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+templateId = '{{ templateId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -410,8 +415,7 @@ created,
 lastUpdated,
 template,
 translations,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -431,7 +435,8 @@ Deletes an SMS template
 
 ```sql
 DELETE FROM okta.templates.sms_templates
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE templateId = '{{ templateId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>ssf_security_event_tokens</code
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>ssf_security_event_tokens</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="ssf_security_event_tokens" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.security.ssf_security_event_tokens" /></td></tr>
 </tbody></table>
@@ -54,7 +55,7 @@ The following methods are available for this resource:
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Publishes a Security Event Token (SET) sent by a Security Events Provider. After the token is verified, Okta ingests the event and performs any appropriate action.</td>
+    <td>Publishes a security event token (SET) sent by a security events provider. After the token is verified, Okta ingests the event and performs any appropriate action.</td>
 </tr>
 </tbody>
 </table>
@@ -75,7 +76,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -90,7 +91,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="publish_security_event_tokens">
 
-Publishes a Security Event Token (SET) sent by a Security Events Provider. After the token is verified, Okta ingests the event and performs any appropriate action.
+Publishes a security event token (SET) sent by a security events provider. After the token is verified, Okta ingests the event and performs any appropriate action.
 
 ```sql
 EXEC okta.security.ssf_security_event_tokens.publish_security_event_tokens 

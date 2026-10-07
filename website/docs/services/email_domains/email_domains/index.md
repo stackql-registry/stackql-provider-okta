@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>email_domains</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>email_domains</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="email_domains" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.email_domains.email_domains" /></td></tr>
 </tbody></table>
@@ -32,36 +33,12 @@ Creates, updates, deletes, gets or lists an <code>email_domains</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_email_domains"
+    defaultValue="get_email_domain"
     values={[
-        { label: 'list_email_domains', value: 'list_email_domains' },
-        { label: 'get_email_domain', value: 'get_email_domain' }
+        { label: 'get_email_domain', value: 'get_email_domain' },
+        { label: 'list_email_domains', value: 'list_email_domains' }
     ]}
 >
-<TabItem value="list_email_domains">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="displayName" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="userName" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_email_domain">
 
 <table>
@@ -74,7 +51,27 @@ The following fields are returned by `SELECT` queries:
 </thead>
 <tbody>
 <tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="_embedded" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
     <td><CopyableCode code="displayName" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="dnsValidationRecords" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="domain" /></td>
     <td><code>string</code></td>
     <td></td>
 </tr>
@@ -82,6 +79,70 @@ The following fields are returned by `SELECT` queries:
     <td><CopyableCode code="userName" /></td>
     <td><code>string</code></td>
     <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="validationStatus" /></td>
+    <td><code>string</code></td>
+    <td> (DELETED, ERROR, NOT_STARTED, POLLING, VERIFIED)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="validationSubdomain" /></td>
+    <td><code>string</code></td>
+    <td>The subdomain for the email sender's custom mail domain (default: mail)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_email_domains">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="_embedded" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="displayName" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="dnsValidationRecords" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="domain" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="userName" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="validationStatus" /></td>
+    <td><code>string</code></td>
+    <td> (DELETED, ERROR, NOT_STARTED, POLLING, VERIFIED)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="validationSubdomain" /></td>
+    <td><code>string</code></td>
+    <td>The subdomain for the email sender's custom mail domain (default: mail)</td>
 </tr>
 </tbody>
 </table>
@@ -104,44 +165,44 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_email_domain"><CopyableCode code="get_email_domain" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-emailDomainId"><code>emailDomainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
+    <td>Retrieves an Email Domain by `emailDomainId`</td>
+</tr>
+<tr>
     <td><a href="#list_email_domains"><CopyableCode code="list_email_domains" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Lists all the Email Domains in your org</td>
-</tr>
-<tr>
-    <td><a href="#get_email_domain"><CopyableCode code="get_email_domain" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves an Email Domain by `emailDomainId`</td>
 </tr>
 <tr>
     <td><a href="#create_email_domain"><CopyableCode code="create_email_domain" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__displayName"><code>data__displayName</code></a>, <a href="#parameter-data__userName"><code>data__userName</code></a></td>
-    <td></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-domain"><code>domain</code></a>, <a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-displayName"><code>displayName</code></a>, <a href="#parameter-userName"><code>userName</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Creates an Email Domain in your org</td>
 </tr>
 <tr>
     <td><a href="#replace_email_domain"><CopyableCode code="replace_email_domain" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__displayName"><code>data__displayName</code></a>, <a href="#parameter-data__userName"><code>data__userName</code></a></td>
-    <td></td>
+    <td><a href="#parameter-emailDomainId"><code>emailDomainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-displayName"><code>displayName</code></a>, <a href="#parameter-userName"><code>userName</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Replaces associated username and sender display name by `emailDomainId`</td>
 </tr>
 <tr>
     <td><a href="#delete_email_domain"><CopyableCode code="delete_email_domain" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
+    <td><a href="#parameter-emailDomainId"><code>emailDomainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Deletes an Email Domain by `emailDomainId`</td>
 </tr>
 <tr>
     <td><a href="#verify_email_domain"><CopyableCode code="verify_email_domain" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-emailDomainId"><code>emailDomainId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Verifies an Email Domain by `emailDomainId`</td>
 </tr>
@@ -161,10 +222,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-emailDomainId">
+    <td><CopyableCode code="emailDomainId" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-expand">
+    <td><CopyableCode code="expand" /></td>
+    <td><code>array</code></td>
+    <td>Specifies additional metadata to be included in the response</td>
 </tr>
 </tbody>
 </table>
@@ -172,35 +243,50 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_email_domains"
+    defaultValue="get_email_domain"
     values={[
-        { label: 'list_email_domains', value: 'list_email_domains' },
-        { label: 'get_email_domain', value: 'get_email_domain' }
+        { label: 'get_email_domain', value: 'get_email_domain' },
+        { label: 'list_email_domains', value: 'list_email_domains' }
     ]}
 >
-<TabItem value="list_email_domains">
-
-Lists all the Email Domains in your org
-
-```sql
-SELECT
-displayName,
-userName
-FROM okta.email_domains.email_domains
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_email_domain">
 
 Retrieves an Email Domain by `emailDomainId`
 
 ```sql
 SELECT
+id,
+_embedded,
 displayName,
-userName
+dnsValidationRecords,
+domain,
+userName,
+validationStatus,
+validationSubdomain
+FROM okta.email_domains.email_domains
+WHERE emailDomainId = '{{ emailDomainId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND expand = '{{ expand }}'
+;
+```
+</TabItem>
+<TabItem value="list_email_domains">
+
+Lists all the Email Domains in your org
+
+```sql
+SELECT
+id,
+_embedded,
+displayName,
+dnsValidationRecords,
+domain,
+userName,
+validationStatus,
+validationSubdomain
 FROM okta.email_domains.email_domains
 WHERE subdomain = '{{ subdomain }}' -- required
+AND expand = '{{ expand }}'
 ;
 ```
 </TabItem>
@@ -222,34 +308,60 @@ Creates an Email Domain in your org
 
 ```sql
 INSERT INTO okta.email_domains.email_domains (
-data__displayName,
-data__userName,
-subdomain
+brandId,
+domain,
+validationSubdomain,
+displayName,
+userName,
+subdomain,
+expand
 )
 SELECT 
+'{{ brandId }}' /* required */,
+'{{ domain }}' /* required */,
+'{{ validationSubdomain }}',
 '{{ displayName }}' /* required */,
 '{{ userName }}' /* required */,
-'{{ subdomain }}'
+'{{ subdomain }}',
+'{{ expand }}'
 RETURNING
+id,
 displayName,
-userName
+dnsValidationRecords,
+domain,
+userName,
+validationStatus,
+validationSubdomain
 ;
 ```
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: email_domains
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the email_domains resource.
+    - name: brandId
+      value: "{{ brandId }}"
+    - name: domain
+      value: "{{ domain }}"
+    - name: validationSubdomain
+      value: "{{ validationSubdomain }}"
+      description: |
+        Subdomain for the email sender's custom mail domain. Specify your subdomain when you configure a custom mail domain.
+      default: mail
     - name: displayName
-      value: string
+      value: "{{ displayName }}"
     - name: userName
-      value: string
-```
+      value: "{{ userName }}"
+    - name: expand
+      value: "{{ expand }}"
+      description: Specifies additional metadata to be included in the response
+      description: Specifies additional metadata to be included in the response
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -269,16 +381,22 @@ Replaces associated username and sender display name by `emailDomainId`
 ```sql
 REPLACE okta.email_domains.email_domains
 SET 
-data__displayName = '{{ displayName }}',
-data__userName = '{{ userName }}'
+displayName = '{{ displayName }}',
+userName = '{{ userName }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__displayName = '{{ displayName }}' --required
-AND data__userName = '{{ userName }}' --required
+emailDomainId = '{{ emailDomainId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND displayName = '{{ displayName }}' --required
+AND userName = '{{ userName }}' --required
+AND expand = '{{ expand}}'
 RETURNING
+id,
 displayName,
-userName
-;
+dnsValidationRecords,
+domain,
+userName,
+validationStatus,
+validationSubdomain;
 ```
 </TabItem>
 </Tabs>
@@ -298,7 +416,9 @@ Deletes an Email Domain by `emailDomainId`
 
 ```sql
 DELETE FROM okta.email_domains.email_domains
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE emailDomainId = '{{ emailDomainId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND expand = '{{ expand }}'
 ;
 ```
 </TabItem>
@@ -319,6 +439,7 @@ Verifies an Email Domain by `emailDomainId`
 
 ```sql
 EXEC okta.email_domains.email_domains.verify_email_domain 
+@emailDomainId='{{ emailDomainId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>feature_dependencies</code> res
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>feature_dependencies</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="feature_dependencies" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.features.feature_dependencies" /></td></tr>
 </tbody></table>
@@ -38,6 +39,8 @@ The following fields are returned by `SELECT` queries:
     ]}
 >
 <TabItem value="list_feature_dependencies">
+
+Specifies feature release cycle information
 
 <table>
 <thead>
@@ -76,12 +79,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Setting status</td>
+    <td>Setting status (DISABLED, ENABLED)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Type of feature</td>
+    <td>Type of feature (self-service)</td>
 </tr>
 </tbody>
 </table>
@@ -106,7 +109,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_feature_dependencies"><CopyableCode code="list_feature_dependencies" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-featureId"><code>featureId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all feature dependencies for a specified feature.<br /><br />A feature's dependencies are the features that it requires to be enabled in order for itself to be enabled.</td>
 </tr>
@@ -126,10 +129,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-featureId">
+    <td><CopyableCode code="featureId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the feature</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -156,7 +164,8 @@ stage,
 status,
 type
 FROM okta.features.feature_dependencies
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE featureId = '{{ featureId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

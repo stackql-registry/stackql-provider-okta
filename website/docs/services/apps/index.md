@@ -18,7 +18,7 @@ apps service documentation.
 
 :::info[Service Summary]
 
-total resources: __15__  
+total resources: __17__  
 
 :::
 
@@ -32,11 +32,13 @@ total resources: __15__
 <a href="/services/apps/cross_app_access_connections/">cross_app_access_connections</a><br />
 <a href="/services/apps/csrs/">csrs</a><br />
 <a href="/services/apps/features/">features</a><br />
-<a href="/services/apps/federated_claims/">federated_claims</a>
+<a href="/services/apps/federated_claims/">federated_claims</a><br />
+<a href="/services/apps/grants/">grants</a>
 </div>
 <div class="providerDocColumn">
-<a href="/services/apps/grants/">grants</a><br />
 <a href="/services/apps/group_assignments/">group_assignments</a><br />
+<a href="/services/apps/interclient_allowed_apps/">interclient_allowed_apps</a><br />
+<a href="/services/apps/interclient_target_apps/">interclient_target_apps</a><br />
 <a href="/services/apps/jwks/">jwks</a><br />
 <a href="/services/apps/keys/">keys</a><br />
 <a href="/services/apps/push_mappings/">push_mappings</a><br />

@@ -185,12 +185,12 @@ ORDER BY user_count DESC;
 Create a group, replace its profile (the groups resource exposes `replace` rather than `update`), then delete it:
 
 ```sql
-INSERT INTO okta.groups.groups (data__profile, subdomain)
+INSERT INTO okta.groups.groups (profile, subdomain)
 SELECT '{"name": "finance-readers", "description": "Read-only access to finance apps"}',
        '{{ subdomain }}';
 
 REPLACE okta.groups.groups
-SET data__profile = '{"name": "finance-readers", "description": "Read-only access to finance and billing apps"}'
+SET profile = '{"name": "finance-readers", "description": "Read-only access to finance and billing apps"}'
 WHERE groupId = '{{ groupId }}'
   AND subdomain = '{{ subdomain }}';
 

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>users</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>users</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="users" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.groups.users" /></td></tr>
 </tbody></table>
@@ -61,7 +62,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="_links" /></td>
     <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+    <td>Specifies link relations (see [Web Linking](https://datatracker.ietf.org/doc/html/rfc8288) available for the current status of a user. The links object is used for dynamic discovery of related resources, lifecycle operations, and credential operations. The links object is read-only.  For an individual user result, the links object contains a full set of link relations available for that user as determined by your policies. For a collection of users, the links object contains only the `self` link. Operations that return a collection of users include [List all users](https://developer.okta.com/docs/api/openapi/okta-management/management/user/listusers) and [List all group member users](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/#tag/Group/operation/listGroupUsers).</td>
 </tr>
 <tr>
     <td><CopyableCode code="activated" /></td>
@@ -96,17 +97,17 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="profile" /></td>
     <td><code>object</code></td>
-    <td>Specifies the default and custom profile properties for a user.  The default user profile is based on the [System for Cross-domain Identity Management: Core Schema](https://datatracker.ietf.org/doc/html/rfc7643).  The only permitted customizations of the default profile are to update permissions, change whether the `firstName` and `lastName` properties are nullable, and specify a [pattern](https://developer.okta.com/docs/reference/api/schemas/#login-pattern-validation) for `login`. You can use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/UISchema/#tag/UISchema) to make schema modifications.  You can extend user profiles with custom properties. You must first add the custom property to the user profile schema before you reference it. You can use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/UISchema/#tag/UISchema) to manage schema extensions.  Custom attributes can contain HTML tags. It's the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.</td>
+    <td>Specifies the default and custom profile properties for a user.  The default user profile is based on the [System for Cross-domain Identity Management: Core Schema](https://datatracker.ietf.org/doc/html/rfc7643).  The only permitted customizations of the default profile are to update permissions, change whether the `firstName` and `lastName` properties are nullable, and specify a [pattern](https://developer.okta.com/docs/reference/api/schemas/#login-pattern-validation) for `login`. You can use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UISchema/#tag/UISchema) to make schema modifications.  You can extend user profiles with custom properties. You must first add the custom property to the user profile schema before you reference it. You can use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UISchema/#tag/UISchema) to manage schema extensions.  Custom attributes can contain HTML tags. It's the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.</td>
 </tr>
 <tr>
     <td><CopyableCode code="realmId" /></td>
     <td><code>string</code></td>
-    <td>The ID of the realm in which the user is residing. See [Realms](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Realm/). (example: guo1bfiNtSnZYILxO0g4)</td>
+    <td>The ID of the realm in which the user is residing. See [Realms](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/realm). (example: guo1bfiNtSnZYILxO0g4)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The current status of the user.  The status of a user changes in response to explicit events, such as admin-driven lifecycle changes, user login, or self-service password recovery. Okta doesn't asynchronously sweep through users and update their password expiry state, for example. Instead, Okta evaluates password policy at login time, notices the password has expired, and moves the user to the expired state. When running reports, remember that the data is valid as of the last login or lifecycle event for that user.</td>
+    <td>The current status of the user.  The status of a user changes in response to explicit events, such as admin-driven lifecycle changes, user login, or self-service password recovery. Okta doesn't asynchronously sweep through users and update their password expiry state, for example. Instead, Okta evaluates password policy at login time, notices the password has expired, and moves the user to the expired state. When running reports, remember that the data is valid as of the last login or lifecycle event for that user.  &gt; **Note:** The `ACTIVATING` status is a transitional status that occurs when a user is being activated but hasn't completed the activation process. This status isn't directly settable through the API, nor should you use it for any of your user management workflows. (ACTIVE, DEPROVISIONED, LOCKED_OUT, PASSWORD_EXPIRED, PROVISIONED, RECOVERY, STAGED, SUSPENDED)</td>
 </tr>
 <tr>
     <td><CopyableCode code="statusChanged" /></td>
@@ -116,12 +117,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="transitioningToStatus" /></td>
     <td><code>string</code></td>
-    <td>The target status of an in-progress asynchronous status transition. This property is only returned if the user's state is transitioning.</td>
+    <td>The target status of an in-progress asynchronous status transition. This property is only returned if the user's state is transitioning. (ACTIVE, DEPROVISIONED, PROVISIONED)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>object</code></td>
-    <td>The user type that determines the schema for the user's profile. The `type` property is a map that identifies the [User Types](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserType/#tag/UserType).  Currently it contains a single element, `id`. It can be specified when creating a new user, and ca be updated by an admin on a full replace of an existing user (but not a partial update).</td>
+    <td>The user type that determines the schema for the user's profile. The `type` property is a map that identifies the [User Types](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/UserType/#tag/UserType).  Currently it contains a single element, `id`. It can be specified when creating a new user, and can be updated by an admin on a full replace of an existing user (but not a partial update).</td>
 </tr>
 </tbody>
 </table>
@@ -146,21 +147,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_group_users"><CopyableCode code="list_group_users" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
     <td>Lists all users that are a member of a group.<br />The default user limit is set to a very high number due to historical reasons that are no longer valid for most orgs. This will change in a future version of this API. The recommended page limit is now `limit=200`.</td>
 </tr>
 <tr>
     <td><a href="#assign_user_to_group"><CopyableCode code="assign_user_to_group" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Assigns a user to a group with the `OKTA_GROUP` type.<br />&gt; **Note:** You only can modify memberships for groups of the `OKTA_GROUP` type. App imports are responsible for managing group memberships for groups of the `APP_GROUP` type, such as Active Directory groups.</td>
 </tr>
 <tr>
     <td><a href="#unassign_user_from_group"><CopyableCode code="unassign_user_from_group" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Unassigns a user from a group with the `OKTA_GROUP` type.<br />&gt; **Note:** You only can modify memberships for groups of the `OKTA_GROUP` type.<br />&gt;<br />&gt; App imports are responsible for managing group memberships for groups of the `APP_GROUP` type, such as Active Directory groups.</td>
 </tr>
@@ -180,15 +181,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-groupId">
+    <td><CopyableCode code="groupId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the group</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -228,7 +239,8 @@ statusChanged,
 transitioningToStatus,
 type
 FROM okta.groups.users
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE groupId = '{{ groupId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND after = '{{ after }}'
 AND limit = '{{ limit }}'
 ;
@@ -254,8 +266,9 @@ REPLACE okta.groups.users
 SET 
 -- No updatable properties
 WHERE 
-subdomain = '{{ subdomain }}' --required
-;
+groupId = '{{ groupId }}' --required
+AND userId = '{{ userId }}' --required
+AND subdomain = '{{ subdomain }}' --required;
 ```
 </TabItem>
 </Tabs>
@@ -275,7 +288,9 @@ Unassigns a user from a group with the `OKTA_GROUP` type.<br />&gt; **Note:** Yo
 
 ```sql
 DELETE FROM okta.groups.users
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE groupId = '{{ groupId }}' --required
+AND userId = '{{ userId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

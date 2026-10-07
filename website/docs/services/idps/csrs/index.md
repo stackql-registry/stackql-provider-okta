@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>csrs</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>csrs</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="csrs" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.idps.csrs" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>csrs</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_csrs_for_identity_provider"
+    defaultValue="get_csr_for_identity_provider"
     values={[
-        { label: 'list_csrs_for_identity_provider', value: 'list_csrs_for_identity_provider' },
-        { label: 'get_csr_for_identity_provider', value: 'get_csr_for_identity_provider' }
+        { label: 'get_csr_for_identity_provider', value: 'get_csr_for_identity_provider' },
+        { label: 'list_csrs_for_identity_provider', value: 'list_csrs_for_identity_provider' }
     ]}
 >
-<TabItem value="list_csrs_for_identity_provider">
+<TabItem value="get_csr_for_identity_provider">
 
 <table>
 <thead>
@@ -77,7 +78,9 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_csr_for_identity_provider">
+<TabItem value="list_csrs_for_identity_provider">
+
+Defines a CSR for a signature or decryption credential for an IdP
 
 <table>
 <thead>
@@ -134,37 +137,37 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_csrs_for_identity_provider"><CopyableCode code="list_csrs_for_identity_provider" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all certificate signing requests (CSRs) for an identity provider (IdP)</td>
-</tr>
-<tr>
     <td><a href="#get_csr_for_identity_provider"><CopyableCode code="get_csr_for_identity_provider" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-idpCsrId"><code>idpCsrId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a specific certificate signing request (CSR) by `id`</td>
 </tr>
 <tr>
+    <td><a href="#list_csrs_for_identity_provider"><CopyableCode code="list_csrs_for_identity_provider" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all certificate signing requests (CSRs) for an identity provider (IdP)</td>
+</tr>
+<tr>
     <td><a href="#generate_csr_for_identity_provider"><CopyableCode code="generate_csr_for_identity_provider" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Generates a new key pair and returns a certificate signing request (CSR) for it<br />&gt; **Note:** The private key isn't listed in the [signing key credentials for the identity provider (IdP)](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProviderSigningKeys/#tag/IdentityProviderSigningKeys/operation/listIdentityProviderSigningKeys) until it's published.</td>
+    <td>Generates a new key pair and returns a certificate signing request (CSR) for it<br />&gt; **Note:** The private key isn't listed in the [signing key credentials for the identity provider (IdP)](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProviderSigningKeys/#tag/IdentityProviderSigningKeys/operation/listIdentityProviderSigningKeys) until it's published.</td>
 </tr>
 <tr>
     <td><a href="#revoke_csr_for_identity_provider"><CopyableCode code="revoke_csr_for_identity_provider" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-idpCsrId"><code>idpCsrId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Revokes a certificate signing request (CSR) and deletes the key pair from the identity provider (IdP)</td>
 </tr>
 <tr>
     <td><a href="#publish_csr_for_identity_provider"><CopyableCode code="publish_csr_for_identity_provider" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-idpCsrId"><code>idpCsrId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Publishes the certificate signing request (CSR) with a signed X.509 certificate and adds it into the signing key credentials for the identity provider (IdP)<br />&gt; **Notes:**<br />&gt; * Publishing a certificate completes the lifecycle of the CSR, and it's no longer accessible.<br />&gt; * If the validity period of the certificate is less than 90 days, a 400 error response is returned.</td>
 </tr>
@@ -184,10 +187,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-idpCsrId">
+    <td><CopyableCode code="idpCsrId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the IdP CSR</td>
+</tr>
+<tr id="parameter-idpId">
+    <td><CopyableCode code="idpId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of IdP</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -195,28 +208,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_csrs_for_identity_provider"
+    defaultValue="get_csr_for_identity_provider"
     values={[
-        { label: 'list_csrs_for_identity_provider', value: 'list_csrs_for_identity_provider' },
-        { label: 'get_csr_for_identity_provider', value: 'get_csr_for_identity_provider' }
+        { label: 'get_csr_for_identity_provider', value: 'get_csr_for_identity_provider' },
+        { label: 'list_csrs_for_identity_provider', value: 'list_csrs_for_identity_provider' }
     ]}
 >
-<TabItem value="list_csrs_for_identity_provider">
-
-Lists all certificate signing requests (CSRs) for an identity provider (IdP)
-
-```sql
-SELECT
-id,
-_links,
-created,
-csr,
-kty
-FROM okta.idps.csrs
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_csr_for_identity_provider">
 
 Retrieves a specific certificate signing request (CSR) by `id`
@@ -229,7 +226,26 @@ created,
 csr,
 kty
 FROM okta.idps.csrs
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE idpId = '{{ idpId }}' -- required
+AND idpCsrId = '{{ idpCsrId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_csrs_for_identity_provider">
+
+Lists all certificate signing requests (CSRs) for an identity provider (IdP)
+
+```sql
+SELECT
+id,
+_links,
+created,
+csr,
+kty
+FROM okta.idps.csrs
+WHERE idpId = '{{ idpId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -247,17 +263,19 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="generate_csr_for_identity_provider">
 
-Generates a new key pair and returns a certificate signing request (CSR) for it<br />&gt; **Note:** The private key isn't listed in the [signing key credentials for the identity provider (IdP)](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProviderSigningKeys/#tag/IdentityProviderSigningKeys/operation/listIdentityProviderSigningKeys) until it's published.
+Generates a new key pair and returns a certificate signing request (CSR) for it<br />&gt; **Note:** The private key isn't listed in the [signing key credentials for the identity provider (IdP)](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProviderSigningKeys/#tag/IdentityProviderSigningKeys/operation/listIdentityProviderSigningKeys) until it's published.
 
 ```sql
 INSERT INTO okta.idps.csrs (
-data__subject,
-data__subjectAltNames,
+subject,
+subjectAltNames,
+idpId,
 subdomain
 )
 SELECT 
 '{{ subject }}',
 '{{ subjectAltNames }}',
+'{{ idpId }}',
 '{{ subdomain }}'
 RETURNING
 id,
@@ -270,18 +288,29 @@ kty
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: csrs
   props:
+    - name: idpId
+      value: "{{ idpId }}"
+      description: Required parameter for the csrs resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the csrs resource.
     - name: subject
-      value: object
+      value:
+        commonName: "{{ commonName }}"
+        countryName: "{{ countryName }}"
+        localityName: "{{ localityName }}"
+        organizationalUnitName: "{{ organizationalUnitName }}"
+        organizationName: "{{ organizationName }}"
+        stateOrProvinceName: "{{ stateOrProvinceName }}"
     - name: subjectAltNames
-      value: object
-```
+      value:
+        dnsNames:
+          - "{{ dnsNames }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -300,7 +329,9 @@ Revokes a certificate signing request (CSR) and deletes the key pair from the id
 
 ```sql
 DELETE FROM okta.idps.csrs
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE idpId = '{{ idpId }}' --required
+AND idpCsrId = '{{ idpCsrId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -321,6 +352,8 @@ Publishes the certificate signing request (CSR) with a signed X.509 certificate 
 
 ```sql
 EXEC okta.idps.csrs.publish_csr_for_identity_provider 
+@idpId='{{ idpId }}' --required, 
+@idpCsrId='{{ idpCsrId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

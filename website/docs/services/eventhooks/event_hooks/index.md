@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>event_hooks</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>event_hooks</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="event_hooks" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.eventhooks.event_hooks" /></td></tr>
 </tbody></table>
@@ -32,81 +33,12 @@ Creates, updates, deletes, gets or lists an <code>event_hooks</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_event_hooks"
+    defaultValue="get_event_hook"
     values={[
-        { label: 'list_event_hooks', value: 'list_event_hooks' },
-        { label: 'get_event_hook', value: 'get_event_hook' }
+        { label: 'get_event_hook', value: 'get_event_hook' },
+        { label: 'list_event_hooks', value: 'list_event_hooks' }
     ]}
 >
-<TabItem value="list_event_hooks">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>Unique key for the event hook</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Display name for the event hook</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="channel" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp of the event hook creation</td>
-</tr>
-<tr>
-    <td><CopyableCode code="createdBy" /></td>
-    <td><code>string</code></td>
-    <td>The ID of the user who created the event hook</td>
-</tr>
-<tr>
-    <td><CopyableCode code="description" /></td>
-    <td><code>string</code></td>
-    <td>Description of the event hook</td>
-</tr>
-<tr>
-    <td><CopyableCode code="events" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Date of the last event hook update</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>Status of the event hook</td>
-</tr>
-<tr>
-    <td><CopyableCode code="verificationStatus" /></td>
-    <td><code>string</code></td>
-    <td>Verification status of the event hook. `UNVERIFIED` event hooks won't receive any events.</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_event_hook">
 
 <table>
@@ -166,12 +98,81 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Status of the event hook</td>
+    <td>Status of the event hook (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="verificationStatus" /></td>
     <td><code>string</code></td>
-    <td>Verification status of the event hook. `UNVERIFIED` event hooks won't receive any events.</td>
+    <td>Verification status of the event hook. `UNVERIFIED` event hooks won't receive any events. (UNVERIFIED, VERIFIED)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_event_hooks">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>Unique key for the event hook</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Display name for the event hook</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="channel" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp of the event hook creation</td>
+</tr>
+<tr>
+    <td><CopyableCode code="createdBy" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the user who created the event hook</td>
+</tr>
+<tr>
+    <td><CopyableCode code="description" /></td>
+    <td><code>string</code></td>
+    <td>Description of the event hook</td>
+</tr>
+<tr>
+    <td><CopyableCode code="events" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Date of the last event hook update</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>Status of the event hook (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="verificationStatus" /></td>
+    <td><code>string</code></td>
+    <td>Verification status of the event hook. `UNVERIFIED` event hooks won't receive any events. (UNVERIFIED, VERIFIED)</td>
 </tr>
 </tbody>
 </table>
@@ -194,6 +195,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_event_hook"><CopyableCode code="get_event_hook" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-eventHookId"><code>eventHookId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves an event hook</td>
+</tr>
+<tr>
     <td><a href="#list_event_hooks"><CopyableCode code="list_event_hooks" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -201,51 +209,44 @@ The following methods are available for this resource:
     <td>Lists all event hooks</td>
 </tr>
 <tr>
-    <td><a href="#get_event_hook"><CopyableCode code="get_event_hook" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves an event hook</td>
-</tr>
-<tr>
     <td><a href="#create_event_hook"><CopyableCode code="create_event_hook" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__events"><code>data__events</code></a>, <a href="#parameter-data__channel"><code>data__channel</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-events"><code>events</code></a>, <a href="#parameter-channel"><code>channel</code></a></td>
     <td></td>
     <td>Creates a new event hook for your organization in `ACTIVE` status. You pass an event hook object in the JSON payload<br />of your request. That object represents the set of required information about the event hook you're registering, including:<br />  * The URI of your external service<br />  * The [events](https://developer.okta.com/docs/reference/api/event-types/) in Okta you want to subscribe to<br />  * An optional event hook filter that can reduce the number of event hook calls. This is a self-service Early Access (EA) feature.<br />    See [Create an event hook filter](https://developer.okta.com/docs/concepts/event-hooks/#create-an-event-hook-filter).<br /><br />    Additionally, you can specify a secret API key for Okta to pass to your external service endpoint for security verification. Note that the API key you set here is unrelated to the Okta API token<br />you must supply when making calls to Okta APIs. Optionally, you can specify extra headers that Okta passes to your external<br />service with each call.<br />Your external service must use a valid HTTPS endpoint.</td>
 </tr>
 <tr>
     <td><a href="#replace_event_hook"><CopyableCode code="replace_event_hook" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__events"><code>data__events</code></a>, <a href="#parameter-data__channel"><code>data__channel</code></a></td>
+    <td><a href="#parameter-eventHookId"><code>eventHookId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-events"><code>events</code></a>, <a href="#parameter-channel"><code>channel</code></a></td>
     <td></td>
     <td>Replaces an event hook. Okta validates the new properties before replacing the existing values.<br />Some event hook properties are immutable and can't be updated. Refer to the parameter description in the request body schema.<br /><br />&gt;**Note:** Updating the `channel` property requires you to verify the hook again.</td>
 </tr>
 <tr>
     <td><a href="#delete_event_hook"><CopyableCode code="delete_event_hook" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-eventHookId"><code>eventHookId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes the event hook that matches the provided `id`. After deletion, the event hook is unrecoverable.<br />As a safety precaution, you can only delete event hooks with a status of `INACTIVE`.</td>
 </tr>
 <tr>
     <td><a href="#activate_event_hook"><CopyableCode code="activate_event_hook" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-eventHookId"><code>eventHookId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates the event hook that matches the provided `id`</td>
 </tr>
 <tr>
     <td><a href="#deactivate_event_hook"><CopyableCode code="deactivate_event_hook" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-eventHookId"><code>eventHookId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates the event hook that matches the provided `id`</td>
 </tr>
 <tr>
     <td><a href="#verify_event_hook"><CopyableCode code="verify_event_hook" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-eventHookId"><code>eventHookId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Verifies that the event hook matches the provided `eventHookId`. To verify ownership, your endpoint must send information back to Okta in JSON format. See [Event hooks](https://developer.okta.com/docs/concepts/event-hooks/#one-time-verification-request).<br /><br />Only `ACTIVE` and `VERIFIED` event hooks can receive events from Okta.<br /><br />If a response is not received within 3 seconds, the outbound request times out. One retry is attempted after a timeout or error response.<br />If a successful response still isn't received, this operation returns a 400 error with more information about the failure.</td>
 </tr>
@@ -265,10 +266,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-eventHookId">
+    <td><CopyableCode code="eventHookId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Event Hook</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -276,15 +282,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_event_hooks"
+    defaultValue="get_event_hook"
     values={[
-        { label: 'list_event_hooks', value: 'list_event_hooks' },
-        { label: 'get_event_hook', value: 'get_event_hook' }
+        { label: 'get_event_hook', value: 'get_event_hook' },
+        { label: 'list_event_hooks', value: 'list_event_hooks' }
     ]}
 >
-<TabItem value="list_event_hooks">
+<TabItem value="get_event_hook">
 
-Lists all event hooks
+Retrieves an event hook
 
 ```sql
 SELECT
@@ -300,13 +306,14 @@ lastUpdated,
 status,
 verificationStatus
 FROM okta.eventhooks.event_hooks
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE eventHookId = '{{ eventHookId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_event_hook">
+<TabItem value="list_event_hooks">
 
-Retrieves an event hook
+Lists all event hooks
 
 ```sql
 SELECT
@@ -344,10 +351,10 @@ Creates a new event hook for your organization in `ACTIVE` status. You pass an e
 
 ```sql
 INSERT INTO okta.eventhooks.event_hooks (
-data__channel,
-data__description,
-data__events,
-data__name,
+channel,
+description,
+events,
+name,
 subdomain
 )
 SELECT 
@@ -373,28 +380,48 @@ verificationStatus
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: event_hooks
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the event_hooks resource.
     - name: channel
-      value: object
+      value:
+        config:
+          authScheme:
+            key: "{{ key }}"
+            type: "{{ type }}"
+            value: "{{ value }}"
+          headers:
+            - key: "{{ key }}"
+              value: "{{ value }}"
+          method: "{{ method }}"
+          uri: "{{ uri }}"
+        type: "{{ type }}"
+        version: "{{ version }}"
     - name: description
-      value: string
-      description: >
+      value: "{{ description }}"
+      description: |
         Description of the event hook
-        
     - name: events
-      value: object
+      value:
+        filter:
+          eventFilterMap:
+            - condition:
+                expression: "{{ expression }}"
+                version: "{{ version }}"
+              event: "{{ event }}"
+          type: "{{ type }}"
+        items:
+          - "{{ items }}"
+        type: "{{ type }}"
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Display name for the event hook
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -414,15 +441,16 @@ Replaces an event hook. Okta validates the new properties before replacing the e
 ```sql
 REPLACE okta.eventhooks.event_hooks
 SET 
-data__channel = '{{ channel }}',
-data__description = '{{ description }}',
-data__events = '{{ events }}',
-data__name = '{{ name }}'
+channel = '{{ channel }}',
+description = '{{ description }}',
+events = '{{ events }}',
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__name = '{{ name }}' --required
-AND data__events = '{{ events }}' --required
-AND data__channel = '{{ channel }}' --required
+eventHookId = '{{ eventHookId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND name = '{{ name }}' --required
+AND events = '{{ events }}' --required
+AND channel = '{{ channel }}' --required
 RETURNING
 id,
 name,
@@ -434,8 +462,7 @@ description,
 events,
 lastUpdated,
 status,
-verificationStatus
-;
+verificationStatus;
 ```
 </TabItem>
 </Tabs>
@@ -455,7 +482,8 @@ Deletes the event hook that matches the provided `id`. After deletion, the event
 
 ```sql
 DELETE FROM okta.eventhooks.event_hooks
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE eventHookId = '{{ eventHookId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -478,6 +506,7 @@ Activates the event hook that matches the provided `id`
 
 ```sql
 EXEC okta.eventhooks.event_hooks.activate_event_hook 
+@eventHookId='{{ eventHookId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -488,6 +517,7 @@ Deactivates the event hook that matches the provided `id`
 
 ```sql
 EXEC okta.eventhooks.event_hooks.deactivate_event_hook 
+@eventHookId='{{ eventHookId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -498,6 +528,7 @@ Verifies that the event hook matches the provided `eventHookId`. To verify owner
 
 ```sql
 EXEC okta.eventhooks.event_hooks.verify_event_hook 
+@eventHookId='{{ eventHookId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

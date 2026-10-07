@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>ssf_stream_status</code> resour
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>ssf_stream_status</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="ssf_stream_status" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.ssf.ssf_stream_status" /></td></tr>
 </tbody></table>
@@ -51,12 +52,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="stream_id" /></td>
     <td><code>string</code></td>
-    <td>The ID of the SSF Stream configuration. This corresponds to the value in the query parameter of the request. (example: esc1k235GIIztAuGK0g5)</td>
+    <td>The ID of the SSF stream configuration. This corresponds to the value in the query parameter of the request. (example: esc1k235GIIztAuGK0g5)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The status of the SSF Stream configuration</td>
+    <td>The status of the SSF stream configuration (enabled, disabled)</td>
 </tr>
 </tbody>
 </table>
@@ -83,7 +84,7 @@ The following methods are available for this resource:
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-stream_id"><code>stream_id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Retrieves the status of an SSF Stream. The status indicates whether the transmitter is able to transmit events over the stream.</td>
+    <td>Retrieves the status of an SSF stream. The status indicates whether the transmitter is able to transmit events over the stream.</td>
 </tr>
 </tbody>
 </table>
@@ -104,12 +105,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-stream_id">
     <td><CopyableCode code="stream_id" /></td>
     <td><code>string</code></td>
-    <td>The ID of the specified SSF Stream configuration (example: esc1k235GIIztAuGK0g5)</td>
+    <td>The ID of the specified SSF stream configuration (example: esc1k235GIIztAuGK0g5)</td>
 </tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -124,7 +125,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="get_ssf_stream_status">
 
-Retrieves the status of an SSF Stream. The status indicates whether the transmitter is able to transmit events over the stream.
+Retrieves the status of an SSF stream. The status indicates whether the transmitter is able to transmit events over the stream.
 
 ```sql
 SELECT

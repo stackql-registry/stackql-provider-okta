@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>trusted_origins</code> resource
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>trusted_origins</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="trusted_origins" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.trustedorigins.trusted_origins" /></td></tr>
 </tbody></table>
@@ -32,76 +33,12 @@ Creates, updates, deletes, gets or lists a <code>trusted_origins</code> resource
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_trusted_origins"
+    defaultValue="get_trusted_origin"
     values={[
-        { label: 'list_trusted_origins', value: 'list_trusted_origins' },
-        { label: 'get_trusted_origin', value: 'get_trusted_origin' }
+        { label: 'get_trusted_origin', value: 'get_trusted_origin' },
+        { label: 'list_trusted_origins', value: 'list_trusted_origins' }
     ]}
 >
-<TabItem value="list_trusted_origins">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>Unique identifier for the trusted origin</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Unique name for the trusted origin</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the trusted origin was created</td>
-</tr>
-<tr>
-    <td><CopyableCode code="createdBy" /></td>
-    <td><code>string</code></td>
-    <td>The ID of the user who created the trusted origin</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the trusted origin was last updated</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdatedBy" /></td>
-    <td><code>string</code></td>
-    <td>The ID of the user who last updated the trusted origin</td>
-</tr>
-<tr>
-    <td><CopyableCode code="origin" /></td>
-    <td><code>string</code></td>
-    <td>Unique origin URL for the trusted origin. The supported schemes for this attribute are HTTP, HTTPS, FTP, Ionic 2, and Capacitor.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="scopes" /></td>
-    <td><code>array</code></td>
-    <td>Array of scope types that this trusted origin is used for</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_trusted_origin">
 
 <table>
@@ -161,7 +98,71 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (ACTIVE, INACTIVE)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_trusted_origins">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>Unique identifier for the trusted origin</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Unique name for the trusted origin</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the trusted origin was created</td>
+</tr>
+<tr>
+    <td><CopyableCode code="createdBy" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the user who created the trusted origin</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the trusted origin was last updated</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdatedBy" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the user who last updated the trusted origin</td>
+</tr>
+<tr>
+    <td><CopyableCode code="origin" /></td>
+    <td><code>string</code></td>
+    <td>Unique origin URL for the trusted origin. The supported schemes for this attribute are HTTP, HTTPS, FTP, Ionic 2, and Capacitor.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="scopes" /></td>
+    <td><code>array</code></td>
+    <td>Array of scope types that this trusted origin is used for</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td> (ACTIVE, INACTIVE)</td>
 </tr>
 </tbody>
 </table>
@@ -184,18 +185,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_trusted_origin"><CopyableCode code="get_trusted_origin" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-trustedOriginId"><code>trustedOriginId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a trusted origin</td>
+</tr>
+<tr>
     <td><a href="#list_trusted_origins"><CopyableCode code="list_trusted_origins" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-q"><code>q</code></a>, <a href="#parameter-filter"><code>filter</code></a>, <a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
     <td>Lists all trusted origins</td>
-</tr>
-<tr>
-    <td><a href="#get_trusted_origin"><CopyableCode code="get_trusted_origin" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a trusted origin</td>
 </tr>
 <tr>
     <td><a href="#create_trusted_origin"><CopyableCode code="create_trusted_origin" /></a></td>
@@ -207,28 +208,28 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#replace_trusted_origin"><CopyableCode code="replace_trusted_origin" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-trustedOriginId"><code>trustedOriginId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a trusted origin</td>
 </tr>
 <tr>
     <td><a href="#delete_trusted_origin"><CopyableCode code="delete_trusted_origin" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-trustedOriginId"><code>trustedOriginId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a trusted origin</td>
 </tr>
 <tr>
     <td><a href="#activate_trusted_origin"><CopyableCode code="activate_trusted_origin" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-trustedOriginId"><code>trustedOriginId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates a trusted origin. Sets the `status` to `ACTIVE`.</td>
 </tr>
 <tr>
     <td><a href="#deactivate_trusted_origin"><CopyableCode code="deactivate_trusted_origin" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-trustedOriginId"><code>trustedOriginId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates a trusted origin. Sets the `status` to `INACTIVE`.</td>
 </tr>
@@ -251,7 +252,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-trustedOriginId">
+    <td><CopyableCode code="trustedOriginId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the trusted origin</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
@@ -279,12 +285,34 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_trusted_origins"
+    defaultValue="get_trusted_origin"
     values={[
-        { label: 'list_trusted_origins', value: 'list_trusted_origins' },
-        { label: 'get_trusted_origin', value: 'get_trusted_origin' }
+        { label: 'get_trusted_origin', value: 'get_trusted_origin' },
+        { label: 'list_trusted_origins', value: 'list_trusted_origins' }
     ]}
 >
+<TabItem value="get_trusted_origin">
+
+Retrieves a trusted origin
+
+```sql
+SELECT
+id,
+name,
+_links,
+created,
+createdBy,
+lastUpdated,
+lastUpdatedBy,
+origin,
+scopes,
+status
+FROM okta.trustedorigins.trusted_origins
+WHERE trustedOriginId = '{{ trustedOriginId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_trusted_origins">
 
 Lists all trusted origins
@@ -310,27 +338,6 @@ AND limit = '{{ limit }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_trusted_origin">
-
-Retrieves a trusted origin
-
-```sql
-SELECT
-id,
-name,
-_links,
-created,
-createdBy,
-lastUpdated,
-lastUpdatedBy,
-origin,
-scopes,
-status
-FROM okta.trustedorigins.trusted_origins
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 </Tabs>
 
 
@@ -349,9 +356,9 @@ Creates a trusted origin
 
 ```sql
 INSERT INTO okta.trustedorigins.trusted_origins (
-data__name,
-data__origin,
-data__scopes,
+name,
+origin,
+scopes,
 subdomain
 )
 SELECT 
@@ -375,29 +382,28 @@ status
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: trusted_origins
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the trusted_origins resource.
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Unique name for the trusted origin
-        
     - name: origin
-      value: string
-      description: >
+      value: "{{ origin }}"
+      description: |
         Unique origin URL for the trusted origin. The supported schemes for this attribute are HTTP, HTTPS, FTP, Ionic 2, and Capacitor.
-        
     - name: scopes
-      value: array
-      description: >
+      description: |
         Array of scope types that this trusted origin is used for
-        
-```
+      value:
+        - allowedOktaApps: "{{ allowedOktaApps }}"
+          type: "{{ type }}"
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -417,14 +423,15 @@ Replaces a trusted origin
 ```sql
 REPLACE okta.trustedorigins.trusted_origins
 SET 
-data__createdBy = '{{ createdBy }}',
-data__lastUpdatedBy = '{{ lastUpdatedBy }}',
-data__name = '{{ name }}',
-data__origin = '{{ origin }}',
-data__scopes = '{{ scopes }}',
-data__status = '{{ status }}'
+createdBy = '{{ createdBy }}',
+lastUpdatedBy = '{{ lastUpdatedBy }}',
+name = '{{ name }}',
+origin = '{{ origin }}',
+scopes = '{{ scopes }}',
+status = '{{ status }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+trustedOriginId = '{{ trustedOriginId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -435,8 +442,7 @@ lastUpdated,
 lastUpdatedBy,
 origin,
 scopes,
-status
-;
+status;
 ```
 </TabItem>
 </Tabs>
@@ -456,7 +462,8 @@ Deletes a trusted origin
 
 ```sql
 DELETE FROM okta.trustedorigins.trusted_origins
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE trustedOriginId = '{{ trustedOriginId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -478,6 +485,7 @@ Activates a trusted origin. Sets the `status` to `ACTIVE`.
 
 ```sql
 EXEC okta.trustedorigins.trusted_origins.activate_trusted_origin 
+@trustedOriginId='{{ trustedOriginId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -488,6 +496,7 @@ Deactivates a trusted origin. Sets the `status` to `INACTIVE`.
 
 ```sql
 EXEC okta.trustedorigins.trusted_origins.deactivate_trusted_origin 
+@trustedOriginId='{{ trustedOriginId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

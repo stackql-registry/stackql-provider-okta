@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>email_settings</code> resource
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>email_settings</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="email_settings" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.email_settings" /></td></tr>
 </tbody></table>
@@ -58,7 +59,7 @@ Successfully retrieved the email template's settings.
 <tr>
     <td><CopyableCode code="recipients" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (ALL_USERS, ADMINS_ONLY, NO_USERS)</td>
 </tr>
 </tbody>
 </table>
@@ -83,14 +84,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_email_settings"><CopyableCode code="get_email_settings" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-templateName"><code>templateName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves an email template's settings</td>
 </tr>
 <tr>
     <td><a href="#replace_email_settings"><CopyableCode code="replace_email_settings" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__recipients"><code>data__recipients</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-templateName"><code>templateName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-recipients"><code>recipients</code></a></td>
     <td></td>
     <td>Replaces an email template's settings</td>
 </tr>
@@ -110,10 +111,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-templateName">
+    <td><CopyableCode code="templateName" /></td>
+    <td><code>string</code></td>
+    <td>The name of the email template</td>
 </tr>
 </tbody>
 </table>
@@ -135,7 +146,9 @@ SELECT
 _links,
 recipients
 FROM okta.brands.email_settings
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND templateName = '{{ templateName }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -157,13 +170,14 @@ Replaces an email template's settings
 ```sql
 REPLACE okta.brands.email_settings
 SET 
-data__recipients = '{{ recipients }}'
+recipients = '{{ recipients }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__recipients = '{{ recipients }}' --required
+brandId = '{{ brandId }}' --required
+AND templateName = '{{ templateName }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND recipients = '{{ recipients }}' --required
 RETURNING
-recipients
-;
+recipients;
 ```
 </TabItem>
 </Tabs>

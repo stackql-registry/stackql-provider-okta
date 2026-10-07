@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>owners</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>owners</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="owners" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.groups.owners" /></td></tr>
 </tbody></table>
@@ -71,7 +72,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="originType" /></td>
     <td><code>string</code></td>
-    <td>The source where group ownership is managed</td>
+    <td>The source where group ownership is managed (APPLICATION, OKTA_DIRECTORY)</td>
 </tr>
 <tr>
     <td><CopyableCode code="resolved" /></td>
@@ -81,7 +82,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The entity type of the owner</td>
+    <td>The entity type of the owner (GROUP, USER)</td>
 </tr>
 </tbody>
 </table>
@@ -106,7 +107,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_group_owners"><CopyableCode code="list_group_owners" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-search"><code>search</code></a>, <a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
     <td>Lists all owners for a specific group</td>
 </tr>
@@ -120,7 +121,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#delete_group_owner"><CopyableCode code="delete_group_owner" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-ownerId"><code>ownerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a group owner from a specific group</td>
 </tr>
@@ -145,10 +146,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     <td><code>string</code></td>
     <td>The `id` of the group</td>
 </tr>
+<tr id="parameter-ownerId">
+    <td><CopyableCode code="ownerId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the group owner</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
@@ -190,7 +196,8 @@ originType,
 resolved,
 type
 FROM okta.groups.owners
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE groupId = '{{ groupId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND search = '{{ search }}'
 AND after = '{{ after }}'
 AND limit = '{{ limit }}'
@@ -215,8 +222,8 @@ Assigns a group owner
 
 ```sql
 INSERT INTO okta.groups.owners (
-data__id,
-data__type,
+id,
+type,
 groupId,
 subdomain
 )
@@ -238,28 +245,26 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: owners
   props:
     - name: groupId
-      value: string
+      value: "{{ groupId }}"
       description: Required parameter for the owners resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the owners resource.
     - name: id
-      value: string
-      description: >
-        The `id` of the group owner
-        
+      value: "{{ id }}"
+      description: |
+        The \`id\` of the group owner
     - name: type
-      value: string
-      description: >
+      value: "{{ type }}"
+      description: |
         The entity type of the owner
-        
       valid_values: ['GROUP', 'USER']
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -278,7 +283,9 @@ Deletes a group owner from a specific group
 
 ```sql
 DELETE FROM okta.groups.owners
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE groupId = '{{ groupId }}' --required
+AND ownerId = '{{ ownerId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

@@ -20,8 +20,9 @@ Authentication and authorization services.
 
 :::info[Provider Summary] 
 
-total services: __55__  
-total resources: __245__  
+total services: __57__  
+total resources: __259__  
+source project: __[stackql-provider-okta](https://github.com/stackql-registry/stackql-provider-okta)__  
 
 :::
 
@@ -212,12 +213,12 @@ ORDER BY user_count DESC;
 Create a group, replace its profile (the groups resource exposes `replace` rather than `update`), then delete it:
 
 ```sql
-INSERT INTO okta.groups.groups (data__profile, subdomain)
+INSERT INTO okta.groups.groups (profile, subdomain)
 SELECT '{"name": "finance-readers", "description": "Read-only access to finance apps"}',
        '{{ subdomain }}';
 
 REPLACE okta.groups.groups
-SET data__profile = '{"name": "finance-readers", "description": "Read-only access to finance and billing apps"}'
+SET profile = '{"name": "finance-readers", "description": "Read-only access to finance and billing apps"}'
 WHERE groupId = '{{ groupId }}'
   AND subdomain = '{{ subdomain }}';
 
@@ -243,6 +244,7 @@ EXEC okta.apps.applications.deactivate_application
 ## Services
 <div class="row">
 <div class="providerDocColumn">
+<a href="/services/_well_known/">_well_known</a><br />
 <a href="/services/agentpools/">agentpools</a><br />
 <a href="/services/api_tokens/">api_tokens</a><br />
 <a href="/services/apps/">apps</a><br />
@@ -250,15 +252,16 @@ EXEC okta.apps.applications.deactivate_application
 <a href="/services/authenticators/">authenticators</a><br />
 <a href="/services/authorizationservers/">authorizationservers</a><br />
 <a href="/services/behaviors/">behaviors</a><br />
+<a href="/services/bot_protection/">bot_protection</a><br />
 <a href="/services/brands/">brands</a><br />
 <a href="/services/captchas/">captchas</a><br />
-<a href="/services/device_access/">device_access</a><br />
 <a href="/services/device_assurances/">device_assurances</a><br />
 <a href="/services/device_integrations/">device_integrations</a><br />
 <a href="/services/device_posture_checks/">device_posture_checks</a><br />
 <a href="/services/devices/">devices</a><br />
 <a href="/services/directories/">directories</a><br />
 <a href="/services/domains/">domains</a><br />
+<a href="/services/dr/">dr</a><br />
 <a href="/services/email_domains/">email_domains</a><br />
 <a href="/services/email_servers/">email_servers</a><br />
 <a href="/services/eventhooks/">eventhooks</a><br />
@@ -270,9 +273,9 @@ EXEC okta.apps.applications.deactivate_application
 <a href="/services/identity_sources/">identity_sources</a><br />
 <a href="/services/idps/">idps</a><br />
 <a href="/services/inlinehooks/">inlinehooks</a><br />
-<a href="/services/integrations/">integrations</a><br />
 </div>
 <div class="providerDocColumn">
+<a href="/services/integrations/">integrations</a><br />
 <a href="/services/logs/">logs</a><br />
 <a href="/services/logstreams/">logstreams</a><br />
 <a href="/services/mappings/">mappings</a><br />
@@ -288,12 +291,12 @@ EXEC okta.apps.applications.deactivate_application
 <a href="/services/rate_limit_settings/">rate_limit_settings</a><br />
 <a href="/services/realm_assignments/">realm_assignments</a><br />
 <a href="/services/realms/">realms</a><br />
-<a href="/services/risk/">risk</a><br />
 <a href="/services/roles/">roles</a><br />
 <a href="/services/security/">security</a><br />
 <a href="/services/security_events_providers/">security_events_providers</a><br />
 <a href="/services/sessions/">sessions</a><br />
 <a href="/services/ssf/">ssf</a><br />
+<a href="/services/telephony_providers/">telephony_providers</a><br />
 <a href="/services/templates/">templates</a><br />
 <a href="/services/threats/">threats</a><br />
 <a href="/services/trustedorigins/">trustedorigins</a><br />

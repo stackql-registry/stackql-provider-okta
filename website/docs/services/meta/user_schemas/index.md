@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>user_schemas</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>user_schemas</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="user_schemas" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.meta.user_schemas" /></td></tr>
 </tbody></table>
@@ -121,16 +122,16 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_user_schema"><CopyableCode code="get_user_schema" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-schemaId"><code>schemaId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the schema for a user type</td>
 </tr>
 <tr>
     <td><a href="#update_user_profile"><CopyableCode code="update_user_profile" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-schemaId"><code>schemaId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Updates a user schema. Use this request to update, add, or remove one or more profile properties in a user schema. If you specify `default` for the `schemaId`, updates will apply to the default user type.<br /><br />Unlike custom user profile properties, limited changes are allowed to base user profile properties (permissions, nullability of the `firstName` and `lastName` properties, or pattern for `login`).<br />You can't remove a property from the default schema if it's being referenced as a [`matchAttribute`](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/createIdentityProvider!path=policy/subject/matchAttribute&t=request) in `SAML2` IdPs.<br />Currently, all validation of SAML assertions are only performed against the default user type.<br /><br />&gt; **Note:** You must set properties explicitly to `null` to remove them from the schema; otherwise, `POST` is interpreted as a partial update.</td>
+    <td>Updates a user schema. Use this request to update, add, or remove one or more profile properties in a user schema. If you specify `default` for the `schemaId`, updates will apply to the default user type.<br /><br />Unlike custom user profile properties, limited changes are allowed to base user profile properties (permissions, nullability of the `firstName` and `lastName` properties, or pattern for `login`).<br />You can't remove a property from the default schema if it's being referenced as a [`matchAttribute`](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/identityprovider/other/createidentityprovider#other/createidentityprovider/t=request&path=policy/subject/matchattribute) in `SAML2` IdPs.<br />Currently, all validation of SAML assertions are only performed against the default user type.<br /><br />&gt; **Note:** You must set properties explicitly to `null` to remove them from the schema; otherwise, `POST` is interpreted as a partial update.</td>
 </tr>
 </tbody>
 </table>
@@ -148,10 +149,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-schemaId">
+    <td><CopyableCode code="schemaId" /></td>
+    <td><code>string</code></td>
+    <td>Schema ID. You can also use `default` to refer to the default user type schema.</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -181,7 +187,8 @@ properties,
 title,
 type
 FROM okta.meta.user_schemas
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE schemaId = '{{ schemaId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -198,16 +205,17 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="update_user_profile">
 
-Updates a user schema. Use this request to update, add, or remove one or more profile properties in a user schema. If you specify `default` for the `schemaId`, updates will apply to the default user type.<br /><br />Unlike custom user profile properties, limited changes are allowed to base user profile properties (permissions, nullability of the `firstName` and `lastName` properties, or pattern for `login`).<br />You can't remove a property from the default schema if it's being referenced as a [`matchAttribute`](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/createIdentityProvider!path=policy/subject/matchAttribute&t=request) in `SAML2` IdPs.<br />Currently, all validation of SAML assertions are only performed against the default user type.<br /><br />&gt; **Note:** You must set properties explicitly to `null` to remove them from the schema; otherwise, `POST` is interpreted as a partial update.
+Updates a user schema. Use this request to update, add, or remove one or more profile properties in a user schema. If you specify `default` for the `schemaId`, updates will apply to the default user type.<br /><br />Unlike custom user profile properties, limited changes are allowed to base user profile properties (permissions, nullability of the `firstName` and `lastName` properties, or pattern for `login`).<br />You can't remove a property from the default schema if it's being referenced as a [`matchAttribute`](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/identityprovider/other/createidentityprovider#other/createidentityprovider/t=request&path=policy/subject/matchattribute) in `SAML2` IdPs.<br />Currently, all validation of SAML assertions are only performed against the default user type.<br /><br />&gt; **Note:** You must set properties explicitly to `null` to remove them from the schema; otherwise, `POST` is interpreted as a partial update.
 
 ```sql
 UPDATE okta.meta.user_schemas
 SET 
-data__definitions = '{{ definitions }}',
-data__properties = '{{ properties }}',
-data__title = '{{ title }}'
+definitions = '{{ definitions }}',
+properties = '{{ properties }}',
+title = '{{ title }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+schemaId = '{{ schemaId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -218,8 +226,7 @@ definitions,
 lastUpdated,
 properties,
 title,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>

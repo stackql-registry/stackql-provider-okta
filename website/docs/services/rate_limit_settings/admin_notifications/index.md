@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>admin_notifications</code> res
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>admin_notifications</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="admin_notifications" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.rate_limit_settings.admin_notifications" /></td></tr>
 </tbody></table>
@@ -83,7 +84,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#replace_rate_limit_settings_admin_notifications"><CopyableCode code="replace_rate_limit_settings_admin_notifications" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__notificationsEnabled"><code>data__notificationsEnabled</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-notificationsEnabled"><code>notificationsEnabled</code></a></td>
     <td></td>
     <td>Replaces the Rate Limit Admin Notification Settings and returns the configured properties</td>
 </tr>
@@ -106,7 +107,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -149,13 +150,12 @@ Replaces the Rate Limit Admin Notification Settings and returns the configured p
 ```sql
 REPLACE okta.rate_limit_settings.admin_notifications
 SET 
-data__notificationsEnabled = {{ notificationsEnabled }}
+notificationsEnabled = {{ notificationsEnabled }}
 WHERE 
 subdomain = '{{ subdomain }}' --required
-AND data__notificationsEnabled = {{ notificationsEnabled }} --required
+AND notificationsEnabled = {{ notificationsEnabled }} --required
 RETURNING
-notificationsEnabled
-;
+notificationsEnabled;
 ```
 </TabItem>
 </Tabs>
