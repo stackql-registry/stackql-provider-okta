@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>keys</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>keys</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="keys" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.idps.keys" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>keys</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_identity_provider_keys"
+    defaultValue="get_identity_provider_key"
     values={[
-        { label: 'list_identity_provider_keys', value: 'list_identity_provider_keys' },
-        { label: 'get_identity_provider_key', value: 'get_identity_provider_key' }
+        { label: 'get_identity_provider_key', value: 'get_identity_provider_key' },
+        { label: 'list_identity_provider_keys', value: 'list_identity_provider_keys' }
     ]}
 >
-<TabItem value="list_identity_provider_keys">
+<TabItem value="get_identity_provider_key">
 
 <table>
 <thead>
@@ -102,7 +103,9 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_identity_provider_key">
+<TabItem value="list_identity_provider_keys">
+
+A [JSON Web Key](https://tools.ietf.org/html/rfc7517) for a signature or encryption credential for an IdP
 
 <table>
 <thead>
@@ -184,6 +187,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_identity_provider_key"><CopyableCode code="get_identity_provider_key" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-kid"><code>kid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a specific identity provider (IdP) key credential by `kid`</td>
+</tr>
+<tr>
     <td><a href="#list_identity_provider_keys"><CopyableCode code="list_identity_provider_keys" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -191,30 +201,23 @@ The following methods are available for this resource:
     <td>Lists all identity provider (IdP) key credentials</td>
 </tr>
 <tr>
-    <td><a href="#get_identity_provider_key"><CopyableCode code="get_identity_provider_key" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a specific identity provider (IdP) key credential by `kid`</td>
-</tr>
-<tr>
     <td><a href="#create_identity_provider_key"><CopyableCode code="create_identity_provider_key" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__x5c"><code>data__x5c</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-x5c"><code>x5c</code></a></td>
     <td></td>
     <td>Creates a new X.509 certificate credential in the identity provider (IdP) key store<br />&gt; **Note:** RSA-based certificates are supported for all IdP types. Okta currently supports EC-based certificates only for the `X509` IdP type. For EC-based certificates we support only P-256, P-384, and P-521 curves.</td>
 </tr>
 <tr>
     <td><a href="#replace_identity_provider_key"><CopyableCode code="replace_identity_provider_key" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-kid"><code>kid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces an identity provider (IdP) key credential by `kid`</td>
 </tr>
 <tr>
     <td><a href="#delete_identity_provider_key"><CopyableCode code="delete_identity_provider_key" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-kid"><code>kid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a specific identity provider (IdP) key credential by `kid` if it isn't currently being used by an active or inactive IdP</td>
 </tr>
@@ -234,15 +237,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-kid">
+    <td><CopyableCode code="kid" /></td>
+    <td><code>string</code></td>
+    <td>Unique `id` of the IdP key credential</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -255,12 +263,34 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_identity_provider_keys"
+    defaultValue="get_identity_provider_key"
     values={[
-        { label: 'list_identity_provider_keys', value: 'list_identity_provider_keys' },
-        { label: 'get_identity_provider_key', value: 'get_identity_provider_key' }
+        { label: 'get_identity_provider_key', value: 'get_identity_provider_key' },
+        { label: 'list_identity_provider_keys', value: 'list_identity_provider_keys' }
     ]}
 >
+<TabItem value="get_identity_provider_key">
+
+Retrieves a specific identity provider (IdP) key credential by `kid`
+
+```sql
+SELECT
+created,
+e,
+expiresAt,
+kid,
+kty,
+lastUpdated,
+n,
+use,
+x5c,
+x5t#S256
+FROM okta.idps.keys
+WHERE kid = '{{ kid }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_identity_provider_keys">
 
 Lists all identity provider (IdP) key credentials
@@ -284,27 +314,6 @@ AND limit = '{{ limit }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_identity_provider_key">
-
-Retrieves a specific identity provider (IdP) key credential by `kid`
-
-```sql
-SELECT
-created,
-e,
-expiresAt,
-kid,
-kty,
-lastUpdated,
-n,
-use,
-x5c,
-x5t#S256
-FROM okta.idps.keys
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 </Tabs>
 
 
@@ -323,7 +332,7 @@ Creates a new X.509 certificate credential in the identity provider (IdP) key st
 
 ```sql
 INSERT INTO okta.idps.keys (
-data__x5c,
+x5c,
 subdomain
 )
 SELECT 
@@ -345,19 +354,19 @@ x5t#S256
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: keys
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the keys resource.
     - name: x5c
-      value: array
-      description: >
+      value:
+        - "{{ x5c }}"
+      description: |
         Base64-encoded X.509 certificate chain with DER encoding
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -377,15 +386,16 @@ Replaces an identity provider (IdP) key credential by `kid`
 ```sql
 REPLACE okta.idps.keys
 SET 
-data__e = '{{ e }}',
-data__kid = '{{ kid }}',
-data__kty = '{{ kty }}',
-data__n = '{{ n }}',
-data__use = '{{ use }}',
-data__x5c = '{{ x5c }}',
-data__x5t#S256 = '{{ x5t#S256 }}'
+e = '{{ e }}',
+kid = '{{ kid }}',
+kty = '{{ kty }}',
+n = '{{ n }}',
+use = '{{ use }}',
+x5c = '{{ x5c }}',
+x5t#S256 = '{{ x5t#S256 }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+kid = '{{ kid }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 created,
 e,
@@ -396,8 +406,7 @@ lastUpdated,
 n,
 use,
 x5c,
-x5t#S256
-;
+x5t#S256;
 ```
 </TabItem>
 </Tabs>
@@ -417,7 +426,8 @@ Deletes a specific identity provider (IdP) key credential by `kid` if it isn't c
 
 ```sql
 DELETE FROM okta.idps.keys
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE kid = '{{ kid }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

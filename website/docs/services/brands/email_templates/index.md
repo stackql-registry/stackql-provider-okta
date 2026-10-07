@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>email_templates</code> resourc
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>email_templates</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="email_templates" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.email_templates" /></td></tr>
 </tbody></table>
@@ -32,15 +33,15 @@ Creates, updates, deletes, gets or lists an <code>email_templates</code> resourc
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_email_templates"
+    defaultValue="get_email_template"
     values={[
-        { label: 'list_email_templates', value: 'list_email_templates' },
-        { label: 'get_email_template', value: 'get_email_template' }
+        { label: 'get_email_template', value: 'get_email_template' },
+        { label: 'list_email_templates', value: 'list_email_templates' }
     ]}
 >
-<TabItem value="list_email_templates">
+<TabItem value="get_email_template">
 
-Successfully returned the list of email templates.
+Successfully retrieved the email template.
 
 <table>
 <thead>
@@ -69,9 +70,7 @@ Successfully returned the list of email templates.
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_email_template">
-
-Successfully retrieved the email template.
+<TabItem value="list_email_templates">
 
 <table>
 <thead>
@@ -118,25 +117,25 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_email_templates"><CopyableCode code="list_email_templates" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-expand"><code>expand</code></a></td>
-    <td>Lists all supported email templates</td>
-</tr>
-<tr>
     <td><a href="#get_email_template"><CopyableCode code="get_email_template" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-templateName"><code>templateName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Retrieves the details of an email template by name</td>
 </tr>
 <tr>
+    <td><a href="#list_email_templates"><CopyableCode code="list_email_templates" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-expand"><code>expand</code></a></td>
+    <td>Lists all supported email templates</td>
+</tr>
+<tr>
     <td><a href="#send_test_email"><CopyableCode code="send_test_email" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-templateName"><code>templateName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-language"><code>language</code></a></td>
-    <td>Sends a test email to the current user's primary and secondary email addresses. The email content is selected based on the following priority:<br />1. The email customization for the language specified in the `language` query parameter<br />&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; If Custom languages for Okta Email Templates is enabled and the `language` parameter is an additional language, the test email uses the customization corresponding to the language.<br />2. The email template's default customization<br />3. The email template's default content, translated to the current user's language<br /><br />&gt; **Note:** Super admins can view customized email templates with the **Send a test email** request. However, when custom email templates are sent to super admins as part of actual email notification flows, the customizations aren't applied. Instead, the default email template is used. This only applies to super admins.</td>
+    <td>Sends a test email to the current user's primary and secondary email addresses. The email content is selected based on the following priority:<br />1. The email customization for the language specified in the `language` query parameter<br />&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; If Custom languages for Okta Email Templates is enabled and the `language` parameter is an additional language, the test email uses the customization corresponding to the language.<br />2. The email template's default customization<br />3. The email template's default content, translated to the current user's language<br /><br />You can only send customized test emails if you've configured a custom email domain. If you don't have a custom email domain, test emails use the Okta default template and are sent from the Okta email domain.<br /><br />&gt; **Note:** Super admins can view customized email templates with the **Send a test email** request. However, when custom email templates are sent to super admins as part of actual email notification flows, the customizations aren't applied. Instead, the default email template is used. This only applies to super admins.</td>
 </tr>
 </tbody>
 </table>
@@ -154,15 +153,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-templateName">
+    <td><CopyableCode code="templateName" /></td>
+    <td><code>string</code></td>
+    <td>The name of the email template</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-expand">
     <td><CopyableCode code="expand" /></td>
@@ -185,29 +194,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_email_templates"
+    defaultValue="get_email_template"
     values={[
-        { label: 'list_email_templates', value: 'list_email_templates' },
-        { label: 'get_email_template', value: 'get_email_template' }
+        { label: 'get_email_template', value: 'get_email_template' },
+        { label: 'list_email_templates', value: 'list_email_templates' }
     ]}
 >
-<TabItem value="list_email_templates">
-
-Lists all supported email templates
-
-```sql
-SELECT
-name,
-_embedded,
-_links
-FROM okta.brands.email_templates
-WHERE subdomain = '{{ subdomain }}' -- required
-AND after = '{{ after }}'
-AND limit = '{{ limit }}'
-AND expand = '{{ expand }}'
-;
-```
-</TabItem>
 <TabItem value="get_email_template">
 
 Retrieves the details of an email template by name
@@ -218,7 +210,27 @@ name,
 _embedded,
 _links
 FROM okta.brands.email_templates
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND templateName = '{{ templateName }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND expand = '{{ expand }}'
+;
+```
+</TabItem>
+<TabItem value="list_email_templates">
+
+Lists all supported email templates
+
+```sql
+SELECT
+name,
+_embedded,
+_links
+FROM okta.brands.email_templates
+WHERE brandId = '{{ brandId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND after = '{{ after }}'
+AND limit = '{{ limit }}'
 AND expand = '{{ expand }}'
 ;
 ```
@@ -236,10 +248,12 @@ AND expand = '{{ expand }}'
 >
 <TabItem value="send_test_email">
 
-Sends a test email to the current user's primary and secondary email addresses. The email content is selected based on the following priority:<br />1. The email customization for the language specified in the `language` query parameter<br />&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; If Custom languages for Okta Email Templates is enabled and the `language` parameter is an additional language, the test email uses the customization corresponding to the language.<br />2. The email template's default customization<br />3. The email template's default content, translated to the current user's language<br /><br />&gt; **Note:** Super admins can view customized email templates with the **Send a test email** request. However, when custom email templates are sent to super admins as part of actual email notification flows, the customizations aren't applied. Instead, the default email template is used. This only applies to super admins.
+Sends a test email to the current user's primary and secondary email addresses. The email content is selected based on the following priority:<br />1. The email customization for the language specified in the `language` query parameter<br />&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; If Custom languages for Okta Email Templates is enabled and the `language` parameter is an additional language, the test email uses the customization corresponding to the language.<br />2. The email template's default customization<br />3. The email template's default content, translated to the current user's language<br /><br />You can only send customized test emails if you've configured a custom email domain. If you don't have a custom email domain, test emails use the Okta default template and are sent from the Okta email domain.<br /><br />&gt; **Note:** Super admins can view customized email templates with the **Send a test email** request. However, when custom email templates are sent to super admins as part of actual email notification flows, the customizations aren't applied. Instead, the default email template is used. This only applies to super admins.
 
 ```sql
 EXEC okta.brands.email_templates.send_test_email 
+@brandId='{{ brandId }}' --required, 
+@templateName='{{ templateName }}' --required, 
 @subdomain='{{ subdomain }}' --required, 
 @language='{{ language }}'
 ;

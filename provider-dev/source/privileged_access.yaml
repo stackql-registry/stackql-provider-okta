@@ -2,8 +2,218 @@ openapi: 3.0.3
 info:
   title: privileged_access API
   description: okta privileged_access API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
+  /privileged-access/api/v1/okta-service-accounts:
+    get:
+      x-okta-iam-admin-roles:
+        - SUPER_ADMIN
+      summary: List all Okta managed user accounts
+      description: |-
+        Lists all Okta managed user accounts in your org.
+
+        Use the `match` parameter to search for accounts where the account name (`name`) or username (`username`) contains the specified value.
+      operationId: listOktaManagedUserAccounts
+      parameters:
+        - $ref: '#/components/parameters/queryLimit'
+        - $ref: '#/components/parameters/queryAfter'
+        - $ref: '#/components/parameters/oktaManagedUserMatchQueryFilter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListOktaManagedUserAccountsResponse'
+              examples:
+                ListOktaManagedUserAccounts:
+                  $ref: '#/components/examples/ListOktaManagedUserAccounts'
+        '400':
+          $ref: '#/components/responses/ErrorApiValidationFailed400'
+        '403':
+          $ref: '#/components/responses/ErrorAccessDenied403'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests429'
+      security:
+        - apiToken: []
+        - oauth2:
+            - okta.serviceAccounts.okta.read
+      tags:
+        - OktaManagedUserAccount
+      x-okta-lifecycle:
+        lifecycle: GA
+        isGenerallyAvailable: false
+        SKUs: []
+      x-stackql-bare-array-wrap:
+        wrapperKey: okta_managed_user_accounts
+        wrapperName: ListOktaManagedUserAccountsResponse
+        mediaType: application/json
+        scalar: false
+    post:
+      x-okta-iam-admin-roles:
+        - SUPER_ADMIN
+      summary: Create an Okta managed user account
+      description: |-
+        Creates a new Okta managed user account for managing a Universal Directory user as a service account.
+
+        You must specify an existing Okta user in your org with the `oktaUserId` request parameter.
+      operationId: createOktaManagedUserAccount
+      x-codegen-request-body-name: body
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OktaManagedUserAccountRequest'
+            examples:
+              CreateOktaManagedUserAccount:
+                $ref: '#/components/examples/CreateOktaManagedUserAccountRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OktaManagedUserAccountResponse'
+              examples:
+                OktaManagedUserAccountResponse:
+                  $ref: '#/components/examples/OktaManagedUserAccountResponse'
+        '400':
+          $ref: '#/components/responses/ErrorApiValidationFailed400'
+        '403':
+          $ref: '#/components/responses/ErrorAccessDenied403'
+        '404':
+          $ref: '#/components/responses/ErrorResourceNotFound404'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests429'
+      security:
+        - apiToken: []
+        - oauth2:
+            - okta.serviceAccounts.okta.manage
+      tags:
+        - OktaManagedUserAccount
+      x-okta-lifecycle:
+        lifecycle: GA
+        isGenerallyAvailable: false
+        SKUs: []
+  /privileged-access/api/v1/okta-service-accounts/{id}:
+    get:
+      x-okta-iam-admin-roles:
+        - SUPER_ADMIN
+      summary: Retrieve an Okta managed user account
+      description: Retrieves an Okta managed user account specified by ID
+      operationId: getOktaManagedUserAccount
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OktaManagedUserAccountResponse'
+              examples:
+                OktaManagedUserAccountResponse:
+                  $ref: '#/components/examples/OktaManagedUserAccountResponse'
+        '400':
+          $ref: '#/components/responses/ErrorApiValidationFailed400'
+        '403':
+          $ref: '#/components/responses/ErrorAccessDenied403'
+        '404':
+          $ref: '#/components/responses/ErrorResourceNotFound404'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests429'
+      security:
+        - apiToken: []
+        - oauth2:
+            - okta.serviceAccounts.okta.read
+      tags:
+        - OktaManagedUserAccount
+      x-okta-lifecycle:
+        lifecycle: GA
+        isGenerallyAvailable: false
+        SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/oktaManagedUserAccountId'
+    patch:
+      x-okta-iam-admin-roles:
+        - SUPER_ADMIN
+      summary: Update an Okta managed user account
+      description: |-
+        Updates an existing Okta managed user account specified by ID.
+
+        You can only update the `name`, `description`, `ownerUserIds`, and `ownerGroupIds` properties.
+      operationId: updateOktaManagedUserAccount
+      x-codegen-request-body-name: body
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OktaManagedUserAccountForUpdate'
+            examples:
+              UpdateOktaManagedUserAccount:
+                $ref: '#/components/examples/UpdateOktaManagedUserAccountRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OktaManagedUserAccountResponse'
+              examples:
+                OktaManagedUserAccountResponse:
+                  $ref: '#/components/examples/OktaManagedUserAccountResponse'
+        '400':
+          $ref: '#/components/responses/ErrorApiValidationFailed400'
+        '403':
+          $ref: '#/components/responses/ErrorAccessDenied403'
+        '404':
+          $ref: '#/components/responses/ErrorResourceNotFound404'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests429'
+      security:
+        - apiToken: []
+        - oauth2:
+            - okta.serviceAccounts.okta.manage
+      tags:
+        - OktaManagedUserAccount
+      x-okta-lifecycle:
+        lifecycle: GA
+        isGenerallyAvailable: false
+        SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/oktaManagedUserAccountId'
+    delete:
+      x-okta-iam-admin-roles:
+        - SUPER_ADMIN
+      summary: Delete an Okta managed user account
+      description: |-
+        Deletes an Okta managed user account specified by ID.
+
+        This operation removes the service account management for the Okta user, suspends the underlying Okta user account,
+        but doesn't delete the user from Universal Directory.
+      operationId: deleteOktaManagedUserAccount
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/ErrorApiValidationFailed400'
+        '403':
+          $ref: '#/components/responses/ErrorAccessDenied403'
+        '404':
+          $ref: '#/components/responses/ErrorResourceNotFound404'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests429'
+      security:
+        - apiToken: []
+        - oauth2:
+            - okta.serviceAccounts.okta.manage
+      tags:
+        - OktaManagedUserAccount
+      x-okta-lifecycle:
+        lifecycle: GA
+        isGenerallyAvailable: false
+        SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/oktaManagedUserAccountId'
   /privileged-access/api/v1/service-accounts:
     get:
       summary: List all app service accounts
@@ -22,9 +232,7 @@ paths:
                 ListAppServiceAccounts:
                   $ref: '#/components/examples/ListAppServiceAccounts'
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AppServiceAccount'
+                $ref: '#/components/schemas/ListAppServiceAccountsResponse'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -40,9 +248,14 @@ paths:
       tags:
         - ServiceAccount
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
+      x-stackql-bare-array-wrap:
+        wrapperKey: app_service_accounts
+        wrapperName: ListAppServiceAccountsResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create an app service account
       description: Creates a new app service account for managing an app account
@@ -76,7 +289,7 @@ paths:
       tags:
         - ServiceAccount
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
   /privileged-access/api/v1/service-accounts/{id}:
@@ -106,9 +319,11 @@ paths:
       tags:
         - ServiceAccount
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/serviceAccountId'
     patch:
       summary: Update an existing app service account
       description: Updates an existing app service account specified by ID
@@ -141,9 +356,11 @@ paths:
       tags:
         - ServiceAccount
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
+      parameters:
+        - $ref: '#/components/parameters/serviceAccountId'
     delete:
       summary: Delete an app service account
       description: Deletes an app service account specified by ID
@@ -166,13 +383,185 @@ paths:
       tags:
         - ServiceAccount
       x-okta-lifecycle:
-        lifecycle: EA
+        lifecycle: GA
         isGenerallyAvailable: false
         SKUs: []
-    parameters:
-      - $ref: '#/components/parameters/serviceAccountId'
+      parameters:
+        - $ref: '#/components/parameters/serviceAccountId'
 components:
   schemas:
+    OktaManagedUserAccountResponse:
+      description: An Okta managed user account representing a Universal Directory user managed as a service account
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          description: Timestamp when the Okta managed user account was created
+          readOnly: true
+          example: '2023-04-04T15:56:05.000Z'
+        description:
+          description: The description of the Okta managed user account
+          format: regex
+          maxLength: 255
+          minLength: 0
+          type: string
+          example: Shared admin account for managing AD integrations
+        email:
+          description: The email address associated with the Okta user. This parameter is read-only, and it is derived from the Okta user profile.
+          type: string
+          example: foo@bar.com
+          readOnly: true
+        id:
+          description: The UUID of the Okta managed user account
+          format: regex
+          pattern: (?i)^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+          readOnly: true
+          type: string
+          example: d1b65a78-21ed-429b-8ea3-eec96f2748d6
+        lastUpdated:
+          type: string
+          format: date-time
+          description: Timestamp when the Okta managed user account was last updated
+          readOnly: true
+          example: '2023-05-05T18:15:44.000Z'
+        name:
+          description: The user-defined name for the Okta managed user account
+          format: regex
+          maxLength: 50
+          minLength: 1
+          pattern: ^[\w\-_. ]+$
+          type: string
+          example: AD Integrations Admin
+        oktaUserId:
+          description: The ID of the Okta user being managed as a service account
+          type: string
+          minLength: 20
+          maxLength: 20
+          example: 00u11s48P9zGW8yqm0g5
+        ownerGroupIds:
+          description: A list of IDs of the Okta groups who own the Okta managed user account
+          type: array
+          items:
+            type: string
+          minItems: 0
+          maxItems: 10
+          example:
+            - 00g57qp78yZT2XBA40g7
+        ownerUserIds:
+          description: A list of IDs of the Okta users who own the Okta managed user account
+          type: array
+          items:
+            type: string
+          minItems: 0
+          maxItems: 10
+          example:
+            - 00u11s48P9zGW8yqm0g5
+        status:
+          $ref: '#/components/schemas/ServiceAccountStatus'
+        statusDetail:
+          $ref: '#/components/schemas/ServiceAccountStatusDetail'
+        username:
+          description: The username associated with the Okta user. This parameter is read-only, and it is derived from the Okta user profile.
+          type: string
+          readOnly: true
+          example: shr-ad-admin-01@example.com
+      required:
+        - id
+        - name
+        - oktaUserId
+        - username
+        - email
+    OktaManagedUserAccountRequest:
+      description: Request body for creating an Okta managed user account
+      type: object
+      properties:
+        description:
+          description: The description of the Okta managed user account
+          format: regex
+          maxLength: 255
+          minLength: 0
+          type: string
+          example: Shared admin account for managing AD integrations
+        name:
+          description: The user-defined name for the Okta managed user account
+          format: regex
+          maxLength: 50
+          minLength: 1
+          pattern: ^[\w\-_. ]+$
+          type: string
+          example: AD Integrations Admin
+        oktaUserId:
+          description: |-
+            The ID of the Okta user to manage as a service account. 
+            This must be an existing user in your Okta org.
+          type: string
+          minLength: 20
+          maxLength: 20
+          pattern: ^[a-zA-Z0-9]+$
+          example: 00u11s48P9zGW8yqm0g5
+        ownerGroupIds:
+          description: A list of IDs of the Okta groups who own the Okta managed user account
+          type: array
+          items:
+            type: string
+            minLength: 20
+            maxLength: 20
+          minItems: 0
+          maxItems: 10
+          example:
+            - 00g57qp78yZT2XBA40g7
+        ownerUserIds:
+          description: A list of IDs of the Okta users who own the Okta managed user account
+          type: array
+          items:
+            type: string
+            minLength: 20
+            maxLength: 20
+          minItems: 0
+          maxItems: 10
+          example:
+            - 00u11s48P9zGW8yqm0g5
+      required:
+        - name
+        - oktaUserId
+    OktaManagedUserAccountForUpdate:
+      description: Request body for updating an Okta managed user account
+      type: object
+      properties:
+        description:
+          description: The description of the Okta managed user account
+          format: regex
+          maxLength: 255
+          minLength: 0
+          type: string
+          example: Updated description for AD integrations admin account
+        name:
+          description: The user-defined name for the Okta managed user account
+          format: regex
+          maxLength: 50
+          minLength: 1
+          pattern: ^[\w\-_. ]+$
+          type: string
+          example: AD Integrations Admin - Updated
+        ownerGroupIds:
+          description: A list of IDs of the Okta groups who own the Okta managed user account
+          type: array
+          items:
+            type: string
+          minItems: 0
+          maxItems: 10
+          example:
+            - 00g57qp78yZT2XBA40g7
+        ownerUserIds:
+          description: A list of IDs of the Okta users who own the Okta managed user account
+          type: array
+          items:
+            type: string
+          minItems: 0
+          maxItems: 10
+          example:
+            - 00u11s48P9zGW8yqm0g5
     AppServiceAccount:
       type: object
       properties:
@@ -187,18 +576,12 @@ components:
           type: string
           example: salesforce Prod 5
         containerOrn:
-          description: >-
-            The
-            [ORN](/openapi/okta-management/guides/roles/#okta-resource-name-orn)
-            of the relevant resource.
+          description: |-
+            The [ORN](/openapi/okta-management/guides/roles/#okta-resource-name-orn) of the relevant resource.
 
-
-            Use the specific app ORN format
-            (`orn:{partition}:idp:{yourOrgId}:apps:{appType}:{appId}`) to
-            identify an Okta app instance in your org.
+            Use the specific app ORN format (`orn:{partition}:idp:{yourOrgId}:apps:{appType}:{appId}`) to identify an Okta app instance in your org.
           type: string
-          example: >-
-            orn:okta:idp:00o1n8sbwArJ7OQRw406:apps:salesforce:0oa1gjh63g214q0Hq0g4
+          example: orn:okta:idp:00o1n8sbwArJ7OQRw406:apps:salesforce:0oa1gjh63g214q0Hq0g4
         created:
           type: string
           format: date-time
@@ -214,8 +597,7 @@ components:
         id:
           description: The UUID of the app service account
           format: regex
-          pattern: >-
-            (?i)^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+          pattern: (?i)^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
           readOnly: true
           type: string
           example: a747a818-a4c4-4446-8a87-704216495a08
@@ -253,20 +635,17 @@ components:
         password:
           type: string
           writeOnly: true
-          description: >-
-            The app service account password. Required for apps that don't have
-            provisioning enabled or don't support password synchronization.
+          description: The app service account password
           format: password
+          minLength: 1
+          maxLength: 255
         status:
           $ref: '#/components/schemas/ServiceAccountStatus'
         statusDetail:
           $ref: '#/components/schemas/ServiceAccountStatusDetail'
         username:
           type: string
-          description: >-
-            The username that serves as the direct link to your managed app
-            account. Ensure that this value precisely matches the identifier of
-            the target app account.
+          description: The username that serves as the direct link to your managed app account. Ensure that this value precisely matches the identifier of the target app account.
           minLength: 1
           maxLength: 100
           example: testuser-salesforce-5@example.com
@@ -274,6 +653,7 @@ components:
         - name
         - containerOrn
         - username
+        - password
     AppServiceAccountForUpdate:
       type: object
       properties:
@@ -311,7 +691,7 @@ components:
           example:
             - 00u11s48P9zGW8yqm0g5
     ServiceAccountStatus:
-      description: Describes the current status of an app service account
+      description: Describes the current status of a service account
       example: UNSECURED
       type: string
       enum:
@@ -322,17 +702,13 @@ components:
         - UNSECURED
       x-enumDescriptions:
         NO_ISSUES: The account is ready for use in Okta Privileged Access
-        UNSECURED: >-
-          The account needs to be assigned to a resource group and a project in
-          Okta Privileged Access
-        INFO: >-
-          An action involving the account is in progress in Okta Privileged
-          Access
+        UNSECURED: The account needs to be assigned to a resource group and a project in Okta Privileged Access
+        INFO: An action involving the account is in progress in Okta Privileged Access
         ALERT: The account requires attention from an admin
         ERROR: An error is preventing Okta Privileged Access from using the account
       readOnly: true
     ServiceAccountStatusDetail:
-      description: Describes the detailed status of an app service account
+      description: Describes the detailed status of a service account
       example: STAGED
       type: string
       enum:
@@ -343,28 +719,18 @@ components:
         - ROTATING
         - ROTATION_FAILED
         - STAGED
+        - UNMANAGED
         - VAULTED
       x-enumDescriptions:
         PENDING: The account is being created
         CREATION_FAILED: The account can't be created
         STAGED: The account is in the Okta Privileged Access resource assignment area
-        ROTATING: >-
-          The account is assigned to a project in Okta Privileged Access.
-          Credentials are currently being synced using Okta Lifecycle
-          Management.
-        ROTATED: >-
-          The account is assigned to a project in Okta Privileged Access.
-          Password rotations are fulfilled by Okta Lifecycle Management.
-        ROTATION_FAILED: >-
-          The account is assigned to a project in Okta Privileged Access. An
-          error occurred while using Okta Lifecycle Management to rotate the
-          password.
-        VAULTED: >-
-          The account is assigned to a project in Okta Privileged Access. A
-          manually managed password is assigned to the account.
-        MISSING_PASSWORD: >-
-          The account is assigned to a project in Okta Privileged Access. A
-          password isn't assigned to the account.
+        ROTATING: The account is assigned to a project in Okta Privileged Access. Credentials are currently being synced using Okta Lifecycle Management.
+        ROTATED: The account is assigned to a project in Okta Privileged Access. Password rotations are fulfilled by Okta Lifecycle Management.
+        ROTATION_FAILED: The account is assigned to a project in Okta Privileged Access. An error occurred while using Okta Lifecycle Management to rotate the password.
+        VAULTED: The account is assigned to a project in Okta Privileged Access. A manually managed password is assigned to the account.
+        MISSING_PASSWORD: The account is assigned to a project in Okta Privileged Access. A password isn't assigned to the account.
+        UNMANAGED: The account is assigned to a project in Okta Privileged Access. Initial password sync hasn't been attempted.
       readOnly: true
     Error:
       title: Error
@@ -379,23 +745,32 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
         errorSummary:
           type: string
+    ListOktaManagedUserAccountsResponse:
+      type: object
+      properties:
+        okta_managed_user_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/OktaManagedUserAccountResponse'
+    ListAppServiceAccountsResponse:
+      type: object
+      properties:
+        app_service_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AppServiceAccount'
   responses:
     ErrorApiValidationFailed400:
       description: Bad Request
@@ -415,15 +790,6 @@ components:
           examples:
             AccessDenied:
               $ref: '#/components/examples/ErrorAccessDenied'
-    ErrorResourceNotFound404:
-      description: Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          examples:
-            ResourceNotFound:
-              $ref: '#/components/examples/ErrorResourceNotFound'
     ErrorTooManyRequests429:
       description: Too Many Requests
       content:
@@ -433,6 +799,15 @@ components:
           examples:
             TooManyRequests:
               $ref: '#/components/examples/ErrorTooManyRequests'
+    ErrorResourceNotFound404:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            ResourceNotFound:
+              $ref: '#/components/examples/ErrorResourceNotFound'
   parameters:
     queryLimit:
       name: limit
@@ -448,17 +823,30 @@ components:
       in: query
       schema:
         type: string
-      description: >-
-        The cursor to use for pagination. It is an opaque string that specifies
-        your current location in the list and is obtained from the `Link`
-        response header. See
-        [Pagination](https://developer.okta.com/docs/api/#pagination).
+      description: The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).
+    oktaManagedUserMatchQueryFilter:
+      name: match
+      description: Searches for Okta managed user accounts where the account name (`name`) or username (`username`) contains the given value
+      in: query
+      required: false
+      schema:
+        type: string
+        minLength: 3
+        maxLength: 255
+        example: admin
+    oktaManagedUserAccountId:
+      name: id
+      in: path
+      description: ID of an existing Okta managed user account
+      required: true
+      schema:
+        type: string
+        format: regex
+        pattern: (?i)^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$
+        example: a747a818-a4c4-4446-8a87-704216495a08
     matchQueryFilter:
       name: match
-      description: >-
-        Searches for app service accounts where the account name (`name`),
-        username (`username`), app instance label (`containerInstanceName`), or
-        OIN app key name (`containerGlobalName`) contains the given value
+      description: Searches for app service accounts where the account name (`name`), username (`username`), app instance label (`containerInstanceName`), or OIN app key name (`containerGlobalName`) contains the given value
       in: query
       required: false
       schema:
@@ -474,14 +862,81 @@ components:
       schema:
         type: string
   examples:
+    ListOktaManagedUserAccounts:
+      summary: List Okta managed user accounts
+      value:
+        - id: d1b65a78-21ed-429b-8ea3-eec96f2748d6
+          name: AD Integrations Admin
+          description: Shared admin account for managing AD integrations
+          oktaUserId: 00u11s48P9zGW8yqm0g5
+          username: shr-ad-admin-01@example.com
+          email: shr-ad-admin-01@example.com
+          ownerUserIds:
+            - 00u22t59Q0aHbNEXi1h8
+          ownerGroupIds:
+            - 00g57qp78yZT2XBA40g7
+          status: NO_ISSUES
+          statusDetail: UNMANAGED
+          created: '2023-04-04T15:56:05.000Z'
+          lastUpdated: '2023-05-05T18:15:44.000Z'
+        - id: e2c76b89-32fe-530c-9fb4-ffd07f3859e7
+          name: SCIM Integration Service Account
+          description: Service account for SCIM provisioning
+          oktaUserId: 00u33u60R1bIcOFYj2i9
+          username: scim-service@example.com
+          email: scim-service@example.com
+          ownerUserIds:
+            - 00u22t59Q0aHbNEXi1h8
+          ownerGroupIds: []
+          status: UNSECURED
+          statusDetail: STAGED
+          created: '2023-06-15T10:30:00.000Z'
+          lastUpdated: '2023-06-15T10:30:00.000Z'
+    CreateOktaManagedUserAccountRequest:
+      summary: Create an Okta managed user account
+      value:
+        name: AD Integrations Admin
+        description: Shared admin account for managing AD integrations
+        oktaUserId: 00u11s48P9zGW8yqm0g5
+        ownerUserIds:
+          - 00u22t59Q0aHbNEXi1h8
+        ownerGroupIds:
+          - 00g57qp78yZT2XBA40g7
+    OktaManagedUserAccountResponse:
+      summary: Okta managed user account response
+      value:
+        id: d1b65a78-21ed-429b-8ea3-eec96f2748d6
+        name: AD Integrations Admin
+        description: Shared admin account for managing AD integrations
+        oktaUserId: 00u11s48P9zGW8yqm0g5
+        username: shr-ad-admin-01@example.com
+        email: shr-ad-admin-01@example.com
+        ownerUserIds:
+          - 00u22t59Q0aHbNEXi1h8
+        ownerGroupIds:
+          - 00g57qp78yZT2XBA40g7
+        status: UNSECURED
+        statusDetail: STAGED
+        created: '2023-04-04T15:56:05.000Z'
+        lastUpdated: '2023-05-05T18:15:44.000Z'
+    UpdateOktaManagedUserAccountRequest:
+      summary: Update an Okta managed user account
+      value:
+        name: AD Integrations Admin - Production
+        description: Updated description for production AD integration admin account
+        ownerUserIds:
+          - 00u22t59Q0aHbNEXi1h8
+          - 00u44v71S2cJdPGZk3j0
+        ownerGroupIds:
+          - 00g57qp78yZT2XBA40g7
     ListAppServiceAccounts:
+      summary: List app service accounts
       value:
         - id: a747a818-a4c4-4446-8a87-704216495a08
           name: salesforce Prod-1 account
           description: This is for accessing salesforce Prod-1
           username: testuser-salesforce-1@example.com
-          containerOrn: >-
-            orn:okta:idp:00o1n8sbwArJ7OQRw406:apps:salesforce:0oa1gjh63g214q0Hq0g4
+          containerOrn: orn:okta:idp:00o1n8sbwArJ7OQRw406:apps:salesforce:0oa1gjh63g214q0Hq0g4
           containerInstanceName: salesforce-1
           containerGlobalName: salesforce
           ownerGroupIds:
@@ -496,8 +951,7 @@ components:
           name: salesforce Prod-5 account
           description: This is for accessing salesforce Prod-5
           username: testuser-salesforce-5@example.com
-          containerOrn: >-
-            orn:okta:idp:00o1n8sbwArJ7OQRw406:apps:salesforce:0oa1gjh63g214q0Hq0g4
+          containerOrn: orn:okta:idp:00o1n8sbwArJ7OQRw406:apps:salesforce:0oa1gjh63g214q0Hq0g4
           containerInstanceName: salesforce-5
           containerGlobalName: salesforce
           ownerGroupIds:
@@ -508,7 +962,6 @@ components:
           statusDetail: ROTATED
           created: '2024-04-04T15:56:05.000Z'
           lastUpdated: '2024-04-05T18:15:44.000Z'
-      summary: List app service accounts
     ErrorApiValidationFailed:
       summary: API Validation Failed
       value:
@@ -525,14 +978,6 @@ components:
         errorLink: E0000006
         errorId: sampleNUSD_8fdkFd8fs8SDBK
         errorCauses: []
-    ErrorResourceNotFound:
-      summary: Resource Not Found
-      value:
-        errorCode: E0000007
-        errorSummary: 'Not found: {0}'
-        errorLink: E0000007
-        errorId: sampleMlLvGUj_YD5v16vkYWY
-        errorCauses: []
     ErrorTooManyRequests:
       summary: Too Many Requests
       value:
@@ -541,12 +986,17 @@ components:
         errorLink: E0000047
         errorId: sampleQPivGUj_ND5v78vbYWW
         errorCauses: []
+    ErrorResourceNotFound:
+      summary: Resource Not Found
+      value:
+        errorCode: E0000007
+        errorSummary: 'Not found: {0}'
+        errorLink: E0000007
+        errorId: sampleMlLvGUj_YD5v16vkYWY
+        errorCauses: []
 servers:
   - url: https://{yourOktaDomain}
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

@@ -1,0 +1,30 @@
+version: 1
+name: okta-starter
+description: example stackql-deploy stack for the okta provider
+providers:
+  - okta
+globals:
+  - name: subdomain
+    description: okta org subdomain (e.g. dev-123456 for dev-123456.okta.com)
+    value: "{{ OKTA_SUBDOMAIN }}"
+resources:
+  - name: app_group
+    file: group.iql
+    props:
+      - name: group_name
+        value: "{{ stack_name }}-{{ stack_env }}-group"
+      - name: group_description
+        value: "example group provisioned by stackql-deploy ({{ stack_name }} {{ stack_env }})"
+    exports:
+      - group_id
+  - name: app_user
+    file: user.iql
+    props:
+      - name: user_login
+        value: "{{ stack_name }}.{{ stack_env }}@example.com"
+      - name: user_first_name
+        value: StackQL
+      - name: user_last_name
+        value: Deploy
+    exports:
+      - user_id

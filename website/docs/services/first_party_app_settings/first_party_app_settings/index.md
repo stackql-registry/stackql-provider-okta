@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>first_party_app_settings</code>
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>first_party_app_settings</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="first_party_app_settings" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.first_party_app_settings.first_party_app_settings" /></td></tr>
 </tbody></table>
@@ -81,14 +82,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_first_party_app_settings"><CopyableCode code="get_first_party_app_settings" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the settings for an Okta app (also known as an Okta first-party app)</td>
 </tr>
 <tr>
     <td><a href="#replace_first_party_app_settings"><CopyableCode code="replace_first_party_app_settings" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the settings for an Okta app (also known as an Okta first-party app)</td>
 </tr>
@@ -108,10 +109,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appName">
+    <td><CopyableCode code="appName" /></td>
+    <td><code>string</code></td>
+    <td>The key name for the Okta app.<br /> Supported apps:   * Okta Admin Console (`admin-console`) </td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +139,8 @@ SELECT
 sessionIdleTimeoutMinutes,
 sessionMaxLifetimeMinutes
 FROM okta.first_party_app_settings.first_party_app_settings
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE appName = '{{ appName }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -155,14 +162,14 @@ Replaces the settings for an Okta app (also known as an Okta first-party app)
 ```sql
 REPLACE okta.first_party_app_settings.first_party_app_settings
 SET 
-data__sessionIdleTimeoutMinutes = {{ sessionIdleTimeoutMinutes }},
-data__sessionMaxLifetimeMinutes = {{ sessionMaxLifetimeMinutes }}
+sessionIdleTimeoutMinutes = {{ sessionIdleTimeoutMinutes }},
+sessionMaxLifetimeMinutes = {{ sessionMaxLifetimeMinutes }}
 WHERE 
-subdomain = '{{ subdomain }}' --required
+appName = '{{ appName }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 sessionIdleTimeoutMinutes,
-sessionMaxLifetimeMinutes
-;
+sessionMaxLifetimeMinutes;
 ```
 </TabItem>
 </Tabs>

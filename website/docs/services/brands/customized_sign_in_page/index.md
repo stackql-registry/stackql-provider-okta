@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>customized_sign_in_page</code> 
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>customized_sign_in_page</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="customized_sign_in_page" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.customized_sign_in_page" /></td></tr>
 </tbody></table>
@@ -68,7 +69,7 @@ Successfully retrieved the customized sign-in page.
 <tr>
     <td><CopyableCode code="widgetVersion" /></td>
     <td><code>string</code></td>
-    <td>The version specified as a [Semantic Version](https://semver.org/). (pattern: <code>^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$</code>)</td>
+    <td>The version specified as a [Semantic Version](https://semver.org/). This value can be a wildcard (`*`), a major version range (for example, `^2`), a major-only version (for example, `7`), or a specific `Major.Minor` version (for example, `5.15`). (pattern: <code>^(?:\*|\^?\d+(?:\.\d+)&#123;0,2&#125;)$</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -93,14 +94,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_customized_sign_in_page"><CopyableCode code="get_customized_sign_in_page" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the customized sign-in page. The customized sign-in page appears in your live environment.</td>
 </tr>
 <tr>
     <td><a href="#replace_customized_sign_in_page"><CopyableCode code="replace_customized_sign_in_page" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the customized sign-in page. The customized sign-in page appears in your live environment.</td>
 </tr>
@@ -120,10 +121,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -147,7 +153,8 @@ pageContent,
 widgetCustomizations,
 widgetVersion
 FROM okta.brands.customized_sign_in_page
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -169,18 +176,18 @@ Replaces the customized sign-in page. The customized sign-in page appears in you
 ```sql
 REPLACE okta.brands.customized_sign_in_page
 SET 
-data__pageContent = '{{ pageContent }}',
-data__contentSecurityPolicySetting = '{{ contentSecurityPolicySetting }}',
-data__widgetCustomizations = '{{ widgetCustomizations }}',
-data__widgetVersion = '{{ widgetVersion }}'
+pageContent = '{{ pageContent }}',
+contentSecurityPolicySetting = '{{ contentSecurityPolicySetting }}',
+widgetCustomizations = '{{ widgetCustomizations }}',
+widgetVersion = '{{ widgetVersion }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+brandId = '{{ brandId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 contentSecurityPolicySetting,
 pageContent,
 widgetCustomizations,
-widgetVersion
-;
+widgetVersion;
 ```
 </TabItem>
 </Tabs>

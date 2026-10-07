@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>app_targets</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>app_targets</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="app_targets" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.groups.app_targets" /></td></tr>
 </tbody></table>
@@ -38,6 +39,8 @@ The following fields are returned by `SELECT` queries:
     ]}
 >
 <TabItem value="list_application_targets_for_application_administrator_role_for_group">
+
+An app in the OIN catalog
 
 <table>
 <thead>
@@ -81,7 +84,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="features" /></td>
     <td><code>array</code></td>
-    <td>Features supported by the app. See app [features](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications!c=200&path=0/features&t=response).</td>
+    <td>Features supported by the app. See app [features](https://developer.okta.com/docs/api/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/features).</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -91,12 +94,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="signOnModes" /></td>
     <td><code>array</code></td>
-    <td>Authentication mode for the app. See app [signOnMode](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications!c=200&path=0/signOnMode&t=response).</td>
+    <td>Authentication mode for the app. See app [signOnMode](https://developer.okta.com/docs/api/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/signonmode).</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>App status</td>
+    <td>App status (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="verificationStatus" /></td>
@@ -131,23 +134,23 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_application_targets_for_application_administrator_role_for_group"><CopyableCode code="list_application_targets_for_application_administrator_role_for_group" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
     <td>Lists all app targets for an `APP_ADMIN` role assignment to a group. The response includes a list of OIN-cataloged apps or app instances. The response payload for an app instance contains the `id` property, but an OIN-cataloged app doesn't.</td>
 </tr>
 <tr>
     <td><a href="#assign_app_target_to_admin_role_for_group"><CopyableCode code="assign_app_target_to_admin_role_for_group" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Assigns an OIN app target to an `APP_ADMIN` role assignment to a group. When you assign the first OIN app target, you reduce the scope of the role assignment. The role no longer applies to all app targets, but applies only to the specified target. An OIN app target that's assigned to the role overrides any existing instance targets of the OIN app. For example, if a user is assigned to administer a specific Facebook instance, a successful request to add an OIN app with `facebook` for `appName` makes that user the administrator for all Facebook instances.</td>
 </tr>
 <tr>
     <td><a href="#unassign_app_target_to_admin_role_for_group"><CopyableCode code="unassign_app_target_to_admin_role_for_group" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Unassigns an OIN app target from an `APP_ADMIN` role assignment to a group<br /><br />&gt; **Note:** You can't remove the last app target from a role assignment.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment with the target and create another one. See [Unassign a group role](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/RoleAssignmentBGroup/#tag/RoleAssignmentBGroup/operation/unassignRoleFromGroup).<br /></td>
+    <td>Unassigns an OIN app target from an `APP_ADMIN` role assignment to a group<br /><br />&gt; **Note:** You can't remove the last app target from a role assignment.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment with the target and create another one. See [Unassign a group role](https://developer.okta.com/docs/api/openapi/okta-management/management/roleassignmentbgroup/unassignrolefromgroup).<br /></td>
 </tr>
 </tbody>
 </table>
@@ -165,15 +168,30 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appName">
+    <td><CopyableCode code="appName" /></td>
+    <td><code>string</code></td>
+    <td>Name of the app definition (the OIN catalog app key name)</td>
+</tr>
+<tr id="parameter-groupId">
+    <td><CopyableCode code="groupId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the group</td>
+</tr>
+<tr id="parameter-roleAssignmentId">
+    <td><CopyableCode code="roleAssignmentId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the role assignment</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -210,7 +228,9 @@ status,
 verificationStatus,
 website
 FROM okta.groups.app_targets
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE groupId = '{{ groupId }}' -- required
+AND roleAssignmentId = '{{ roleAssignmentId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND after = '{{ after }}'
 AND limit = '{{ limit }}'
 ;
@@ -236,8 +256,10 @@ REPLACE okta.groups.app_targets
 SET 
 -- No updatable properties
 WHERE 
-subdomain = '{{ subdomain }}' --required
-;
+groupId = '{{ groupId }}' --required
+AND roleAssignmentId = '{{ roleAssignmentId }}' --required
+AND appName = '{{ appName }}' --required
+AND subdomain = '{{ subdomain }}' --required;
 ```
 </TabItem>
 </Tabs>
@@ -253,11 +275,14 @@ subdomain = '{{ subdomain }}' --required
 >
 <TabItem value="unassign_app_target_to_admin_role_for_group">
 
-Unassigns an OIN app target from an `APP_ADMIN` role assignment to a group<br /><br />&gt; **Note:** You can't remove the last app target from a role assignment.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment with the target and create another one. See [Unassign a group role](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/RoleAssignmentBGroup/#tag/RoleAssignmentBGroup/operation/unassignRoleFromGroup).<br />
+Unassigns an OIN app target from an `APP_ADMIN` role assignment to a group<br /><br />&gt; **Note:** You can't remove the last app target from a role assignment.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment with the target and create another one. See [Unassign a group role](https://developer.okta.com/docs/api/openapi/okta-management/management/roleassignmentbgroup/unassignrolefromgroup).<br />
 
 ```sql
 DELETE FROM okta.groups.app_targets
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE groupId = '{{ groupId }}' --required
+AND roleAssignmentId = '{{ roleAssignmentId }}' --required
+AND appName = '{{ appName }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

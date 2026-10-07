@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: email_domains API
   description: okta email_domains API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/email-domains:
     get:
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EmailDomainResponseWithEmbedded'
+                $ref: '#/components/schemas/ListEmailDomainsResponse'
               examples:
                 List email domain response:
                   $ref: '#/components/examples/EmailDomainResponse'
@@ -34,6 +32,13 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/queryExpandEmailDomain'
+      x-stackql-bare-array-wrap:
+        wrapperKey: email_domains
+        wrapperName: ListEmailDomainsResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create an email domain
       description: Creates an Email Domain in your org
@@ -84,8 +89,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/queryExpandEmailDomain'
+      parameters:
+        - $ref: '#/components/parameters/queryExpandEmailDomain'
   /api/v1/email-domains/{emailDomainId}:
     get:
       summary: Retrieve an email domain
@@ -116,6 +121,9 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathEmailDomainId'
+        - $ref: '#/components/parameters/queryExpandEmailDomain'
     put:
       summary: Replace an email domain
       description: Replaces associated username and sender display name by `emailDomainId`
@@ -157,6 +165,9 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathEmailDomainId'
+        - $ref: '#/components/parameters/queryExpandEmailDomain'
     delete:
       summary: Delete an email domain
       description: Deletes an Email Domain by `emailDomainId`
@@ -166,9 +177,7 @@ paths:
           description: No Content
           content: {}
         '400':
-          description: >-
-            Unable to delete custom email domain due to mail provider specific
-            restrictions
+          description: Unable to delete custom email domain due to mail provider specific restrictions
           content:
             application/json:
               schema:
@@ -191,9 +200,9 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathEmailDomainId'
-      - $ref: '#/components/parameters/queryExpandEmailDomain'
+      parameters:
+        - $ref: '#/components/parameters/pathEmailDomainId'
+        - $ref: '#/components/parameters/queryExpandEmailDomain'
   /api/v1/email-domains/{emailDomainId}/verify:
     post:
       summary: Verify an email domain
@@ -235,13 +244,12 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathEmailDomainId'
+      parameters:
+        - $ref: '#/components/parameters/pathEmailDomainId'
 components:
   schemas:
     EmailDomainResponseWithEmbedded:
-      allOf:
-        - $ref: '#/components/schemas/EmailDomainResponse'
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         _embedded:
@@ -252,9 +260,29 @@ components:
               items:
                 $ref: '#/components/schemas/Brand'
           readOnly: true
+        dnsValidationRecords:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailDomainDNSRecord'
+        domain:
+          type: string
+        id:
+          type: string
+        validationStatus:
+          $ref: '#/components/schemas/EmailDomainStatus'
+        validationSubdomain:
+          type: string
+          description: The subdomain for the email sender's custom mail domain
+          default: mail
+        displayName:
+          type: string
+        userName:
+          type: string
+      required:
+        - displayName
+        - userName
     EmailDomain:
-      allOf:
-        - $ref: '#/components/schemas/BaseEmailDomain'
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         brandId:
@@ -263,16 +291,19 @@ components:
           type: string
         validationSubdomain:
           type: string
-          description: >-
-            Subdomain for the email sender's custom mail domain. Specify your
-            subdomain when you configure a custom mail domain.
+          description: Subdomain for the email sender's custom mail domain. Specify your subdomain when you configure a custom mail domain.
           default: mail
+        displayName:
+          type: string
+        userName:
+          type: string
       required:
         - domain
         - brandId
+        - displayName
+        - userName
     EmailDomainResponse:
-      allOf:
-        - $ref: '#/components/schemas/BaseEmailDomain'
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         dnsValidationRecords:
@@ -289,6 +320,13 @@ components:
           type: string
           description: The subdomain for the email sender's custom mail domain
           default: mail
+        displayName:
+          type: string
+        userName:
+          type: string
+      required:
+        - displayName
+        - userName
     Error:
       title: Error
       type: object
@@ -302,29 +340,30 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     UpdateEmailDomain:
-      allOf:
-        - $ref: '#/components/schemas/BaseEmailDomain'
+      x-okta-ignore-redocly-rules-for-sdk: true
+      type: object
+      properties:
+        displayName:
+          type: string
+        userName:
+          type: string
+      required:
+        - displayName
+        - userName
     Brand:
       type: object
       properties:
         agreeToCustomPrivacyPolicy:
           type: boolean
-          description: >-
-            Consent for updating the custom privacy URL. Not required when
-            resetting the URL.
+          description: Consent for updating the custom privacy URL. Not required when resetting the URL.
         customPrivacyPolicyUrl:
           type: string
           description: Custom privacy policy URL
@@ -350,10 +389,7 @@ components:
         removePoweredByOkta:
           type: boolean
           default: false
-          description: >-
-            Removes "Powered by Okta" from the sign-in page in redirect
-            authentication deployments, and "© [current year] Okta, Inc." from
-            the Okta End-User Dashboard
+          description: Removes "Powered by Okta" from the sign-in page in redirect authentication deployments, and "© [current year] Okta, Inc." from the Okta End-User Dashboard
     BaseEmailDomain:
       type: object
       properties:
@@ -374,6 +410,7 @@ components:
         verificationValue:
           type: string
     EmailDomainStatus:
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: string
       enum:
         - DELETED
@@ -399,15 +436,20 @@ components:
           type: string
           description: Application URI for classic Orgs
     Language:
-      description: >-
-        The language specified as an [IETF BCP 47 language
-        tag](https://datatracker.ietf.org/doc/html/rfc5646)
+      description: The language specified as an [IETF BCP 47 language tag](https://datatracker.ietf.org/doc/html/rfc5646)
       type: string
     EmailDomainDNSRecordType:
       type: string
       enum:
         - CNAME
         - TXT
+    ListEmailDomainsResponse:
+      type: object
+      properties:
+        email_domains:
+          type: array
+          items:
+            $ref: '#/components/schemas/EmailDomainResponseWithEmbedded'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -606,7 +648,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

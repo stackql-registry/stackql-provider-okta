@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>subscriptions</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>subscriptions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="subscriptions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.subscriptions" /></td></tr>
 </tbody></table>
@@ -32,46 +33,12 @@ Creates, updates, deletes, gets or lists a <code>subscriptions</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_subscriptions_user"
+    defaultValue="get_subscriptions_notification_type_user"
     values={[
-        { label: 'list_subscriptions_user', value: 'list_subscriptions_user' },
-        { label: 'get_subscriptions_notification_type_user', value: 'get_subscriptions_notification_type_user' }
+        { label: 'get_subscriptions_notification_type_user', value: 'get_subscriptions_notification_type_user' },
+        { label: 'list_subscriptions_user', value: 'list_subscriptions_user' }
     ]}
 >
-<TabItem value="list_subscriptions_user">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Discoverable resources related to the subscription</td>
-</tr>
-<tr>
-    <td><CopyableCode code="channels" /></td>
-    <td><code>array</code></td>
-    <td>An array of sources send notifications to users. &gt; **Note**: Currently, Okta only allows `email` channels.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="notificationType" /></td>
-    <td><code>string</code></td>
-    <td>The type of notification</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>The status of the subscription</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_subscriptions_notification_type_user">
 
 <table>
@@ -96,12 +63,46 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="notificationType" /></td>
     <td><code>string</code></td>
-    <td>The type of notification</td>
+    <td>The type of notification (AD_AGENT, AGENT_AUTO_UPDATE_NOTIFICATION, AGENT_AUTO_UPDATE_NOTIFICATION_LDAP, APP_IMPORT, CONNECTOR_AGENT, IWA_AGENT, LDAP_AGENT, OKTA_ANNOUNCEMENT, OKTA_UPDATE, RATELIMIT_NOTIFICATION, REPORT_SUSPICIOUS_ACTIVITY, USER_DEPROVISION, USER_LOCKED_OUT)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The status of the subscription</td>
+    <td>The status of the subscription (subscribed, unsubscribed)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_subscriptions_user">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Discoverable resources related to the subscription</td>
+</tr>
+<tr>
+    <td><CopyableCode code="channels" /></td>
+    <td><code>array</code></td>
+    <td>An array of sources send notifications to users. &gt; **Note**: Currently, Okta only allows `email` channels.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="notificationType" /></td>
+    <td><code>string</code></td>
+    <td>The type of notification (AD_AGENT, AGENT_AUTO_UPDATE_NOTIFICATION, AGENT_AUTO_UPDATE_NOTIFICATION_LDAP, APP_IMPORT, CONNECTOR_AGENT, IWA_AGENT, LDAP_AGENT, OKTA_ANNOUNCEMENT, OKTA_UPDATE, RATELIMIT_NOTIFICATION, REPORT_SUSPICIOUS_ACTIVITY, USER_DEPROVISION, USER_LOCKED_OUT)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>The status of the subscription (subscribed, unsubscribed)</td>
 </tr>
 </tbody>
 </table>
@@ -124,18 +125,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_subscriptions_user"><CopyableCode code="list_subscriptions_user" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all subscriptions available to a specified user. Returns an `AccessDeniedException` message if requests are made for another user.</td>
-</tr>
-<tr>
     <td><a href="#get_subscriptions_notification_type_user"><CopyableCode code="get_subscriptions_notification_type_user" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-notificationType"><code>notificationType</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a subscription by `notificationType` for a specified user. Returns an `AccessDeniedException` message if requests are made for another user.</td>
+</tr>
+<tr>
+    <td><a href="#list_subscriptions_user"><CopyableCode code="list_subscriptions_user" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all subscriptions available to a specified user. Returns an `AccessDeniedException` message if requests are made for another user.</td>
 </tr>
 <tr>
     <td><a href="#subscribe_by_notification_type_user"><CopyableCode code="subscribe_by_notification_type_user" /></a></td>
@@ -175,7 +176,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-userId">
     <td><CopyableCode code="userId" /></td>
@@ -188,28 +189,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_subscriptions_user"
+    defaultValue="get_subscriptions_notification_type_user"
     values={[
-        { label: 'list_subscriptions_user', value: 'list_subscriptions_user' },
-        { label: 'get_subscriptions_notification_type_user', value: 'get_subscriptions_notification_type_user' }
+        { label: 'get_subscriptions_notification_type_user', value: 'get_subscriptions_notification_type_user' },
+        { label: 'list_subscriptions_user', value: 'list_subscriptions_user' }
     ]}
 >
-<TabItem value="list_subscriptions_user">
-
-Lists all subscriptions available to a specified user. Returns an `AccessDeniedException` message if requests are made for another user.
-
-```sql
-SELECT
-_links,
-channels,
-notificationType,
-status
-FROM okta.users.subscriptions
-WHERE userId = '{{ userId }}' -- required
-AND subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_subscriptions_notification_type_user">
 
 Retrieves a subscription by `notificationType` for a specified user. Returns an `AccessDeniedException` message if requests are made for another user.
@@ -223,6 +208,22 @@ status
 FROM okta.users.subscriptions
 WHERE userId = '{{ userId }}' -- required
 AND notificationType = '{{ notificationType }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_subscriptions_user">
+
+Lists all subscriptions available to a specified user. Returns an `AccessDeniedException` message if requests are made for another user.
+
+```sql
+SELECT
+_links,
+channels,
+notificationType,
+status
+FROM okta.users.subscriptions
+WHERE userId = '{{ userId }}' -- required
 AND subdomain = '{{ subdomain }}' -- required
 ;
 ```

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: oauth2 API
   description: okta oauth2 API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /oauth2/v1/clients/{clientId}/roles:
     get:
@@ -15,15 +15,13 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/StandardRole'
-                  - $ref: '#/components/schemas/CustomRole'
+                $ref: '#/components/schemas/ListRolesForClientResponse'
               examples:
-                Standard Roles:
+                Standard roles:
                   $ref: '#/components/examples/StandardRolesListResponseClient'
-                Custom Roles:
+                Custom roles:
                   $ref: '#/components/examples/CustomRolesListResponseClient'
-                IAM-based Standard Roles:
+                IAM-based standard roles:
                   $ref: '#/components/examples/IAMStandardRolesListResponseClient'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
@@ -40,42 +38,78 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+      x-stackql-bare-array-wrap:
+        wrapperKey: roles_for_client
+        wrapperName: ListRolesForClientResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Assign a client role
-      description: >-
-        Assigns a [standard
-        role](/openapi/okta-management/guides/roles/#standard-roles) to a client
-        app.
+      description: |-
+        Assigns a [standard role](/openapi/okta-management/guides/roles/#standard-roles) to a client app.
 
-
-        You can also assign a custom role to a client app, but the preferred
-        method to assign a custom role to a client is to create a binding
-        between the custom role, the resource set, and the client app. See
-        [Create a role resource set
-        binding](/openapi/okta-management/management/tag/RoleDResourceSetBinding/#tag/RoleDResourceSetBinding/operation/createResourceSetBinding).
-
+        You can also assign a custom role to a client app, but the preferred method to assign a custom role to a client is to create a binding between the custom role, the resource set, and the client app. See [Create a role resource set binding](/openapi/okta-management/management/roledresourcesetbinding/createresourcesetbinding).
 
         > **Notes:**
-
-        > * The request payload is different for standard and custom role
-        assignments.
-
-        > * For IAM-based standard role assignments, use the request payload for
-        standard roles. However, the response payload for IAM-based role
-        assignments is similar to the custom role's assignment response.
+        > * The request payload is different for standard and custom role assignments.
+        > * For IAM-based standard role assignments, use the request payload for standard roles. However, the response payload for IAM-based role assignments is similar to the custom role's assignment response.
       operationId: assignRoleToClient
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: '#/components/schemas/StandardRoleAssignmentSchema'
-                - $ref: '#/components/schemas/CustomRoleAssignmentSchema'
+              discriminator:
+                propertyName: type
+                mapping:
+                  API_ACCESS_MANAGEMENT_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  APP_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  GROUP_MEMBERSHIP_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  HELP_DESK_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  ORG_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  READ_ONLY_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  REPORT_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  SUPER_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  USER_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  ACCESS_CERTIFICATIONS_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  ACCESS_REQUESTS_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  WORKFLOWS_ADMIN: '#/components/schemas/StandardRoleAssignmentSchema'
+                  CUSTOM: '#/components/schemas/CustomRoleAssignmentSchema'
+              title: Standard role
+              type: object
+              properties:
+                type:
+                  type: string
+                  description: 'Specify a [standard admin role](/openapi/okta-management/guides/roles/#standard-roles), an [IAM-based standard role](/openapi/okta-management/guides/roles/#iam-based-standard-roles), or `CUSTOM` for a custom role type:'
+                  enum:
+                    - ACCESS_CERTIFICATIONS_ADMIN
+                    - ACCESS_REQUESTS_ADMIN
+                    - API_ACCESS_MANAGEMENT_ADMIN
+                    - APP_ADMIN
+                    - GROUP_MEMBERSHIP_ADMIN
+                    - HELP_DESK_ADMIN
+                    - ORG_ADMIN
+                    - READ_ONLY_ADMIN
+                    - REPORT_ADMIN
+                    - SUPER_ADMIN
+                    - USER_ADMIN
+                    - WORKFLOWS_ADMIN
+                resource-set:
+                  type: string
+                  description: Resource set ID
+                role:
+                  type: string
+                  description: Custom role ID
+              required:
+                - type
+                - role
+                - resource-set
             examples:
-              Standard Role:
+              Standard role:
                 $ref: '#/components/examples/StandardRoleAssignmentRequest'
-              Custom Role Assignment:
+              Custom role assignment:
                 $ref: '#/components/examples/CustomRoleAssignmentRequest'
       responses:
         '200':
@@ -83,15 +117,93 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/StandardRole'
-                  - $ref: '#/components/schemas/CustomRole'
+                discriminator:
+                  propertyName: type
+                  mapping:
+                    API_ACCESS_MANAGEMENT_ADMIN: '#/components/schemas/StandardRole'
+                    APP_ADMIN: '#/components/schemas/StandardRole'
+                    GROUP_MEMBERSHIP_ADMIN: '#/components/schemas/StandardRole'
+                    HELP_DESK_ADMIN: '#/components/schemas/StandardRole'
+                    ORG_ADMIN: '#/components/schemas/StandardRole'
+                    READ_ONLY_ADMIN: '#/components/schemas/StandardRole'
+                    REPORT_ADMIN: '#/components/schemas/StandardRole'
+                    SUPER_ADMIN: '#/components/schemas/StandardRole'
+                    USER_ADMIN: '#/components/schemas/StandardRole'
+                    ACCESS_CERTIFICATIONS_ADMIN: '#/components/schemas/CustomRole'
+                    ACCESS_REQUESTS_ADMIN: '#/components/schemas/CustomRole'
+                    WORKFLOWS_ADMIN: '#/components/schemas/CustomRole'
+                    CUSTOM: '#/components/schemas/CustomRole'
+                title: Standard role assignment
+                x-okta-ignore-redocly-rules-for-sdk: true
+                type: object
+                properties:
+                  assignmentType:
+                    $ref: '#/components/schemas/RoleAssignmentType'
+                  created:
+                    type: string
+                    description: Timestamp when the object was created
+                    format: date-time
+                    readOnly: true
+                  id:
+                    type: string
+                    description: Role assignment ID
+                    readOnly: true
+                  label:
+                    type: string
+                    description: Label for the role assignment
+                    readOnly: true
+                  lastUpdated:
+                    type: string
+                    description: Timestamp when the object was last updated
+                    format: date-time
+                    readOnly: true
+                  status:
+                    type: string
+                    enum:
+                      - ACTIVE
+                      - INACTIVE
+                    description: Status of the role assignment
+                  type:
+                    $ref: '#/components/schemas/RoleType'
+                  _embedded:
+                    type: object
+                    description: Optional embedded resources for the role assignment
+                    properties:
+                      targets:
+                        type: object
+                        description: Targets configured for the role assignment
+                        properties:
+                          groups:
+                            type: array
+                            description: Group targets
+                            items:
+                              $ref: '#/components/schemas/Group'
+                          catalog:
+                            description: App targets
+                            properties:
+                              apps:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/CatalogApplication'
+                            type: object
+                  _links:
+                    $ref: '#/components/schemas/LinksAssignee'
+                  resource-set:
+                    type: string
+                    description: Resource set ID
+                    readOnly: true
+                  role:
+                    type: string
+                    description: Role ID
+                    readOnly: true
+                required:
+                  - type
               examples:
-                Standard Role:
+                Standard role:
                   $ref: '#/components/examples/StandardRoleResponseClient'
-                Custom Role Assignment:
+                Custom role assignment:
                   $ref: '#/components/examples/CustomRoleResponseClient'
-                IAM-based Role Assignment:
+                IAM-based role assignment:
                   $ref: '#/components/examples/IAMStandardRolesListResponseClient'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
@@ -108,14 +220,12 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
   /oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}:
     get:
       summary: Retrieve a client role
-      description: >-
-        Retrieves a role assignment (identified by `roleAssignmentId`) for a
-        client app (identified by `clientId`)
+      description: Retrieves a role assignment (identified by `roleAssignmentId`) for a client app (identified by `clientId`)
       operationId: retrieveClientRole
       responses:
         '200':
@@ -123,15 +233,93 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: '#/components/schemas/StandardRole'
-                  - $ref: '#/components/schemas/CustomRole'
+                discriminator:
+                  propertyName: type
+                  mapping:
+                    API_ACCESS_MANAGEMENT_ADMIN: '#/components/schemas/StandardRole'
+                    APP_ADMIN: '#/components/schemas/StandardRole'
+                    GROUP_MEMBERSHIP_ADMIN: '#/components/schemas/StandardRole'
+                    HELP_DESK_ADMIN: '#/components/schemas/StandardRole'
+                    ORG_ADMIN: '#/components/schemas/StandardRole'
+                    READ_ONLY_ADMIN: '#/components/schemas/StandardRole'
+                    REPORT_ADMIN: '#/components/schemas/StandardRole'
+                    SUPER_ADMIN: '#/components/schemas/StandardRole'
+                    USER_ADMIN: '#/components/schemas/StandardRole'
+                    ACCESS_CERTIFICATIONS_ADMIN: '#/components/schemas/CustomRole'
+                    ACCESS_REQUESTS_ADMIN: '#/components/schemas/CustomRole'
+                    WORKFLOWS_ADMIN: '#/components/schemas/CustomRole'
+                    CUSTOM: '#/components/schemas/CustomRole'
+                title: Standard role assignment
+                x-okta-ignore-redocly-rules-for-sdk: true
+                type: object
+                properties:
+                  assignmentType:
+                    $ref: '#/components/schemas/RoleAssignmentType'
+                  created:
+                    type: string
+                    description: Timestamp when the object was created
+                    format: date-time
+                    readOnly: true
+                  id:
+                    type: string
+                    description: Role assignment ID
+                    readOnly: true
+                  label:
+                    type: string
+                    description: Label for the role assignment
+                    readOnly: true
+                  lastUpdated:
+                    type: string
+                    description: Timestamp when the object was last updated
+                    format: date-time
+                    readOnly: true
+                  status:
+                    type: string
+                    enum:
+                      - ACTIVE
+                      - INACTIVE
+                    description: Status of the role assignment
+                  type:
+                    $ref: '#/components/schemas/RoleType'
+                  _embedded:
+                    type: object
+                    description: Optional embedded resources for the role assignment
+                    properties:
+                      targets:
+                        type: object
+                        description: Targets configured for the role assignment
+                        properties:
+                          groups:
+                            type: array
+                            description: Group targets
+                            items:
+                              $ref: '#/components/schemas/Group'
+                          catalog:
+                            description: App targets
+                            properties:
+                              apps:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/CatalogApplication'
+                            type: object
+                  _links:
+                    $ref: '#/components/schemas/LinksAssignee'
+                  resource-set:
+                    type: string
+                    description: Resource set ID
+                    readOnly: true
+                  role:
+                    type: string
+                    description: Role ID
+                    readOnly: true
+                required:
+                  - type
               examples:
-                Standard Role:
+                Standard role:
                   $ref: '#/components/examples/StandardRoleResponseClient'
-                Custom Role Assignment:
+                Custom role assignment:
                   $ref: '#/components/examples/CustomRoleResponseClient'
-                IAM-based Standard Role Assignment:
+                IAM-based standard role assignment:
                   $ref: '#/components/examples/IAMStandardRoleResponseClient'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
@@ -148,11 +336,12 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
     delete:
       summary: Unassign a client role
-      description: >-
-        Unassigns a role assignment (identified by `roleAssignmentId`) from a
-        client app (identified by `clientId`)
+      description: Unassigns a role assignment (identified by `roleAssignmentId`) from a client app (identified by `clientId`)
       operationId: deleteRoleFromClient
       responses:
         '204':
@@ -173,28 +362,26 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
-      - $ref: '#/components/parameters/pathRoleAssignmentId'
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
   /oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps:
     get:
       summary: List all client role app targets
-      description: >-
-        Lists all OIN app targets for an `APP_ADMIN` role that's assigned to a
-        client (by `clientId`).
+      description: Lists all OIN app targets for an `APP_ADMIN` role that's assigned to a client (by `clientId`).
       operationId: listAppTargetRoleToClient
       parameters:
         - $ref: '#/components/parameters/queryAfter'
         - $ref: '#/components/parameters/queryLimit'
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CatalogApplication'
+                $ref: '#/components/schemas/ListAppTargetRoleToClientResponse'
               examples:
                 ClientRoleTargetExample:
                   $ref: '#/components/examples/ClientRoleTargetResponseFacebookEx'
@@ -215,27 +402,20 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
-      - $ref: '#/components/parameters/pathRoleAssignmentId'
+      x-stackql-bare-array-wrap:
+        wrapperKey: app_target_role_to_client
+        wrapperName: ListAppTargetRoleToClientResponse
+        mediaType: application/json
+        scalar: false
   /oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}:
     put:
       summary: Assign a client role app target
-      description: >-
-        Assigns an OIN app target for an `APP_ADMIN` role assignment to a
-        client. When you assign an app target from the OIN catalog, you reduce
-        the scope of the role assignment.
-
-        The role assignment applies to only app instances that are included in
-        the specified OIN app target.
-
+      description: |-
+        Assigns an OIN app target for an `APP_ADMIN` role assignment to a client. When you assign an app target from the OIN catalog, you reduce the scope of the role assignment.
+        The role assignment applies to only app instances that are included in the specified OIN app target.
 
         An assigned OIN app target overrides any existing app instance targets.
-
-        For example, if a user is assigned to administer a specific Facebook
-        instance, a successful request to add an OIN app target with `facebook`
-        for `appName` makes that user the administrator for all Facebook
-        instances.
+        For example, if a user is assigned to administer a specific Facebook instance, a successful request to add an OIN app target with `facebook` for `appName` makes that user the administrator for all Facebook instances.
       operationId: assignAppTargetRoleToClient
       responses:
         '204':
@@ -256,19 +436,17 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
+        - $ref: '#/components/parameters/pathAppName'
     delete:
       summary: Unassign a client role app target
-      description: >-
+      description: |-
         Unassigns an OIN app target for a role assignment to a client app
 
-
-        > **Note:** You can't remove the last OIN app target from a role
-        assignment.
-
-        > If you need a role assignment that applies to all apps, delete the
-        role assignment with the target and create another one. See [Unassign a
-        client
-        role](/openapi/okta-management/management/tag/RoleAssignmentClient/#tag/RoleAssignmentClient/operation/deleteRoleFromClient).
+        > **Note:** You can't remove the last OIN app target from a role assignment.
+        > If you need a role assignment that applies to all apps, delete the role assignment with the target and create another one. See [Unassign a client role](/openapi/okta-management/management/tags/roleassignmentclient/other/deleterolefromclient).
       operationId: removeAppTargetRoleFromClient
       responses:
         '204':
@@ -289,29 +467,19 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
-      - $ref: '#/components/parameters/pathRoleAssignmentId'
-      - $ref: '#/components/parameters/pathAppName'
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
+        - $ref: '#/components/parameters/pathAppName'
   /oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/catalog/apps/{appName}/{appId}:
     put:
       summary: Assign a client role app instance target
-      description: >-
-        Assigns an app instance target to an `APP_ADMIN` role assignment to a
-        client. When you assign the first OIN app or app instance target, you
-        reduce the scope of the role assignment.
+      description: |-
+        Assigns an app instance target to an `APP_ADMIN` role assignment to a client. When you assign the first OIN app or app instance target, you reduce the scope of the role assignment.
+        The role no longer applies to all app targets, but applies only to the specified target.
 
-        The role no longer applies to all app targets, but applies only to the
-        specified target.
-
-
-        > **Note:** You can target a mixture of both OIN app and app instance
-        targets, but you can't assign permissions to manage all instances of an
-        OIN app and then assign a subset of permissions to the same app.
-
-        For example, you can't specify that an admin has access to manage all
-        instances of the Salesforce app and then also manage only specific
-        configurations of the Salesforce app.
+        > **Note:** You can target a mixture of both OIN app and app instance targets, but you can't assign permissions to manage all instances of an OIN app and then assign a subset of permissions to the same app.
+        For example, you can't specify that an admin has access to manage all instances of the Salesforce app and then also manage only specific configurations of the Salesforce app.
       operationId: assignAppTargetInstanceRoleForClient
       responses:
         '204':
@@ -332,19 +500,18 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
+        - $ref: '#/components/parameters/pathAppName'
+        - $ref: '#/components/parameters/pathAppId'
     delete:
       summary: Unassign a client role app instance target
-      description: >-
+      description: |-
         Unassigns an app instance target from a role assignment to a client app
 
-
-        > **Note:** You can't remove the last app instance target from a role
-        assignment.
-
-        > If you need a role assignment that applies to all the apps, delete the
-        role assignment with the instance target and create another one.  See
-        [Unassign a client
-        role](/openapi/okta-management/management/tag/RoleAssignmentClient/#tag/RoleAssignmentClient/operation/deleteRoleFromClient).
+        > **Note:** You can't remove the last app instance target from a role assignment.
+        > If you need a role assignment that applies to all the apps, delete the role assignment with the instance target and create another one.  See [Unassign a client role](/openapi/okta-management/management/tags/roleassignmentclient/other/deleterolefromclient).
       operationId: removeAppTargetInstanceRoleForClient
       responses:
         '204':
@@ -365,33 +532,28 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
-      - $ref: '#/components/parameters/pathRoleAssignmentId'
-      - $ref: '#/components/parameters/pathAppName'
-      - $ref: '#/components/parameters/pathAppId'
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
+        - $ref: '#/components/parameters/pathAppName'
+        - $ref: '#/components/parameters/pathAppId'
   /oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups:
     get:
       summary: List all client role group targets
-      description: >-
-        Lists all group targets for a
-        [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles),
-        `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a
-        client. If the role isn't scoped to specific group targets, Okta returns
-        an empty array `[]`.
+      description: Lists all group targets for a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a client. If the role isn't scoped to specific group targets, Okta returns an empty array `[]`.
       operationId: listGroupTargetRoleForClient
       parameters:
         - $ref: '#/components/parameters/queryAfter'
         - $ref: '#/components/parameters/queryLimit'
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Group'
+                $ref: '#/components/schemas/ListGroupTargetRoleForClientResponse'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '404':
@@ -407,19 +569,15 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
-      - $ref: '#/components/parameters/pathRoleAssignmentId'
+      x-stackql-bare-array-wrap:
+        wrapperKey: group_target_role_for_client
+        wrapperName: ListGroupTargetRoleForClientResponse
+        mediaType: application/json
+        scalar: false
   /oauth2/v1/clients/{clientId}/roles/{roleAssignmentId}/targets/groups/{groupId}:
     put:
       summary: Assign a client role group target
-      description: >-
-        Assigns a group target to a
-        [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles),
-        `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a
-        client app. When you assign the first group target, you reduce the scope
-        of the role assignment. The role no longer applies to all targets, but
-        applies only to the specified target.
+      description: Assigns a group target to a [`USER_ADMIN`](/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a client app. When you assign the first group target, you reduce the scope of the role assignment. The role no longer applies to all targets, but applies only to the specified target.
       operationId: assignGroupTargetRoleForClient
       responses:
         '204':
@@ -440,18 +598,16 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
+        - $ref: '#/components/parameters/pathGroupId'
     delete:
       summary: Unassign a client role group target
-      description: >-
-        Unassigns a Group target from a `USER_ADMIN`, `HELP_DESK_ADMIN`, or
-        `GROUP_MEMBERSHIP_ADMIN` role assignment to a client app.
+      description: |-
+        Unassigns a Group target from a `USER_ADMIN`, `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a client app.
 
-
-        > **Note:** You can't remove the last group target from a role
-        assignment. If you need a role assignment that applies to all groups,
-        delete the role assignment with the target and create another one. See
-        [Unassign a client
-        role](/openapi/okta-management/management/tag/RoleAssignmentClient/#tag/RoleAssignmentClient/operation/deleteRoleFromClient).
+        > **Note:** You can't remove the last group target from a role assignment. If you need a role assignment that applies to all groups, delete the role assignment with the target and create another one. See [Unassign a client role](/openapi/okta-management/management/tags/roleassignmentclient/other/deleterolefromclient).
       operationId: removeGroupTargetRoleFromClient
       responses:
         '204':
@@ -472,14 +628,15 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathClientId'
-      - $ref: '#/components/parameters/pathRoleAssignmentId'
-      - $ref: '#/components/parameters/pathGroupId'
+      parameters:
+        - $ref: '#/components/parameters/pathClientId'
+        - $ref: '#/components/parameters/pathRoleAssignmentId'
+        - $ref: '#/components/parameters/pathGroupId'
 components:
   schemas:
     StandardRole:
-      title: Standard Role Assignment
+      title: Standard role assignment
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         assignmentType:
@@ -503,9 +660,11 @@ components:
           format: date-time
           readOnly: true
         status:
-          allOf:
-            - $ref: '#/components/schemas/LifecycleStatus'
-            - description: Status of the role assignment
+          type: string
+          enum:
+            - ACTIVE
+            - INACTIVE
+          description: Status of the role assignment
         type:
           $ref: '#/components/schemas/RoleType'
         _embedded:
@@ -531,8 +690,11 @@ components:
                   type: object
         _links:
           $ref: '#/components/schemas/LinksAssignee'
+      required:
+        - type
     CustomRole:
       title: Custom role assignment
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         assignmentType:
@@ -548,7 +710,7 @@ components:
           readOnly: true
         label:
           type: string
-          description: Label for the custom role assignment
+          description: Label for the role assignment
           readOnly: true
         lastUpdated:
           type: string
@@ -561,28 +723,42 @@ components:
           readOnly: true
         role:
           type: string
-          description: Custom role ID
+          description: Role ID
           readOnly: true
         status:
-          allOf:
-            - $ref: '#/components/schemas/LifecycleStatus'
-            - description: Status of the custom role assignment
-        type:
           type: string
-          description: CUSTOM for a custom role
           enum:
-            - CUSTOM
+            - ACTIVE
+            - INACTIVE
+          description: Status of the role assignment
+        type:
+          $ref: '#/components/schemas/RoleType'
         _links:
           $ref: '#/components/schemas/LinksCustomRoleResponse'
+      required:
+        - type
     StandardRoleAssignmentSchema:
-      title: Standard Role
+      title: Standard role
       type: object
       properties:
         type:
           type: string
-          description: >-
-            Specify the standard or IAM-based role type. See [standard
-            roles](/openapi/okta-management/guides/roles/#standard-roles).
+          description: 'Specify a [standard admin role](/openapi/okta-management/guides/roles/#standard-roles), an [IAM-based standard role](/openapi/okta-management/guides/roles/#iam-based-standard-roles), or `CUSTOM` for a custom role type:'
+          enum:
+            - ACCESS_CERTIFICATIONS_ADMIN
+            - ACCESS_REQUESTS_ADMIN
+            - API_ACCESS_MANAGEMENT_ADMIN
+            - APP_ADMIN
+            - GROUP_MEMBERSHIP_ADMIN
+            - HELP_DESK_ADMIN
+            - ORG_ADMIN
+            - READ_ONLY_ADMIN
+            - REPORT_ADMIN
+            - SUPER_ADMIN
+            - USER_ADMIN
+            - WORKFLOWS_ADMIN
+      required:
+        - type
     CustomRoleAssignmentSchema:
       title: Custom Role
       type: object
@@ -595,9 +771,13 @@ components:
           description: Custom role ID
         type:
           type: string
-          description: The type of role. Specify `CUSTOM` for a custom role.
+          description: 'Specify a [standard admin role](/openapi/okta-management/guides/roles/#standard-roles), an [IAM-based standard role](/openapi/okta-management/guides/roles/#iam-based-standard-roles), or `CUSTOM` for a custom role type:'
           enum:
             - CUSTOM
+      required:
+        - type
+        - role
+        - resource-set
     CatalogApplication:
       description: An app in the OIN catalog
       type: object
@@ -618,17 +798,13 @@ components:
         features:
           type: array
           readOnly: true
-          description: >-
-            Features supported by the app. See app
-            [features](/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications!c=200&path=0/features&t=response).
+          description: Features supported by the app. See app [features](/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/features).
           items:
             type: string
         id:
           type: string
           readOnly: true
-          description: >-
-            ID of the app instance. Okta returns this property only for apps not
-            in the OIN catalog.
+          description: ID of the app instance. Okta returns this property only for apps not in the OIN catalog.
         lastUpdated:
           type: string
           description: Timestamp when the object was last updated
@@ -637,14 +813,10 @@ components:
           example: '2024-09-19T23:37:37.000Z'
         name:
           type: string
-          description: >-
-            App key name. For OIN catalog apps, this is a unique key for the app
-            definition.
+          description: App key name. For OIN catalog apps, this is a unique key for the app definition.
         signOnModes:
           type: array
-          description: >-
-            Authentication mode for the app. See app
-            [signOnMode](/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications!c=200&path=0/signOnMode&t=response).
+          description: Authentication mode for the app. See app [signOnMode](/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/signonmode).
           items:
             type: string
         status:
@@ -658,12 +830,7 @@ components:
           description: Website of the OIN catalog app
         _links:
           type: object
-          description: >-
-            Specifies link relations (see [Web
-            Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using
-            the [JSON Hypertext Application
-            Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-            specification
+          description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification
           readOnly: true
           properties:
             logo:
@@ -674,6 +841,7 @@ components:
             self:
               $ref: '#/components/schemas/HrefObjectSelfLink'
     Group:
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         created:
@@ -709,29 +877,61 @@ components:
         _embedded:
           type: object
           description: Embedded resources related to the group
-          additionalProperties:
-            type: object
-            properties: {}
           readOnly: true
-        _links:
-          description: >-
-            [Discoverable
-            resources](/openapi/okta-management/management/tag/Group/#tag/Group/operation/listGroups!c=200&path=_links&t=response)
-            related to the group
-          allOf:
-            - $ref: '#/components/schemas/LinksSelf'
-            - properties:
-                apps:
-                  $ref: '#/components/schemas/HrefObject'
-                logo:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/HrefObject'
-                source:
-                  $ref: '#/components/schemas/HrefObject'
-                users:
-                  $ref: '#/components/schemas/HrefObject'
+          properties:
+            stats:
+              description: Statistics about the group
               type: object
+              properties:
+                usersCount:
+                  type: integer
+                  format: int32
+                  description: Number of users in the group
+                appsCount:
+                  type: integer
+                  format: int32
+                  description: Number of apps associated with the group
+                groupPushMappingsCount:
+                  type: integer
+                  format: int32
+                  description: Number of group push mappings associated with the group
+                hasAdminPrivlege:
+                  type: boolean
+                  description: Indicates if the group has admin privileges via a group-level role assignment
+            app:
+              description: If the group is sourced from an app, this object contains information about that app
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: The ID of the `AppInstance`
+                name:
+                  type: string
+                  description: The name of the `AppInstance`
+                label:
+                  type: string
+                  description: The user-facing display name of the `AppInstance`
+                signOnMode:
+                  type: string
+                  description: The configured sign-on mode for the `AppInstance`
+                  example: SAML_1_1
+        _links:
+          description: '[Discoverable resources](/openapi/okta-management/management/group/listgroups#group/listgroups/t=response&c=200&path=_links/source) related to the group'
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/HrefObjectSelfLink'
+            apps:
+              $ref: '#/components/schemas/HrefObject'
+            logo:
+              type: array
+              items:
+                $ref: '#/components/schemas/HrefObject'
+            source:
+              $ref: '#/components/schemas/HrefObject'
+            users:
+              $ref: '#/components/schemas/HrefObject'
+          readOnly: true
     RoleAssignmentType:
       description: Role assignment type
       type: string
@@ -749,59 +949,46 @@ components:
         - ACTIVE
         - INACTIVE
     RoleType:
-      description: Standard role type
+      title: roleType
+      description: |-
+        | Role type                    | Description                                                 |
+        |------------------------------|-------------------------------------------------------------|
+        | ACCESS_CERTIFICATIONS_ADMIN  | Access Certifications Administrator IAM-based standard role |
+        | ACCESS_REQUESTS_ADMIN        | Access Requests Administrator IAM-based standard role       |
+        | API_ACCESS_MANAGEMENT_ADMIN  | Access Management Administrator standard role               |
+        | APP_ADMIN                    | Application Administrator standard role                     |
+        | CUSTOM                       | Custom admin role                                           |
+        | GROUP_MEMBERSHIP_ADMIN       | Group Membership Administrator standard role                |
+        | HELP_DESK_ADMIN              | Help Desk Administrator standard role                       |
+        | ORG_ADMIN                    | Organizational Administrator standard role                  |
+        | READ_ONLY_ADMIN              | Read-Only Administrator standard role                       |
+        | REPORT_ADMIN                 | Report Administrator standard role                          |
+        | SUPER_ADMIN                  | Super Administrator standard role                           |
+        | USER_ADMIN                   | User Administrator standard role                            |
+        | WORKFLOWS_ADMIN              | Workflows Administrator IAM-based standard role             |
       type: string
       enum:
         - ACCESS_CERTIFICATIONS_ADMIN
         - ACCESS_REQUESTS_ADMIN
         - API_ACCESS_MANAGEMENT_ADMIN
-        - API_ADMIN
         - APP_ADMIN
         - CUSTOM
         - GROUP_MEMBERSHIP_ADMIN
         - HELP_DESK_ADMIN
-        - MOBILE_ADMIN
         - ORG_ADMIN
         - READ_ONLY_ADMIN
         - REPORT_ADMIN
         - SUPER_ADMIN
         - USER_ADMIN
         - WORKFLOWS_ADMIN
-      x-enumDescriptions:
-        API_ACCESS_MANAGEMENT_ADMIN: Access Management Administrator
-        API_ADMIN: Access Management Administrator
-        APP_ADMIN: Application Administrator
-        CUSTOM: Custom label specified by the client
-        GROUP_MEMBERSHIP_ADMIN: Group Membership Administrator
-        HELP_DESK_ADMIN: Help Desk Administrator
-        MOBILE_ADMIN: Mobile Administrator
-        ORG_ADMIN: Organizational Administrator
-        READ_ONLY_ADMIN: Read-Only Administrator
-        REPORT_ADMIN: Report Administrator
-        SUPER_ADMIN: Super Administrator
-        USER_ADMIN: Group Administrator
-        WORKFLOWS_ADMIN: Workflows Administrator
-        ACCESS_CERTIFICATIONS_ADMIN: Access Certifications Administrator (predefined resource sets)
-        ACCESS_REQUESTS_ADMIN: Access Requests Administrator (predefined resource sets)
     LinksAssignee:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification.
       type: object
       properties:
         assignee:
           $ref: '#/components/schemas/HrefObjectAssigneeLink'
     LinksCustomRoleResponse:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources.
       type: object
       properties:
         assignee:
@@ -827,18 +1014,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     CatalogApplicationStatus:
       description: App status
       type: string
@@ -846,65 +1028,7 @@ components:
         - ACTIVE
         - INACTIVE
     HrefObjectLogoLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the logo resource
-    HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    GroupProfile:
-      description: >-
-        Specifies required and optional properties for a group. The
-        `objectClass` of a group determines which additional properties are
-        available.
-
-
-        You can extend group profiles with custom properties, but you must first
-        add the properties to the group profile schema before you can reference
-        them. Use the Profile Editor in the Admin Console or the [Schemas
-        API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/)to
-        manage schema extensions.
-
-
-        Custom properties can contain HTML tags. It is the client's
-        responsibility to escape or encode this data before displaying it. Use
-        [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
-        to prevent cross-site scripting.
-      anyOf:
-        - $ref: '#/components/schemas/OktaUserGroupProfile'
-        - $ref: '#/components/schemas/OktaActiveDirectoryGroupProfile'
-    GroupType:
-      description: Determines how a group's profile and memberships are managed
-      type: string
-      enum:
-        - APP_GROUP
-        - BUILT_IN
-        - OKTA_GROUP
-      x-enumDescriptions:
-        APP_GROUP: >-
-          Group profile and memberships are imported and must be managed within
-          the app (such as Active Directory or LDAP) that imported the group
-        BUILT_IN: >-
-          Group profile and memberships are managed by Okta and can't be
-          modified
-        OKTA_GROUP: >-
-          Group profile and memberships are directly managed in Okta via static
-          assignments or indirectly through group rules
-    LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
-      type: object
-      properties:
-        self:
-          $ref: '#/components/schemas/HrefObjectSelfLink'
-      readOnly: true
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -921,52 +1045,273 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the logo resource
+    HrefObjectSelfLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    GroupProfile:
+      description: |-
+        Profile for any group that is not imported from Active Directory. Specifies the standard
+        and custom profile properties for a group.
+
+        The `objectClass` for these groups is `okta:user_group`.
+
+        You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/) to manage schema extensions.
+
+        Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.
+      type: object
+      properties:
+        description:
+          type: string
+          example: All users West of The Rockies
+          description: Description of the group
+        name:
+          type: string
+          example: West Coast users
+          description: Name of the group
+        dn:
+          type: string
+          example: CN=West Coast users,OU=West Coast,DC=example,DC=com
+          description: The distinguished name of the Windows group
+        externalId:
+          type: string
+          example: VKzYZ1C+IkSZxIWlrW5ITg==
+          description: Base-64 encoded GUID (`objectGUID`) of the Windows group
+        samAccountName:
+          type: string
+          example: West Coast users
+          description: Pre-Windows 2000 name of the Windows group
+        windowsDomainQualifiedName:
+          type: string
+          example: EXAMPLE\\West Coast users
+          description: Fully qualified name of the Windows group
+      x-okta-extensible: true
+    GroupType:
+      description: Determines how a group's profile and memberships are managed
+      type: string
+      enum:
+        - APP_GROUP
+        - BUILT_IN
+        - OKTA_GROUP
+      x-enumDescriptions:
+        APP_GROUP: Group profile and memberships are imported and must be managed within the app (such as Active Directory or LDAP) that imported the group
+        BUILT_IN: Group profile and memberships are managed by Okta and can't be modified
+        OKTA_GROUP: Group profile and memberships are directly managed in Okta via static assignments or indirectly through group rules
+    LinksSelf:
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HrefObjectSelfLink'
+      readOnly: true
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
     HrefObjectAssigneeLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the assignee resource
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the assignee resource
     HrefObjectMemberLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the member resource
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the member resource
     HrefObjectPermissionsLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the permissions resource
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the permissions resource
     HrefObjectResourceSetLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource set resource
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource set resource
     HrefObjectRoleLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the role resource
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the role resource
     ErrorCause:
       type: object
       properties:
         errorSummary:
           type: string
     OktaUserGroupProfile:
-      description: >-
-        Profile for any group that is not imported from Active Directory.
-        Specifies the standard
-
+      description: |-
+        Profile for any group that is not imported from Active Directory. Specifies the standard
         and custom profile properties for a group.
 
-
         The `objectClass` for these groups is `okta:user_group`.
+
+        You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/) to manage schema extensions.
+
+        Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.
       type: object
       properties:
         description:
@@ -983,6 +1328,10 @@ components:
         Profile for a group that is imported from Active Directory.
 
         The `objectClass` for such groups is `okta:windows_security_principal`.
+
+        You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/) to manage schema extensions.
+
+        Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.
       type: object
       properties:
         description:
@@ -1024,6 +1373,45 @@ components:
         - GET
         - POST
         - PUT
+    ListRolesForClientResponse:
+      type: object
+      properties:
+        roles_for_client:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/StandardRole'
+              - $ref: '#/components/schemas/CustomRole'
+            discriminator:
+              propertyName: type
+              mapping:
+                API_ACCESS_MANAGEMENT_ADMIN: '#/components/schemas/StandardRole'
+                APP_ADMIN: '#/components/schemas/StandardRole'
+                GROUP_MEMBERSHIP_ADMIN: '#/components/schemas/StandardRole'
+                HELP_DESK_ADMIN: '#/components/schemas/StandardRole'
+                ORG_ADMIN: '#/components/schemas/StandardRole'
+                READ_ONLY_ADMIN: '#/components/schemas/StandardRole'
+                REPORT_ADMIN: '#/components/schemas/StandardRole'
+                SUPER_ADMIN: '#/components/schemas/StandardRole'
+                USER_ADMIN: '#/components/schemas/StandardRole'
+                ACCESS_CERTIFICATIONS_ADMIN: '#/components/schemas/CustomRole'
+                ACCESS_REQUESTS_ADMIN: '#/components/schemas/CustomRole'
+                WORKFLOWS_ADMIN: '#/components/schemas/CustomRole'
+                CUSTOM: '#/components/schemas/CustomRole'
+    ListAppTargetRoleToClientResponse:
+      type: object
+      properties:
+        app_target_role_to_client:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogApplication'
+    ListGroupTargetRoleForClientResponse:
+      type: object
+      properties:
+        group_target_role_for_client:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -1055,7 +1443,7 @@ components:
   parameters:
     pathClientId:
       name: clientId
-      description: Client app ID
+      description: '`client_id` of the app'
       in: path
       required: true
       schema:
@@ -1074,11 +1462,7 @@ components:
       in: query
       schema:
         type: string
-      description: >-
-        The cursor to use for pagination. It is an opaque string that specifies
-        your current location in the list and is obtained from the `Link`
-        response header. See
-        [Pagination](https://developer.okta.com/docs/api/#pagination).
+      description: The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).
     queryLimit:
       name: limit
       in: query
@@ -1124,8 +1508,7 @@ components:
           assignmentType: CLIENT
           _links:
             assignee:
-              href: >-
-                https://{yourOktaDomain}/oauth2/v1/clients/0jrabyQWm4B9zVJPbotY/roles
+              href: https://{yourOktaDomain}/oauth2/v1/clients/0jrabyQWm4B9zVJPbotY/roles
     CustomRolesListResponseClient:
       value:
         - id: irb4ey26fpFI3vQ8y0g7
@@ -1141,14 +1524,11 @@ components:
             role:
               href: https://{yourOktaDomain}/api/v1/iam/roles/cr04cxy6yzSCtNciD0g7
             resource-set:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7
+              href: https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7
             permissions:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/roles/cr04cxy6yzSCtNciD0g7/permissions
+              href: https://{yourOktaDomain}/api/v1/iam/roles/cr04cxy6yzSCtNciD0g7/permissions
             member:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7/bindings/cr04cxy6yzSCtNciD0g7/members/irb4ey26fpFI3vQ8y0g7
+              href: https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7/bindings/cr04cxy6yzSCtNciD0g7/members/irb4ey26fpFI3vQ8y0g7
             assignee:
               href: https://{yourOktaDomain}/oauth2/v1/clients/0oa4ee9vgbIuqTUvd0g7
     IAMStandardRolesListResponseClient:
@@ -1166,17 +1546,13 @@ components:
             assignee:
               href: https://{yourOktaDomain}/api/v1/clients/0oa4ee9vgbIuqTUvd0g7
             resource-set:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY
+              href: https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY
             member:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY/bindings/ACCESS_CERTIFICATIONS_ADMIN/members/irb1qe6PGuMc7Oh8N0g4
+              href: https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY/bindings/ACCESS_CERTIFICATIONS_ADMIN/members/irb1qe6PGuMc7Oh8N0g4
             role:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/roles/ACCESS_CERTIFICATIONS_ADMIN
+              href: https://{yourOktaDomain}/api/v1/iam/roles/ACCESS_CERTIFICATIONS_ADMIN
             permissions:
-              href: >-
-                https://{yourOktaDomain}/api/v1/iam/permission-sets/OKTA_IAM_TEST_DELIVERED_ROLE/permissionsZ
+              href: https://{yourOktaDomain}/api/v1/iam/permission-sets/OKTA_IAM_TEST_DELIVERED_ROLE/permissionsZ
     StandardRoleAssignmentRequest:
       value:
         type: HELP_DESK_ADMIN
@@ -1196,8 +1572,7 @@ components:
         assignmentType: CLIENT
         _links:
           assignee:
-            href: >-
-              https://{yourOktaDomain}/oauth2/v1/clients/0jrabyQWm4B9zVJPbotY/roles
+            href: https://{yourOktaDomain}/oauth2/v1/clients/0jrabyQWm4B9zVJPbotY/roles
     CustomRoleResponseClient:
       value:
         id: irb4ey26fpFI3vQ8y0g7
@@ -1213,14 +1588,11 @@ components:
           role:
             href: https://{yourOktaDomain}/api/v1/iam/roles/cr04cxy6yzSCtNciD0g7
           resource-set:
-            href: >-
-              https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7
+            href: https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7
           permissions:
-            href: >-
-              https://{yourOktaDomain}/api/v1/iam/roles/cr04cxy6yzSCtNciD0g7/permissions
+            href: https://{yourOktaDomain}/api/v1/iam/roles/cr04cxy6yzSCtNciD0g7/permissions
           member:
-            href: >-
-              https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7/bindings/cr04cxy6yzSCtNciD0g7/members/irb4ey26fpFI3vQ8y0g7
+            href: https://{yourOktaDomain}/api/v1/iam/resource-sets/iam4cxy6z7hhaZCSk0g7/bindings/cr04cxy6yzSCtNciD0g7/members/irb4ey26fpFI3vQ8y0g7
           assignee:
             href: https://{yourOktaDomain}/oauth2/v1/clients/0oa4ee9vgbIuqTUvd0g7
     IAMStandardRoleResponseClient:
@@ -1238,24 +1610,19 @@ components:
           assignee:
             href: https://{yourOktaDomain}/api/v1/client/0oa5vymVNCe2cPEeZ0g4
           resource-set:
-            href: >-
-              https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY
+            href: https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY
           role:
             href: https://{yourOktaDomain}/api/v1/iam/roles/ACCESS_REQUESTS_ADMIN
           permissions:
-            href: >-
-              https://{yourOktaDomain}/api/v1/iam/roles/ACCESS_REQUESTS_ADMIN/permissions
+            href: https://{yourOktaDomain}/api/v1/iam/roles/ACCESS_REQUESTS_ADMIN/permissions
           member:
-            href: >-
-              https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY/bindings/ACCESS_REQUESTS_ADMIN/members/irb4jlomnnDBuBDyJ0g7
+            href: https://{yourOktaDomain}/api/v1/iam/resource-sets/ACCESS_CERTIFICATIONS_IAM_POLICY/bindings/ACCESS_REQUESTS_ADMIN/members/irb4jlomnnDBuBDyJ0g7
     ClientRoleTargetResponseFacebookEx:
       summary: Facebook target app example
       value:
         - name: facebook
           displayName: Facebook
-          description: >-
-            Giving people the power to share and make the world more open and
-            connected.
+          description: Giving people the power to share and make the world more open and connected.
           status: ACTIVE
           lastUpdated: '2021-03-18T17:37:56.000Z'
           category: SOCIAL
@@ -1307,7 +1674,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

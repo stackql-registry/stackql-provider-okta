@@ -2,19 +2,15 @@ openapi: 3.0.3
 info:
   title: ssf API
   description: okta ssf API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/ssf/stream:
     get:
       summary: Retrieve the SSF stream configuration(s)
-      description: >-
-        Retrieves either a list of all known SSF Stream configurations or the
-        individual configuration if specified by ID.
+      description: |-
+        Retrieves either a list of all known SSF stream configurations or the individual configuration if specified by ID.
 
-
-        As Stream configurations are tied to a Client ID, only the Stream
-        associated with the Client ID of the request OAuth 2.0 access token can
-        be viewed.
+        As stream configurations are tied to a client ID, you can only view the stream associated with the client ID of the request OAuth 2.0 access token.
       operationId: getSsfStreams
       parameters:
         - in: query
@@ -22,19 +18,94 @@ paths:
           schema:
             type: string
           example: esc1k235GIIztAuGK0g5
-          description: The ID of the specified SSF Stream configuration
+          description: The ID of the specified SSF stream configuration
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                oneOf:
-                  - type: array
-                    title: List of Stream Configurations
+                type: array
+                title: List of stream configurations
+                items:
+                  $ref: '#/components/schemas/StreamConfiguration'
+                properties:
+                  aud:
+                    description: |-
+                      The audience used in the SET. This value is set as `aud` in the claim.
+
+                      A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
+                    example: https://example.com
+                    type: string
+                    format: uri
                     items:
-                      $ref: '#/components/schemas/StreamConfiguration'
-                  - $ref: '#/components/schemas/StreamConfiguration'
+                      type: string
+                      format: uri
+                      example: https://example.com
+                  delivery:
+                    $ref: '#/components/schemas/StreamConfigurationDelivery'
+                  events_delivered:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                    description: |-
+                      The events (mapped by the array of event type URIs) that the transmitter actually delivers to the SSF stream.
+
+                      A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
+                    example:
+                      - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+                      - https://schemas.openid.net/secevent/caep/event-type/credential-change
+                  events_requested:
+                    type: array
+                    maxItems: 50
+                    items:
+                      type: string
+                      format: uri
+                      maxLength: 256
+                    description: The events (mapped by the array of event type URIs) that the receiver wants to receive
+                    example:
+                      - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+                      - https://schemas.openid.net/secevent/caep/event-type/credential-change
+                  events_supported:
+                    type: array
+                    items:
+                      type: string
+                      format: uri
+                    description: |-
+                      An array of event type URIs that the transmitter supports.
+
+                      A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
+                    example:
+                      - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+                      - https://schemas.openid.net/secevent/caep/event-type/credential-change
+                  format:
+                    type: string
+                    description: The subject identifier format expected for any SET transmitted.
+                    enum:
+                      - iss_sub
+                  iss:
+                    type: string
+                    description: |-
+                      The issuer used in security event tokens (SETs). This value is set as `iss` in the claim.
+
+                      A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
+                    example: https://{yourOktaDomain}
+                  min_verification_interval:
+                    type: integer
+                    nullable: true
+                    example: 60
+                    description: |-
+                      The minimum amount of time, in seconds, between two verification requests.
+
+                      A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
+                  stream_id:
+                    type: string
+                    description: The ID of the SSF stream configuration
+                    example: esc1k235GIIztAuGK0g5
+                required:
+                  - events_requested
+                  - delivery
               examples:
                 listResponse:
                   $ref: '#/components/examples/listStreamConfigurationExample'
@@ -60,20 +131,12 @@ paths:
           - Okta Identity Engine
     post:
       summary: Create an SSF stream
-      description: >-
-        Creates an SSF Stream for an event receiver to start receiving security
-        events in the form of Security Event Tokens (SETs) from Okta.
+      description: |-
+        Creates an SSF stream for an event receiver to start receiving security events in the form of Security Event Tokens (SETs) from Okta.
 
+        An SSF stream is associated with the client ID of the OAuth 2.0 access token used to create the stream. The client ID is provided by Okta for an [OAuth 2.0 app integration](https://help.okta.com/okta_help.htm?id=ext_Apps_App_Integration_Wizard-oidc). One SSF stream is allowed for each client ID, hence, one SSF stream is allowed for each app integration in Okta.
 
-        An SSF Stream is associated with the Client ID of the OAuth 2.0 access
-        token used to create the stream. The Client ID is provided by Okta for
-        an [OAuth 2.0 app
-        integration](https://help.okta.com/okta_help.htm?id=ext_Apps_App_Integration_Wizard-oidc).
-        One SSF Stream is allowed for each Client ID, hence, one SSF Stream is
-        allowed for each app integration in Okta.
-
-
-        A maximum of 10 SSF Stream configurations can be created for one org.
+        You can create a maximum of 10 SSF stream configurations for one org.
       operationId: createSsfStream
       x-codegen-request-body-name: instance
       requestBody:
@@ -111,13 +174,10 @@ paths:
           - Okta Identity Engine
     put:
       summary: Replace an SSF stream
-      description: >-
-        Replaces all properties for an existing SSF Stream configuration.
+      description: |-
+        Replaces all properties for an existing SSF stream configuration.
 
-
-        If the `stream_id` isn't provided in the request body, the associated
-        stream with the Client ID (through the request OAuth 2.0 access token)
-        is replaced.
+        If the `stream_id` isn't provided in the request body, the associated stream with the client ID (through the request OAuth 2.0 access token) is replaced.
       operationId: replaceSsfStream
       x-codegen-request-body-name: instance
       requestBody:
@@ -155,13 +215,10 @@ paths:
           - Okta Identity Engine
     patch:
       summary: Update an SSF stream
-      description: >-
-        Updates properties for an existing SSF Stream configuration.
+      description: |-
+        Updates properties for an existing SSF stream configuration.
 
-
-        If the `stream_id` isn't provided in the request body, the associated
-        stream with the Client ID (through the request OAuth 2.0 access token)
-        is updated.
+        If the `stream_id` isn't provided in the request body, the associated stream with the client ID (through the request OAuth 2.0 access token) is updated.
       operationId: updateSsfStream
       x-codegen-request-body-name: instance
       requestBody:
@@ -199,14 +256,10 @@ paths:
           - Okta Identity Engine
     delete:
       summary: Delete an SSF stream
-      description: >-
-        Deletes the specified SSF Stream.
+      description: |-
+        Deletes the specified SSF stream.
 
-
-        If the `stream_id` is not provided in the query string, the associated
-        stream with the Client ID (through the request OAuth 2.0 access token)
-        is deleted. Otherwise, the SSF Stream with the `stream_id` is deleted,
-        if found.
+        If the `stream_id` is not provided in the query string, the associated stream with the client ID (through the request OAuth 2.0 access token) is deleted. Otherwise, the SSF stream with the `stream_id` is deleted, if found.
       operationId: deleteSsfStream
       parameters:
         - in: query
@@ -241,10 +294,8 @@ paths:
           - Okta Identity Engine
   /api/v1/ssf/stream/status:
     get:
-      summary: Retrieve the SSF Stream status
-      description: >-
-        Retrieves the status of an SSF Stream. The status indicates whether the
-        transmitter is able to transmit events over the stream.
+      summary: Retrieve the SSF stream status
+      description: Retrieves the status of an SSF stream. The status indicates whether the transmitter is able to transmit events over the stream.
       operationId: getSsfStreamStatus
       parameters:
         - in: query
@@ -252,7 +303,7 @@ paths:
           schema:
             type: string
           example: esc1k235GIIztAuGK0g5
-          description: The ID of the specified SSF Stream configuration
+          description: The ID of the specified SSF stream configuration
           required: true
       responses:
         '200':
@@ -289,15 +340,12 @@ paths:
   /api/v1/ssf/stream/verification:
     post:
       summary: Verify an SSF stream
-      description: >-
-        Verifies an SSF Stream by publishing a Verification Event requested by a
-        Security Events Provider.
+      description: |-
+        Verifies an SSF stream by publishing a verification event requested by a security events provider.
 
-
-        > **Note:** A successful response doesn't indicate that the Verification
-        Event
+        > **Note:** A successful response doesn't indicate that the verification event
             was transmitted successfully, only that Okta has transmitted the event or will
-            at some point in the future. The SSF Receiver is responsible for validating and acknowledging
+            at some point in the future. The SSF receiver is responsible for validating and acknowledging
             successful transmission of the request by responding with HTTP Response Status Code 202.
       operationId: verifySsfStream
       x-codegen-request-body-name: instance
@@ -334,28 +382,21 @@ paths:
 components:
   schemas:
     StreamConfiguration:
-      title: Stream Configuration
+      title: Stream configuration
       type: object
       properties:
         aud:
-          oneOf:
-            - type: string
-              format: uri
-              example: https://example.com
-            - type: array
-              items:
-                type: string
-                format: uri
-                example: https://example.com
-          description: >-
-            The audience used in the SET. This value is set as `aud` in the
-            claim.
+          description: |-
+            The audience used in the SET. This value is set as `aud` in the claim.
 
-
-            A read-only parameter that is set by the transmitter. If this
-            parameter is included in the request, the value must match the
-            expected value from the transmitter.
+            A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
           example: https://example.com
+          type: string
+          format: uri
+          items:
+            type: string
+            format: uri
+            example: https://example.com
         delivery:
           $ref: '#/components/schemas/StreamConfigurationDelivery'
         events_delivered:
@@ -363,19 +404,13 @@ components:
           items:
             type: string
             format: uri
-          description: >-
-            The events (mapped by the array of event type URIs) that the
-            transmitter actually delivers to the SSF Stream.
+          description: |-
+            The events (mapped by the array of event type URIs) that the transmitter actually delivers to the SSF stream.
 
-
-            A read-only parameter that is set by the transmitter. If this
-            parameter is included in the request, the value must match the
-            expected value from the transmitter.
+            A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
           example:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
         events_requested:
           type: array
           maxItems: 50
@@ -383,68 +418,51 @@ components:
             type: string
             format: uri
             maxLength: 256
-          description: >-
-            The events (mapped by the array of event type URIs) that the
-            receiver wants to receive
+          description: The events (mapped by the array of event type URIs) that the receiver wants to receive
           example:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
         events_supported:
           type: array
           items:
             type: string
             format: uri
-          description: >-
+          description: |-
             An array of event type URIs that the transmitter supports.
 
-
-            A read-only parameter that is set by the transmitter. If this
-            parameter is included in the request, the value must match the
-            expected value from the transmitter.
+            A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
           example:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
         format:
           type: string
-          description: The Subject Identifier format expected for any SET transmitted.
+          description: The subject identifier format expected for any SET transmitted.
           enum:
             - iss_sub
         iss:
           type: string
-          description: >-
-            The issuer used in Security Event Tokens (SETs). This value is set
-            as `iss` in the claim.
+          description: |-
+            The issuer used in security event tokens (SETs). This value is set as `iss` in the claim.
 
-
-            A read-only parameter that is set by the transmitter. If this
-            parameter is included in the request, the value must match the
-            expected value from the transmitter.
+            A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
           example: https://{yourOktaDomain}
         min_verification_interval:
           type: integer
           nullable: true
           example: 60
-          description: >-
-            The minimum amount of time, in seconds, between two verification
-            requests.
+          description: |-
+            The minimum amount of time, in seconds, between two verification requests.
 
-
-            A read-only parameter that is set by the transmitter. If this
-            parameter is included in the request, the value must match the
-            expected value from the transmitter.
+            A read-only parameter that is set by the transmitter. If this parameter is included in the request, the value must match the expected value from the transmitter.
         stream_id:
           type: string
-          description: The ID of the SSF Stream configuration
+          description: The ID of the SSF stream configuration
           example: esc1k235GIIztAuGK0g5
       required:
         - events_requested
         - delivery
     StreamConfigurationCreateRequest:
-      title: Stream Configuration Create Request
+      title: Stream configuration create request
       type: object
       properties:
         delivery:
@@ -456,83 +474,66 @@ components:
             type: string
             format: uri
             maxLength: 256
-          description: >-
-            The events (mapped by the array of event type URIs) that the
-            receiver wants to receive
+          description: The events (mapped by the array of event type URIs) that the receiver wants to receive
           example:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
         format:
           type: string
-          description: The Subject Identifier format expected for any SET transmitted.
+          description: The subject identifier format expected for any SET transmitted.
           enum:
             - iss_sub
       required:
         - events_requested
         - delivery
     StreamStatus:
-      title: Stream Status
-      description: Status corresponding to the `stream_id` of the SSF Stream
+      title: Stream status
+      description: Status corresponding to the `stream_id` of the SSF stream
       type: object
       properties:
         status:
           type: string
-          description: The status of the SSF Stream configuration
+          description: The status of the SSF stream configuration
           enum:
             - enabled
             - disabled
           x-enumDescriptions:
-            enabled: >-
-              The transmitter MUST transmit events over the stream according to
-              the stream’s configured delivery method.
-            disabled: >-
-              The transmitter MUST NOT transmit events over the stream and
-              doesn't hold any events for later transmission.
+            enabled: The transmitter MUST transmit events over the stream according to the stream’s configured delivery method.
+            disabled: The transmitter MUST NOT transmit events over the stream and doesn't hold any events for later transmission.
         stream_id:
           type: string
-          description: >-
-            The ID of the SSF Stream configuration. This corresponds to the
-            value in the query parameter of the request.
+          description: The ID of the SSF stream configuration. This corresponds to the value in the query parameter of the request.
           example: esc1k235GIIztAuGK0g5
     StreamVerificationRequest:
-      title: Stream Verification Request
+      title: Stream verification request
       type: object
       properties:
         state:
           type: string
-          description: >-
-            An arbitrary string that Okta as a transmitter must echo back to the
-            Event Receiver in the Verification Event's payload
+          description: An arbitrary string that Okta as a transmitter must echo back to the event receiver in the verification event's payload
           example: VGhpcyBpcyBhbiBleGFtcGxlIHN0YXRlIHZhbHVlLgo=
         stream_id:
           type: string
-          description: The ID of the SSF Stream Configuration
+          description: The ID of the SSF stream configuration
           example: esc1k235GIIztAuGK0g5
       required:
         - stream_id
     StreamConfigurationDelivery:
-      title: Stream Configuration Delivery
-      description: >-
-        Contains information about the intended SET delivery method by the
-        receiver
+      title: Stream configuration delivery
+      x-okta-ignore-redocly-rules-for-sdk: true
+      description: Contains information about the intended SET delivery method by the receiver
       type: object
       properties:
         authorization_header:
           type: string
-          description: >-
-            The HTTP Authorization header that is included for each HTTP POST
-            request
+          description: The HTTP authorization header that's included for each HTTP POST request
           example: '{authorizationHeaderValue}'
           nullable: true
           maxLength: 8192
         endpoint_url:
           type: string
           format: uri
-          description: >-
-            The target endpoint URL where the transmitter delivers the SET using
-            HTTP POST requests
+          description: The target endpoint URL where the transmitter delivers the SET using HTTP POST requests
           example: https://example.com/
           maxLength: 2048
         method:
@@ -557,18 +558,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
@@ -638,20 +634,14 @@ components:
             method: urn:ietf:rfc:8935
             endpoint_url: https://example.com
           events_delivered:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
           events_requested:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
           events_supported:
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/session-revoked
-            - >-
-              https://schemas.openid.net/secevent/caep/event-type/credential-change
+            - https://schemas.openid.net/secevent/caep/event-type/session-revoked
+            - https://schemas.openid.net/secevent/caep/event-type/credential-change
           format: iss_sub
           iss: https://{yourOktaDomain}
           min_verification_interval: 0
@@ -665,27 +655,24 @@ components:
           endpoint_url: https://example.com
         events_delivered:
           - https://schemas.openid.net/secevent/caep/event-type/session-revoked
-          - >-
-            https://schemas.openid.net/secevent/caep/event-type/credential-change
+          - https://schemas.openid.net/secevent/caep/event-type/credential-change
         events_requested:
           - https://schemas.openid.net/secevent/caep/event-type/session-revoked
-          - >-
-            https://schemas.openid.net/secevent/caep/event-type/credential-change
+          - https://schemas.openid.net/secevent/caep/event-type/credential-change
         events_supported:
           - https://schemas.openid.net/secevent/caep/event-type/session-revoked
-          - >-
-            https://schemas.openid.net/secevent/caep/event-type/credential-change
+          - https://schemas.openid.net/secevent/caep/event-type/credential-change
         format: iss_sub
         iss: https://{yourOktaDomain}
         min_verification_interval: 0
         stream_id: esc1k235GIIztAuGK0g5
     streamStatusEnabledExample:
-      summary: SSF Stream enabled status example
+      summary: SSF stream enabled status example
       value:
         stream_id: esc1k235GIIztAuGK0g5
         status: enabled
     streamStatusDisabledExample:
-      summary: SSF Stream disabled status example
+      summary: SSF stream disabled status example
       value:
         stream_id: esc1k235GIIztAuGK0g5
         status: disabled
@@ -742,7 +729,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

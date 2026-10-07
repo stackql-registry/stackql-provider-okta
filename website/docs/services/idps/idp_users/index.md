@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>idp_users</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>idp_users</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="idp_users" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.idps.idp_users" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists an <code>idp_users</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_identity_provider_application_users"
+    defaultValue="get_identity_provider_application_user"
     values={[
-        { label: 'list_identity_provider_application_users', value: 'list_identity_provider_application_users' },
-        { label: 'get_identity_provider_application_user', value: 'get_identity_provider_application_user' }
+        { label: 'get_identity_provider_application_user', value: 'get_identity_provider_application_user' },
+        { label: 'list_identity_provider_application_users', value: 'list_identity_provider_application_users' }
     ]}
 >
-<TabItem value="list_identity_provider_application_users">
+<TabItem value="get_identity_provider_application_user">
 
 <table>
 <thead>
@@ -87,7 +88,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_identity_provider_application_user">
+<TabItem value="list_identity_provider_application_users">
 
 <table>
 <thead>
@@ -154,32 +155,32 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_identity_provider_application_users"><CopyableCode code="list_identity_provider_application_users" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td><a href="#parameter-q"><code>q</code></a>, <a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-expand"><code>expand</code></a></td>
-    <td>Lists all the users linked to an identity provider (IdP)</td>
-</tr>
-<tr>
     <td><a href="#get_identity_provider_application_user"><CopyableCode code="get_identity_provider_application_user" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a linked identity provider (IdP) user by ID</td>
 </tr>
 <tr>
+    <td><a href="#list_identity_provider_application_users"><CopyableCode code="list_identity_provider_application_users" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-q"><code>q</code></a>, <a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-expand"><code>expand</code></a></td>
+    <td>Lists all the users linked to an identity provider (IdP)</td>
+</tr>
+<tr>
     <td><a href="#unlink_user_from_identity_provider"><CopyableCode code="unlink_user_from_identity_provider" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Unlinks the Okta user and the identity provider (IdP) user. The next time the user federates into Okta through this IdP, they have to re-link their account according to the account link policy.</td>
 </tr>
 <tr>
     <td><a href="#link_user_to_identity_provider"><CopyableCode code="link_user_to_identity_provider" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Links an Okta user to an existing SAML or social identity provider (IdP).<br /><br />The SAML IdP must have `honorPersistentNameId` set to `true` to use this API.<br />The [Name Identifier Format](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/replaceIdentityProvider!path=protocol/0/settings&t=request) of the incoming assertion must be `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent`.</td>
+    <td>Links an Okta user to an existing SAML or social identity provider (IdP).<br /><br />The SAML IdP must have `honorPersistentNameId` set to `true` to use this API.<br />The [Name Identifier Format](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/replaceIdentityProvider!path=protocol/0/settings&t=request) of the incoming assertion must be `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent`.</td>
 </tr>
 </tbody>
 </table>
@@ -197,15 +198,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-idpId">
+    <td><CopyableCode code="idpId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of IdP</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-expand">
     <td><CopyableCode code="expand" /></td>
@@ -228,34 +239,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_identity_provider_application_users"
+    defaultValue="get_identity_provider_application_user"
     values={[
-        { label: 'list_identity_provider_application_users', value: 'list_identity_provider_application_users' },
-        { label: 'get_identity_provider_application_user', value: 'get_identity_provider_application_user' }
+        { label: 'get_identity_provider_application_user', value: 'get_identity_provider_application_user' },
+        { label: 'list_identity_provider_application_users', value: 'list_identity_provider_application_users' }
     ]}
 >
-<TabItem value="list_identity_provider_application_users">
-
-Lists all the users linked to an identity provider (IdP)
-
-```sql
-SELECT
-id,
-_embedded,
-_links,
-created,
-externalId,
-lastUpdated,
-profile
-FROM okta.idps.idp_users
-WHERE subdomain = '{{ subdomain }}' -- required
-AND q = '{{ q }}'
-AND after = '{{ after }}'
-AND limit = '{{ limit }}'
-AND expand = '{{ expand }}'
-;
-```
-</TabItem>
 <TabItem value="get_identity_provider_application_user">
 
 Retrieves a linked identity provider (IdP) user by ID
@@ -270,7 +259,32 @@ externalId,
 lastUpdated,
 profile
 FROM okta.idps.idp_users
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE idpId = '{{ idpId }}' -- required
+AND userId = '{{ userId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_identity_provider_application_users">
+
+Lists all the users linked to an identity provider (IdP)
+
+```sql
+SELECT
+id,
+_embedded,
+_links,
+created,
+externalId,
+lastUpdated,
+profile
+FROM okta.idps.idp_users
+WHERE idpId = '{{ idpId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND q = '{{ q }}'
+AND after = '{{ after }}'
+AND limit = '{{ limit }}'
+AND expand = '{{ expand }}'
 ;
 ```
 </TabItem>
@@ -291,7 +305,9 @@ Unlinks the Okta user and the identity provider (IdP) user. The next time the us
 
 ```sql
 DELETE FROM okta.idps.idp_users
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE idpId = '{{ idpId }}' --required
+AND userId = '{{ userId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -308,10 +324,12 @@ WHERE subdomain = '{{ subdomain }}' --required
 >
 <TabItem value="link_user_to_identity_provider">
 
-Links an Okta user to an existing SAML or social identity provider (IdP).<br /><br />The SAML IdP must have `honorPersistentNameId` set to `true` to use this API.<br />The [Name Identifier Format](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/replaceIdentityProvider!path=protocol/0/settings&t=request) of the incoming assertion must be `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent`.
+Links an Okta user to an existing SAML or social identity provider (IdP).<br /><br />The SAML IdP must have `honorPersistentNameId` set to `true` to use this API.<br />The [Name Identifier Format](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/IdentityProvider/#tag/IdentityProvider/operation/replaceIdentityProvider!path=protocol/0/settings&t=request) of the incoming assertion must be `urn:oasis:names:tc:SAML:2.0:nameid-format:persistent`.
 
 ```sql
 EXEC okta.idps.idp_users.link_user_to_identity_provider 
+@idpId='{{ idpId }}' --required, 
+@userId='{{ userId }}' --required, 
 @subdomain='{{ subdomain }}' --required 
 @@json=
 '{

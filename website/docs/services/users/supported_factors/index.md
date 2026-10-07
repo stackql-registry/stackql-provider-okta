@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>supported_factors</code> resour
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>supported_factors</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="supported_factors" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.supported_factors" /></td></tr>
 </tbody></table>
@@ -61,22 +62,22 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="enrollment" /></td>
     <td><code>string</code></td>
-    <td>Indicates if the factor is required for the specified user (example: OPTIONAL)</td>
+    <td>Indicates if the factor is required for the specified user (OPTIONAL, REQUIRED) (example: OPTIONAL)</td>
 </tr>
 <tr>
     <td><CopyableCode code="factorType" /></td>
     <td><code>string</code></td>
-    <td>Type of factor</td>
+    <td>Type of factor (call, email, push, question, signed_nonce, sms, token, token:hardware, token:hotp, token:software:totp, u2f, web, webauthn)</td>
 </tr>
 <tr>
     <td><CopyableCode code="provider" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (CUSTOM, DUO, FIDO, GOOGLE, OKTA, RSA, SYMANTEC, YUBICO)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Status of the factor (example: ACTIVE)</td>
+    <td>Status of the factor (ACTIVE, DISABLED, ENROLLED, EXPIRED, INACTIVE, NOT_SETUP, PENDING_ACTIVATION) (example: ACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="vendorName" /></td>
@@ -106,9 +107,9 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_supported_factors"><CopyableCode code="list_supported_factors" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Lists all the supported factors that can be enrolled for the specified user that are included in the highest priority [authenticator enrollment policy](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/) that applies to the user.<br /><br />Only factors that are `REQUIRED` or `OPTIONAL` in the highest priority authenticator enrollment policy can be returned.<br /><br />&gt; **Note:** When admins use this endpoint for other users, the authenticator enrollment policy that's evaluated can vary depending on how client-specific conditions are configured in the rules of an authenticator enrollment policy. The client-specific conditions of the admin's client are used during policy evaluation instead of the client-specific conditions of the user. This can affect which authenticator enrollment policy is evaluated and which factors are returned.<br />&gt;<br />&gt; For example, an admin in Europe lists all supported factors for a user in North America. The network zone of the admin's client (in Europe) is used during policy evaluation instead of the network zone of the user (in North America).</td>
+    <td>Lists all the supported factors that can be enrolled for the specified user that are included in the highest priority [authenticator enrollment policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/policy/) that applies to the user.<br /><br />Only factors that are `REQUIRED` or `OPTIONAL` in the highest priority authenticator enrollment policy can be returned.<br /><br />&gt; **Note:** When admins use this endpoint for other users, the authenticator enrollment policy that's evaluated can vary depending on how client-specific conditions are configured in the rules of an authenticator enrollment policy. The client-specific conditions of the admin's client are used during policy evaluation instead of the client-specific conditions of the user. This can affect which authenticator enrollment policy is evaluated and which factors are returned.<br />&gt;<br />&gt; For example, an admin in Europe lists all supported factors for a user in North America. The network zone of the admin's client (in Europe) is used during policy evaluation instead of the network zone of the user (in North America).</td>
 </tr>
 </tbody>
 </table>
@@ -129,7 +130,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 </tbody>
 </table>
@@ -144,7 +150,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="list_supported_factors">
 
-Lists all the supported factors that can be enrolled for the specified user that are included in the highest priority [authenticator enrollment policy](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/) that applies to the user.<br /><br />Only factors that are `REQUIRED` or `OPTIONAL` in the highest priority authenticator enrollment policy can be returned.<br /><br />&gt; **Note:** When admins use this endpoint for other users, the authenticator enrollment policy that's evaluated can vary depending on how client-specific conditions are configured in the rules of an authenticator enrollment policy. The client-specific conditions of the admin's client are used during policy evaluation instead of the client-specific conditions of the user. This can affect which authenticator enrollment policy is evaluated and which factors are returned.<br />&gt;<br />&gt; For example, an admin in Europe lists all supported factors for a user in North America. The network zone of the admin's client (in Europe) is used during policy evaluation instead of the network zone of the user (in North America).
+Lists all the supported factors that can be enrolled for the specified user that are included in the highest priority [authenticator enrollment policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/policy/) that applies to the user.<br /><br />Only factors that are `REQUIRED` or `OPTIONAL` in the highest priority authenticator enrollment policy can be returned.<br /><br />&gt; **Note:** When admins use this endpoint for other users, the authenticator enrollment policy that's evaluated can vary depending on how client-specific conditions are configured in the rules of an authenticator enrollment policy. The client-specific conditions of the admin's client are used during policy evaluation instead of the client-specific conditions of the user. This can affect which authenticator enrollment policy is evaluated and which factors are returned.<br />&gt;<br />&gt; For example, an admin in Europe lists all supported factors for a user in North America. The network zone of the admin's client (in Europe) is used during policy evaluation instead of the network zone of the user (in North America).
 
 ```sql
 SELECT
@@ -156,7 +162,8 @@ provider,
 status,
 vendorName
 FROM okta.users.supported_factors
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

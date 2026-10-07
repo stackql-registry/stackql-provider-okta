@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>customized_error_page</code> re
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>customized_error_page</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="customized_error_page" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.customized_error_page" /></td></tr>
 </tbody></table>
@@ -83,21 +84,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_customized_error_page"><CopyableCode code="get_customized_error_page" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the customized error page. The customized error page appears in your live environment.</td>
 </tr>
 <tr>
     <td><a href="#replace_customized_error_page"><CopyableCode code="replace_customized_error_page" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the customized error page. The customized error page appears in your live environment.</td>
 </tr>
 <tr>
     <td><a href="#delete_customized_error_page"><CopyableCode code="delete_customized_error_page" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes the customized error page. As a result, the default error page appears in your live environment.</td>
 </tr>
@@ -117,10 +118,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -142,7 +148,8 @@ SELECT
 contentSecurityPolicySetting,
 pageContent
 FROM okta.brands.customized_error_page
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -164,14 +171,14 @@ Replaces the customized error page. The customized error page appears in your li
 ```sql
 REPLACE okta.brands.customized_error_page
 SET 
-data__pageContent = '{{ pageContent }}',
-data__contentSecurityPolicySetting = '{{ contentSecurityPolicySetting }}'
+pageContent = '{{ pageContent }}',
+contentSecurityPolicySetting = '{{ contentSecurityPolicySetting }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+brandId = '{{ brandId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 contentSecurityPolicySetting,
-pageContent
-;
+pageContent;
 ```
 </TabItem>
 </Tabs>
@@ -191,7 +198,8 @@ Deletes the customized error page. As a result, the default error page appears i
 
 ```sql
 DELETE FROM okta.brands.customized_error_page
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE brandId = '{{ brandId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

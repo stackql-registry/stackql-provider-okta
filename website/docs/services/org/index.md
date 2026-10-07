@@ -18,7 +18,7 @@ org service documentation.
 
 :::info[Service Summary]
 
-total resources: __15__  
+total resources: __14__  
 
 :::
 
@@ -31,8 +31,7 @@ total resources: __15__
 <a href="/services/org/communication_settings/">communication_settings</a><br />
 <a href="/services/org/contact_types/">contact_types</a><br />
 <a href="/services/org/contacts/">contacts</a><br />
-<a href="/services/org/email_customizations/">email_customizations</a><br />
-<a href="/services/org/okta_support/">okta_support</a>
+<a href="/services/org/email_customizations/">email_customizations</a>
 </div>
 <div class="providerDocColumn">
 <a href="/services/org/preferences/">preferences</a><br />

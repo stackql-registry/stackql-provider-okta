@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>keys</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>keys</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="keys" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.apps.keys" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>keys</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_application_keys"
+    defaultValue="get_application_key"
     values={[
-        { label: 'list_application_keys', value: 'list_application_keys' },
-        { label: 'get_application_key', value: 'get_application_key' }
+        { label: 'get_application_key', value: 'get_application_key' },
+        { label: 'list_application_keys', value: 'list_application_keys' }
     ]}
 >
-<TabItem value="list_application_keys">
+<TabItem value="get_application_key">
 
 <table>
 <thead>
@@ -102,7 +103,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_application_key">
+<TabItem value="list_application_keys">
 
 <table>
 <thead>
@@ -184,32 +185,32 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_application_key"><CopyableCode code="get_application_key" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-keyId"><code>keyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a specific application key credential by `kid`</td>
+</tr>
+<tr>
     <td><a href="#list_application_keys"><CopyableCode code="list_application_keys" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all key credentials for an app</td>
 </tr>
 <tr>
-    <td><a href="#get_application_key"><CopyableCode code="get_application_key" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a specific Application Key Credential by `kid`</td>
-</tr>
-<tr>
     <td><a href="#generate_application_key"><CopyableCode code="generate_application_key" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-validityYears"><code>validityYears</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-validityYears"><code>validityYears</code></a>, <a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Generates a new X.509 certificate for an app key credential<br />&gt; **Note:** To update an Application with the newly generated key credential, use the [Replace an Application](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication) request with the new [credentials.signing.kid](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials/signing/kid&t=request) value in the request body. You can provide just the [Signing Credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials/signing&t=request) instead of the entire [Application Credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials&t=request).</td>
+    <td>Generates a new X.509 certificate for an app key credential<br />&gt; **Note:** To update an app with the newly generated key credential, use the [Replace an Application](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication) request with the new [credentials.signing.kid](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication#application/replaceapplication/t=request&path=&d=0/credentials/signing/kid) value in the request body. You can provide just the [signing credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication#application/replaceapplication/t=request&path=&d=0/credentials/signing) instead of the entire [application credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication#application/replaceapplication/t=response&c=200&path=&d=0/credentials).</td>
 </tr>
 <tr>
     <td><a href="#clone_application_key"><CopyableCode code="clone_application_key" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-targetAid"><code>targetAid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-targetAid"><code>targetAid</code></a>, <a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-keyId"><code>keyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Clones an X.509 certificate for an Application Key Credential from a source app to a target app.<br /><br />For step-by-step instructions to clone a credential, see [Share application key credentials for IdPs across apps](https://developer.okta.com/docs/guides/sharing-cert/main/).<br />&gt; **Note:** Sharing certificates isn't a recommended security practice.</td>
+    <td>Clones an X.509 certificate for an application key credential from a source app to a target app.<br /><br />For step-by-step instructions to clone a credential, see [Share application key credentials for IdPs across apps](https://developer.okta.com/docs/guides/sharing-cert/main/).<br />&gt; **Note:** Sharing certificates isn't a recommended security practice.</td>
 </tr>
 </tbody>
 </table>
@@ -227,20 +228,30 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appId">
+    <td><CopyableCode code="appId" /></td>
+    <td><code>string</code></td>
+    <td>Application ID</td>
+</tr>
+<tr id="parameter-keyId">
+    <td><CopyableCode code="keyId" /></td>
+    <td><code>string</code></td>
+    <td>ID of the Key Credential for the application</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-targetAid">
     <td><CopyableCode code="targetAid" /></td>
     <td><code>string</code></td>
-    <td>Unique key of the target Application</td>
+    <td>Unique key of the target app</td>
 </tr>
 <tr id="parameter-validityYears">
     <td><CopyableCode code="validityYears" /></td>
     <td><code>integer</code></td>
-    <td>Expiry years of the Application Key Credential</td>
+    <td>Expiry years of the application key credential</td>
 </tr>
 </tbody>
 </table>
@@ -248,12 +259,35 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_application_keys"
+    defaultValue="get_application_key"
     values={[
-        { label: 'list_application_keys', value: 'list_application_keys' },
-        { label: 'get_application_key', value: 'get_application_key' }
+        { label: 'get_application_key', value: 'get_application_key' },
+        { label: 'list_application_keys', value: 'list_application_keys' }
     ]}
 >
+<TabItem value="get_application_key">
+
+Retrieves a specific application key credential by `kid`
+
+```sql
+SELECT
+created,
+e,
+expiresAt,
+kid,
+kty,
+lastUpdated,
+n,
+use,
+x5c,
+x5t#S256
+FROM okta.apps.keys
+WHERE appId = '{{ appId }}' -- required
+AND keyId = '{{ keyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_application_keys">
 
 Lists all key credentials for an app
@@ -271,28 +305,8 @@ use,
 x5c,
 x5t#S256
 FROM okta.apps.keys
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
-<TabItem value="get_application_key">
-
-Retrieves a specific Application Key Credential by `kid`
-
-```sql
-SELECT
-created,
-e,
-expiresAt,
-kid,
-kty,
-lastUpdated,
-n,
-use,
-x5c,
-x5t#S256
-FROM okta.apps.keys
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE appId = '{{ appId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -310,15 +324,17 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="generate_application_key">
 
-Generates a new X.509 certificate for an app key credential<br />&gt; **Note:** To update an Application with the newly generated key credential, use the [Replace an Application](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication) request with the new [credentials.signing.kid](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials/signing/kid&t=request) value in the request body. You can provide just the [Signing Credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials/signing&t=request) instead of the entire [Application Credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/replaceApplication!path=4/credentials&t=request).
+Generates a new X.509 certificate for an app key credential<br />&gt; **Note:** To update an app with the newly generated key credential, use the [Replace an Application](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication) request with the new [credentials.signing.kid](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication#application/replaceapplication/t=request&path=&d=0/credentials/signing/kid) value in the request body. You can provide just the [signing credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication#application/replaceapplication/t=request&path=&d=0/credentials/signing) instead of the entire [application credential object](https://developer.okta.com/docs/api/openapi/okta-management/management/application/replaceapplication#application/replaceapplication/t=response&c=200&path=&d=0/credentials).
 
 ```sql
 INSERT INTO okta.apps.keys (
 validityYears,
+appId,
 subdomain
 )
 SELECT 
 '{{ validityYears }}',
+'{{ appId }}',
 '{{ subdomain }}'
 RETURNING
 created,
@@ -336,17 +352,20 @@ x5t#S256
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: keys
   props:
     - name: validityYears
-      value: integer
+      value: {{ validityYears }}
+      description: Required parameter for the keys resource.
+    - name: appId
+      value: "{{ appId }}"
       description: Required parameter for the keys resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the keys resource.
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -361,11 +380,13 @@ x5t#S256
 >
 <TabItem value="clone_application_key">
 
-Clones an X.509 certificate for an Application Key Credential from a source app to a target app.<br /><br />For step-by-step instructions to clone a credential, see [Share application key credentials for IdPs across apps](https://developer.okta.com/docs/guides/sharing-cert/main/).<br />&gt; **Note:** Sharing certificates isn't a recommended security practice.
+Clones an X.509 certificate for an application key credential from a source app to a target app.<br /><br />For step-by-step instructions to clone a credential, see [Share application key credentials for IdPs across apps](https://developer.okta.com/docs/guides/sharing-cert/main/).<br />&gt; **Note:** Sharing certificates isn't a recommended security practice.
 
 ```sql
 EXEC okta.apps.keys.clone_application_key 
 @targetAid='{{ targetAid }}' --required, 
+@appId='{{ appId }}' --required, 
+@keyId='{{ keyId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

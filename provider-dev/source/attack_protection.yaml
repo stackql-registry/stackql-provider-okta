@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: attack_protection API
   description: okta attack_protection API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /attack-protection/api/v1/authenticator-settings:
     get:
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AttackProtectionAuthenticatorSettings'
+                $ref: '#/components/schemas/AttackProtectionAuthenticatorSettings'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '429':
@@ -86,9 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserLockoutSettings'
+                $ref: '#/components/schemas/UserLockoutSettings'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '429':
@@ -149,10 +145,7 @@ components:
       properties:
         verifyKnowledgeSecondWhen2faRequired:
           type: boolean
-          description: >-
-            If true, requires users to verify a possession factor before
-            verifying a knowledge factor when the assurance requires two-factor
-            authentication (2FA).
+          description: If true, requires users to verify a possession factor before verifying a knowledge factor when the assurance requires two-factor authentication (2FA).
           default: false
     Error:
       title: Error
@@ -167,26 +160,19 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     UserLockoutSettings:
       type: object
       properties:
         preventBruteForceLockoutFromUnknownDevices:
           type: boolean
-          description: >-
-            Prevents brute-force lockout from unknown devices for the password
-            authenticator.
+          description: Prevents brute-force lockout from unknown devices for the password authenticator.
           default: false
     ErrorCause:
       type: object
@@ -251,7 +237,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

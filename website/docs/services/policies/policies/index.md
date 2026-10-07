@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>policies</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>policies</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="policies" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.policies.policies" /></td></tr>
 </tbody></table>
@@ -32,81 +33,12 @@ Creates, updates, deletes, gets or lists a <code>policies</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_policies"
+    defaultValue="get_policy"
     values={[
-        { label: 'list_policies', value: 'list_policies' },
-        { label: 'get_policy', value: 'get_policy' }
+        { label: 'get_policy', value: 'get_policy' },
+        { label: 'list_policies', value: 'list_policies' }
     ]}
 >
-<TabItem value="list_policies">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>Identifier of the policy (default: Assigned)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Name of the policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_embedded" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the policy was created (default: Assigned)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="description" /></td>
-    <td><code>string</code></td>
-    <td>Description of the policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the policy was last modified (default: Assigned)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="priority" /></td>
-    <td><code>integer</code></td>
-    <td>Specifies the order in which this policy is evaluated in relation to the other policies (default: Last / Lowest Priority, for example `1`)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>Whether or not the policy is active. Use the `activate` query parameter to set the status of a policy.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="system" /></td>
-    <td><code>boolean</code></td>
-    <td>Specifies whether Okta created the policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>All Okta orgs contain only one IdP discovery policy with an immutable default rule routing to your org's sign-in page, one entity risk policy, and one session protection policy. Creating or replacing a policy with the `IDP_DISCOVERY` type, the `ENTITY_RISK` type, or the `POST_AUTH_SESSION` type isn't supported. The following policy types are available with Identity Engine: `ACCESS_POLICY`, `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION`, &lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; `DEVICE_SIGNAL_COLLECTION`, and `ENTITY_RISK`.</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_policy">
 
 <table>
@@ -161,7 +93,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Whether or not the policy is active. Use the `activate` query parameter to set the status of a policy.</td>
+    <td>Whether or not the policy is active. Use the `activate` query parameter to set the status of a policy. (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="system" /></td>
@@ -171,7 +103,76 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>All Okta orgs contain only one IdP discovery policy with an immutable default rule routing to your org's sign-in page, one entity risk policy, and one session protection policy. Creating or replacing a policy with the `IDP_DISCOVERY` type, the `ENTITY_RISK` type, or the `POST_AUTH_SESSION` type isn't supported. The following policy types are available with Identity Engine: `ACCESS_POLICY`, `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION`, &lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; `DEVICE_SIGNAL_COLLECTION`, and `ENTITY_RISK`.</td>
+    <td>All Okta orgs contain only one IdP discovery policy with an immutable default rule routing to your org's sign-in page. All Okta orgs also contain just one entity risk policy, one session protection policy, and one identity claims sourcing policy. (ACCESS_POLICY, ENTITY_RISK, IDP_DISCOVERY, MFA_ENROLL, OKTA_SIGN_ON, PASSWORD, POST_AUTH_SESSION, PROFILE_ENROLLMENT, DEVICE_SIGNAL_COLLECTION, SESSION_VIOLATION_DETECTION, CLIENT_UPDATE, IDENTITY_CLAIM_SOURCING)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_policies">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>Identifier of the policy (default: Assigned)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Name of the policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_embedded" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the policy was created (default: Assigned)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="description" /></td>
+    <td><code>string</code></td>
+    <td>Description of the policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the policy was last modified (default: Assigned)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="priority" /></td>
+    <td><code>integer</code></td>
+    <td>Specifies the order in which this policy is evaluated in relation to the other policies (default: Last / Lowest Priority, for example `1`)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>Whether or not the policy is active. Use the `activate` query parameter to set the status of a policy. (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="system" /></td>
+    <td><code>boolean</code></td>
+    <td>Specifies whether Okta created the policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>All Okta orgs contain only one IdP discovery policy with an immutable default rule routing to your org's sign-in page. All Okta orgs also contain just one entity risk policy, one session protection policy, and one identity claims sourcing policy. (ACCESS_POLICY, ENTITY_RISK, IDP_DISCOVERY, MFA_ENROLL, OKTA_SIGN_ON, PASSWORD, POST_AUTH_SESSION, PROFILE_ENROLLMENT, DEVICE_SIGNAL_COLLECTION, SESSION_VIOLATION_DETECTION, CLIENT_UPDATE, IDENTITY_CLAIM_SOURCING)</td>
 </tr>
 </tbody>
 </table>
@@ -194,6 +195,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_policy"><CopyableCode code="get_policy" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
+    <td>Retrieves a policy</td>
+</tr>
+<tr>
     <td><a href="#list_policies"><CopyableCode code="list_policies" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-type"><code>type</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -201,30 +209,23 @@ The following methods are available for this resource:
     <td>Lists all policies with the specified type</td>
 </tr>
 <tr>
-    <td><a href="#get_policy"><CopyableCode code="get_policy" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td><a href="#parameter-expand"><code>expand</code></a></td>
-    <td>Retrieves a policy</td>
-</tr>
-<tr>
     <td><a href="#create_policy"><CopyableCode code="create_policy" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__type"><code>data__type</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td><a href="#parameter-activate"><code>activate</code></a></td>
     <td>Creates a policy. There are many types of policies that you can create. See [Policies](https://developer.okta.com/docs/concepts/policies/) for an overview of the types of policies available and links to more indepth information.</td>
 </tr>
 <tr>
     <td><a href="#replace_policy"><CopyableCode code="replace_policy" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__type"><code>data__type</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td></td>
     <td>Replaces the properties of a policy identified by `policyId`</td>
 </tr>
 <tr>
     <td><a href="#delete_policy"><CopyableCode code="delete_policy" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a policy</td>
 </tr>
@@ -232,27 +233,27 @@ The following methods are available for this resource:
     <td><a href="#create_policy_simulation"><CopyableCode code="create_policy_simulation" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Creates a policy or policy rule simulation. The access simulation evaluates policy and policy rules based on the existing policy rule configuration.<br />The evaluation result simulates what the real-world authentication flow is and what policy rules have been applied or matched to the authentication flow.</td>
 </tr>
 <tr>
     <td><a href="#clone_policy"><CopyableCode code="clone_policy" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Clones an existing policy</td>
 </tr>
 <tr>
     <td><a href="#activate_policy"><CopyableCode code="activate_policy" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates a policy</td>
 </tr>
 <tr>
     <td><a href="#deactivate_policy"><CopyableCode code="deactivate_policy" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates a policy</td>
 </tr>
@@ -272,19 +273,24 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-policyId">
+    <td><CopyableCode code="policyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-type">
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Specifies the type of policy to return. The following policy types are available only with the Okta Identity Engine - `ACCESS_POLICY`, &lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; `DEVICE_SIGNAL_COLLECTION`, `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION`, and `ENTITY_RISK`.</td>
+    <td>Specifies the type of policy to return</td>
 </tr>
 <tr id="parameter-activate">
     <td><CopyableCode code="activate" /></td>
-    <td><code>boolean</code></td>
+    <td><code>string</code></td>
     <td>This query parameter is only valid for Classic Engine orgs.</td>
 </tr>
 <tr id="parameter-after">
@@ -295,7 +301,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-expand">
     <td><CopyableCode code="expand" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>Use `expand=EVALUATED` to include a list of evaluated but not matched policies and policy rules. Use `expand=RULE` to include details about why a rule condition wasn't matched.</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -328,12 +334,36 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_policies"
+    defaultValue="get_policy"
     values={[
-        { label: 'list_policies', value: 'list_policies' },
-        { label: 'get_policy', value: 'get_policy' }
+        { label: 'get_policy', value: 'get_policy' },
+        { label: 'list_policies', value: 'list_policies' }
     ]}
 >
+<TabItem value="get_policy">
+
+Retrieves a policy
+
+```sql
+SELECT
+id,
+name,
+_embedded,
+_links,
+created,
+description,
+lastUpdated,
+priority,
+status,
+system,
+type
+FROM okta.policies.policies
+WHERE policyId = '{{ policyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND expand = '{{ expand }}'
+;
+```
+</TabItem>
 <TabItem value="list_policies">
 
 Lists all policies with the specified type
@@ -364,29 +394,6 @@ AND after = '{{ after }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_policy">
-
-Retrieves a policy
-
-```sql
-SELECT
-id,
-name,
-_embedded,
-_links,
-created,
-description,
-lastUpdated,
-priority,
-status,
-system,
-type
-FROM okta.policies.policies
-WHERE subdomain = '{{ subdomain }}' -- required
-AND expand = '{{ expand }}'
-;
-```
-</TabItem>
 </Tabs>
 
 
@@ -405,12 +412,12 @@ Creates a policy. There are many types of policies that you can create. See [Pol
 
 ```sql
 INSERT INTO okta.policies.policies (
-data__description,
-data__name,
-data__priority,
-data__status,
-data__system,
-data__type,
+description,
+name,
+priority,
+status,
+system,
+type,
 subdomain,
 activate
 )
@@ -440,54 +447,47 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: policies
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the policies resource.
     - name: description
-      value: string
-      description: >
+      value: "{{ description }}"
+      description: |
         Description of the policy
-        
       default: null
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Name of the policy
-        
     - name: priority
-      value: integer
-      description: >
+      value: {{ priority }}
+      description: |
         Specifies the order in which this policy is evaluated in relation to the other policies
-        
-      default: Last / Lowest Priority, for example `1`
+      default: Last / Lowest Priority, for example \`1\`
     - name: status
-      value: string
-      description: >
-        Whether or not the policy is active. Use the `activate` query parameter to set the status of a policy.
-        
+      value: "{{ status }}"
+      description: |
+        Whether or not the policy is active. Use the \`activate\` query parameter to set the status of a policy.
       valid_values: ['ACTIVE', 'INACTIVE']
     - name: system
-      value: boolean
-      description: >
+      value: {{ system }}
+      description: |
         Specifies whether Okta created the policy
-        
       default: false
     - name: type
-      value: string
-      description: >
-        All Okta orgs contain only one IdP discovery policy with an immutable default rule routing to your org's sign-in page, one entity risk policy, and one session protection policy.
-Creating or replacing a policy with the `IDP_DISCOVERY` type, the `ENTITY_RISK` type, or the `POST_AUTH_SESSION` type isn't supported.
-The following policy types are available with Identity Engine: `ACCESS_POLICY`, `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION`, <x-lifecycle class="ea"></x-lifecycle> `DEVICE_SIGNAL_COLLECTION`, and `ENTITY_RISK`.
-        
-      valid_values: ['<x-lifecycle class="ea"></x-lifecycle> DEVICE_SIGNAL_COLLECTION', 'ACCESS_POLICY', 'ENTITY_RISK', 'IDP_DISCOVERY', 'MFA_ENROLL', 'OKTA_SIGN_ON', 'PASSWORD', 'POST_AUTH_SESSION', 'PROFILE_ENROLLMENT']
+      value: "{{ type }}"
+      description: |
+        All Okta orgs contain only one IdP discovery policy with an immutable default rule routing to your org's sign-in page. All Okta orgs also contain just one entity risk policy, one session protection policy, and one identity claims sourcing policy.
+      valid_values: ['ACCESS_POLICY', 'ENTITY_RISK', 'IDP_DISCOVERY', 'MFA_ENROLL', 'OKTA_SIGN_ON', 'PASSWORD', 'POST_AUTH_SESSION', 'PROFILE_ENROLLMENT', 'DEVICE_SIGNAL_COLLECTION', 'SESSION_VIOLATION_DETECTION', 'CLIENT_UPDATE', 'IDENTITY_CLAIM_SOURCING']
     - name: activate
-      value: boolean
+      value: "{{ activate }}"
       description: This query parameter is only valid for Classic Engine orgs.
-```
+      description: This query parameter is only valid for Classic Engine orgs.
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -507,16 +507,17 @@ Replaces the properties of a policy identified by `policyId`
 ```sql
 REPLACE okta.policies.policies
 SET 
-data__description = '{{ description }}',
-data__name = '{{ name }}',
-data__priority = {{ priority }},
-data__status = '{{ status }}',
-data__system = {{ system }},
-data__type = '{{ type }}'
+description = '{{ description }}',
+name = '{{ name }}',
+priority = {{ priority }},
+status = '{{ status }}',
+system = {{ system }},
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__name = '{{ name }}' --required
-AND data__type = '{{ type }}' --required
+policyId = '{{ policyId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND name = '{{ name }}' --required
+AND type = '{{ type }}' --required
 RETURNING
 id,
 name,
@@ -528,8 +529,7 @@ lastUpdated,
 priority,
 status,
 system,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -549,7 +549,8 @@ Deletes a policy
 
 ```sql
 DELETE FROM okta.policies.policies
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE policyId = '{{ policyId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -573,7 +574,8 @@ Creates a policy or policy rule simulation. The access simulation evaluates poli
 
 ```sql
 EXEC okta.policies.policies.create_policy_simulation 
-@subdomain='{{ subdomain }}' --required
+@subdomain='{{ subdomain }}' --required, 
+@expand='{{ expand }}'
 ;
 ```
 </TabItem>
@@ -583,6 +585,7 @@ Clones an existing policy
 
 ```sql
 EXEC okta.policies.policies.clone_policy 
+@policyId='{{ policyId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -593,6 +596,7 @@ Activates a policy
 
 ```sql
 EXEC okta.policies.policies.activate_policy 
+@policyId='{{ policyId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -603,6 +607,7 @@ Deactivates a policy
 
 ```sql
 EXEC okta.policies.policies.deactivate_policy 
+@policyId='{{ policyId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

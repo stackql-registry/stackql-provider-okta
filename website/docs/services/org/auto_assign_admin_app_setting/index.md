@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>auto_assign_admin_app_setting<
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>auto_assign_admin_app_setting</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="auto_assign_admin_app_setting" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.org.auto_assign_admin_app_setting" /></td></tr>
 </tbody></table>
@@ -106,7 +107,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -149,12 +150,11 @@ Updates the org setting to automatically assign the Okta Admin Console when an a
 ```sql
 UPDATE okta.org.auto_assign_admin_app_setting
 SET 
-data__autoAssignAdminAppSetting = {{ autoAssignAdminAppSetting }}
+autoAssignAdminAppSetting = {{ autoAssignAdminAppSetting }}
 WHERE 
 subdomain = '{{ subdomain }}' --required
 RETURNING
-autoAssignAdminAppSetting
-;
+autoAssignAdminAppSetting;
 ```
 </TabItem>
 </Tabs>

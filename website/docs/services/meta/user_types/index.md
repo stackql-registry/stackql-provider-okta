@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>user_types</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>user_types</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="user_types" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.meta.user_types" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>user_types</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_user_types"
+    defaultValue="get_user_type"
     values={[
-        { label: 'list_user_types', value: 'list_user_types' },
-        { label: 'get_user_type', value: 'get_user_type' }
+        { label: 'get_user_type', value: 'get_user_type' },
+        { label: 'list_user_types', value: 'list_user_types' }
     ]}
 >
-<TabItem value="list_user_types">
+<TabItem value="get_user_type">
 
 <table>
 <thead>
@@ -102,7 +103,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_user_type">
+<TabItem value="list_user_types">
 
 <table>
 <thead>
@@ -184,6 +185,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_user_type"><CopyableCode code="get_user_type" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-typeId"><code>typeId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a user type by ID. Use `default` to fetch the default user type.</td>
+</tr>
+<tr>
     <td><a href="#list_user_types"><CopyableCode code="list_user_types" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -191,37 +199,30 @@ The following methods are available for this resource:
     <td>Lists all user types in your org</td>
 </tr>
 <tr>
-    <td><a href="#get_user_type"><CopyableCode code="get_user_type" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a user type by ID. Use `default` to fetch the default user type.</td>
-</tr>
-<tr>
     <td><a href="#create_user_type"><CopyableCode code="create_user_type" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__displayName"><code>data__displayName</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-displayName"><code>displayName</code></a></td>
     <td></td>
     <td>Creates a new user type. Okta automatically creates a `default` user type for your org. You may add up to nine additional user types.<br />&gt; **Note**: New user types are based on the current default schema template. Modifications to this schema do not automatically propagate to previously created user types.</td>
 </tr>
 <tr>
     <td><a href="#update_user_type"><CopyableCode code="update_user_type" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-typeId"><code>typeId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Updates an existing user type. This operation is a partial update.<br />&gt; **Note**: You can only update the `displayName` and `description` elements. The `name` of an existing user type can't be changed.</td>
 </tr>
 <tr>
     <td><a href="#replace_user_type"><CopyableCode code="replace_user_type" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__displayName"><code>data__displayName</code></a>, <a href="#parameter-data__description"><code>data__description</code></a></td>
+    <td><a href="#parameter-typeId"><code>typeId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-displayName"><code>displayName</code></a>, <a href="#parameter-description"><code>description</code></a></td>
     <td></td>
     <td>Replaces an existing user type. This operation is a full update.<br />&gt; **Note**: The `name` of an existing user type can't be changed, but must be part of the request body. You can only replace the `displayName` and `description` elements.</td>
 </tr>
 <tr>
     <td><a href="#delete_user_type"><CopyableCode code="delete_user_type" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-typeId"><code>typeId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a user type permanently.<br />&gt; **Note**: You can't delete the default user type or a user type that is currently assigned to users.</td>
 </tr>
@@ -244,7 +245,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-typeId">
+    <td><CopyableCode code="typeId" /></td>
+    <td><code>string</code></td>
+    <td></td>
 </tr>
 </tbody>
 </table>
@@ -252,15 +258,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_user_types"
+    defaultValue="get_user_type"
     values={[
-        { label: 'list_user_types', value: 'list_user_types' },
-        { label: 'get_user_type', value: 'get_user_type' }
+        { label: 'get_user_type', value: 'get_user_type' },
+        { label: 'list_user_types', value: 'list_user_types' }
     ]}
 >
-<TabItem value="list_user_types">
+<TabItem value="get_user_type">
 
-Lists all user types in your org
+Retrieves a user type by ID. Use `default` to fetch the default user type.
 
 ```sql
 SELECT
@@ -275,13 +281,14 @@ displayName,
 lastUpdated,
 lastUpdatedBy
 FROM okta.meta.user_types
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE typeId = '{{ typeId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_user_type">
+<TabItem value="list_user_types">
 
-Retrieves a user type by ID. Use `default` to fetch the default user type.
+Lists all user types in your org
 
 ```sql
 SELECT
@@ -318,9 +325,9 @@ Creates a new user type. Okta automatically creates a `default` user type for yo
 
 ```sql
 INSERT INTO okta.meta.user_types (
-data__description,
-data__displayName,
-data__name,
+description,
+displayName,
+name,
 subdomain
 )
 SELECT 
@@ -344,29 +351,26 @@ lastUpdatedBy
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: user_types
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the user_types resource.
     - name: description
-      value: string
-      description: >
+      value: "{{ description }}"
+      description: |
         The human-readable description of the user type
-        
     - name: displayName
-      value: string
-      description: >
+      value: "{{ displayName }}"
+      description: |
         The human-readable name of the user type
-        
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         The name of the user type. The name must start with A-Z or a-z and contain only A-Z, a-z, 0-9, or underscore (_) characters. This value becomes read-only after creation and can't be updated.
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -386,10 +390,11 @@ Updates an existing user type. This operation is a partial update.<br />&gt; **N
 ```sql
 UPDATE okta.meta.user_types
 SET 
-data__description = '{{ description }}',
-data__displayName = '{{ displayName }}'
+description = '{{ description }}',
+displayName = '{{ displayName }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+typeId = '{{ typeId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -400,8 +405,7 @@ default,
 description,
 displayName,
 lastUpdated,
-lastUpdatedBy
-;
+lastUpdatedBy;
 ```
 </TabItem>
 </Tabs>
@@ -422,14 +426,15 @@ Replaces an existing user type. This operation is a full update.<br />&gt; **Not
 ```sql
 REPLACE okta.meta.user_types
 SET 
-data__description = '{{ description }}',
-data__displayName = '{{ displayName }}',
-data__name = '{{ name }}'
+description = '{{ description }}',
+displayName = '{{ displayName }}',
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__name = '{{ name }}' --required
-AND data__displayName = '{{ displayName }}' --required
-AND data__description = '{{ description }}' --required
+typeId = '{{ typeId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND name = '{{ name }}' --required
+AND displayName = '{{ displayName }}' --required
+AND description = '{{ description }}' --required
 RETURNING
 id,
 name,
@@ -440,8 +445,7 @@ default,
 description,
 displayName,
 lastUpdated,
-lastUpdatedBy
-;
+lastUpdatedBy;
 ```
 </TabItem>
 </Tabs>
@@ -461,7 +465,8 @@ Deletes a user type permanently.<br />&gt; **Note**: You can't delete the defaul
 
 ```sql
 DELETE FROM okta.meta.user_types
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE typeId = '{{ typeId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

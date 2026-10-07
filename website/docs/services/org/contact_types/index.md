@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>contact_types</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>contact_types</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="contact_types" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.org.contact_types" /></td></tr>
 </tbody></table>
@@ -39,6 +40,8 @@ The following fields are returned by `SELECT` queries:
 >
 <TabItem value="list_org_contact_types">
 
+Org billing contact
+
 <table>
 <thead>
     <tr>
@@ -49,9 +52,14 @@ The following fields are returned by `SELECT` queries:
 </thead>
 <tbody>
 <tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the org billing contact type object using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification</td>
+</tr>
+<tr>
     <td><CopyableCode code="contactType" /></td>
     <td><code>string</code></td>
-    <td>Type of contact</td>
+    <td>Type of contact (BILLING, TECHNICAL)</td>
 </tr>
 </tbody>
 </table>
@@ -99,7 +107,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -118,6 +126,7 @@ Lists all org contact types for your Okta org
 
 ```sql
 SELECT
+_links,
 contactType
 FROM okta.org.contact_types
 WHERE subdomain = '{{ subdomain }}' -- required

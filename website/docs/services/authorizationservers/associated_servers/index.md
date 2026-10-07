@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>associated_servers</code> reso
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>associated_servers</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="associated_servers" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authorizationservers.associated_servers" /></td></tr>
 </tbody></table>
@@ -66,7 +67,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="accessTokenEncryptedResponseAlgorithm" /></td>
     <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed.</td>
+    <td>The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed. (RSA-OAEP-256, RSA-OAEP-384, RSA-OAEP-512)</td>
 </tr>
 <tr>
     <td><CopyableCode code="audiences" /></td>
@@ -101,12 +102,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="jwks" /></td>
     <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server</td>
+    <td>A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server</td>
 </tr>
 <tr>
     <td><CopyableCode code="jwks_uri" /></td>
     <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server</td>
+    <td>URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -116,7 +117,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (ACTIVE, INACTIVE)</td>
 </tr>
 </tbody>
 </table>
@@ -141,21 +142,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_associated_servers_by_trusted_type"><CopyableCode code="list_associated_servers_by_trusted_type" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-trusted"><code>trusted</code></a>, <a href="#parameter-q"><code>q</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-after"><code>after</code></a></td>
     <td>Lists all associated Authorization Servers by trusted type for the given `authServerId`</td>
 </tr>
 <tr>
     <td><a href="#create_associated_servers"><CopyableCode code="create_associated_servers" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Creates trusted relationships between the given authorization server and other authorization servers</td>
 </tr>
 <tr>
     <td><a href="#delete_associated_server"><CopyableCode code="delete_associated_server" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-associatedServerId"><code>associatedServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes an associated Authorization Server</td>
 </tr>
@@ -175,10 +176,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-associatedServerId">
+    <td><CopyableCode code="associatedServerId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the associated Authorization Server</td>
+</tr>
+<tr id="parameter-authServerId">
+    <td><CopyableCode code="authServerId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Authorization Server</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
@@ -197,7 +208,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 </tr>
 <tr id="parameter-trusted">
     <td><CopyableCode code="trusted" /></td>
-    <td><code>boolean</code></td>
+    <td><code>string</code></td>
     <td>Searches trusted authorization servers when `true` or searches untrusted authorization servers when `false`</td>
 </tr>
 </tbody>
@@ -232,7 +243,8 @@ jwks_uri,
 lastUpdated,
 status
 FROM okta.authorizationservers.associated_servers
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE authServerId = '{{ authServerId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND trusted = '{{ trusted }}'
 AND q = '{{ q }}'
 AND limit = '{{ limit }}'
@@ -258,11 +270,13 @@ Creates trusted relationships between the given authorization server and other a
 
 ```sql
 INSERT INTO okta.authorizationservers.associated_servers (
-data__trusted,
+trusted,
+authServerId,
 subdomain
 )
 SELECT 
 '{{ trusted }}',
+'{{ authServerId }}',
 '{{ subdomain }}'
 RETURNING
 id,
@@ -284,19 +298,22 @@ status
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: associated_servers
   props:
+    - name: authServerId
+      value: "{{ authServerId }}"
+      description: Required parameter for the associated_servers resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the associated_servers resource.
     - name: trusted
-      value: array
-      description: >
+      value:
+        - "{{ trusted }}"
+      description: |
         A list of the authorization server IDs
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -315,7 +332,9 @@ Deletes an associated Authorization Server
 
 ```sql
 DELETE FROM okta.authorizationservers.associated_servers
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE authServerId = '{{ authServerId }}' --required
+AND associatedServerId = '{{ associatedServerId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

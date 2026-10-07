@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>device_integrations</code> reso
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>device_integrations</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="device_integrations" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.device_integrations.device_integrations" /></td></tr>
 </tbody></table>
@@ -32,61 +33,12 @@ Creates, updates, deletes, gets or lists a <code>device_integrations</code> reso
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_device_integrations"
+    defaultValue="get_device_integration"
     values={[
-        { label: 'list_device_integrations', value: 'list_device_integrations' },
-        { label: 'get_device_integration', value: 'get_device_integration' }
+        { label: 'get_device_integration', value: 'get_device_integration' },
+        { label: 'list_device_integrations', value: 'list_device_integrations' }
     ]}
 >
-<TabItem value="list_device_integrations">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>The ID of the device integration</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>The namespace of the device integration</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="displayName" /></td>
-    <td><code>string</code></td>
-    <td>The display name of the device integration</td>
-</tr>
-<tr>
-    <td><CopyableCode code="metadata" /></td>
-    <td><code>object</code></td>
-    <td>The metadata of the device integration</td>
-</tr>
-<tr>
-    <td><CopyableCode code="platform" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>The status of the device integration</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_device_integration">
 
 <table>
@@ -106,7 +58,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="name" /></td>
     <td><code>string</code></td>
-    <td>The namespace of the device integration</td>
+    <td>The namespace of the device integration (com.android.zero.trust, com.crowdstrike.zta, com.google.dtc, com.okta.device.osquery, com.okta.deviceidp, com.okta.windowssecuritycenter, com.okta.workspaceone)</td>
 </tr>
 <tr>
     <td><CopyableCode code="_links" /></td>
@@ -126,12 +78,61 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="platform" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (ANDROID, CHROMEOS, IOS, MACOS, WINDOWS)</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>The status of the device integration</td>
+    <td>The status of the device integration (ACTIVE, DEACTIVATED)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_device_integrations">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the device integration</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>The namespace of the device integration (com.android.zero.trust, com.crowdstrike.zta, com.google.dtc, com.okta.device.osquery, com.okta.deviceidp, com.okta.windowssecuritycenter, com.okta.workspaceone)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="displayName" /></td>
+    <td><code>string</code></td>
+    <td>The display name of the device integration</td>
+</tr>
+<tr>
+    <td><CopyableCode code="metadata" /></td>
+    <td><code>object</code></td>
+    <td>The metadata of the device integration</td>
+</tr>
+<tr>
+    <td><CopyableCode code="platform" /></td>
+    <td><code>string</code></td>
+    <td> (ANDROID, CHROMEOS, IOS, MACOS, WINDOWS)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>The status of the device integration (ACTIVE, DEACTIVATED)</td>
 </tr>
 </tbody>
 </table>
@@ -154,6 +155,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_device_integration"><CopyableCode code="get_device_integration" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-deviceIntegrationId"><code>deviceIntegrationId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a device integration by `deviceIntegrationId`</td>
+</tr>
+<tr>
     <td><a href="#list_device_integrations"><CopyableCode code="list_device_integrations" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -161,23 +169,16 @@ The following methods are available for this resource:
     <td>Lists all device integrations for your org. Examples include Device Posture Provider, Windows Security Center, Chrome Device Trust, OSQuery, and Android Device Trust.</td>
 </tr>
 <tr>
-    <td><a href="#get_device_integration"><CopyableCode code="get_device_integration" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a device integration by `deviceIntegrationId`</td>
-</tr>
-<tr>
     <td><a href="#activate_device_integration"><CopyableCode code="activate_device_integration" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-deviceIntegrationId"><code>deviceIntegrationId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates a device integration and populates the related configurations by `deviceIntegrationId`</td>
 </tr>
 <tr>
     <td><a href="#deactivate_device_integration"><CopyableCode code="deactivate_device_integration" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-deviceIntegrationId"><code>deviceIntegrationId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates a device integration by `deviceIntegrationId`</td>
 </tr>
@@ -197,10 +198,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-deviceIntegrationId">
+    <td><CopyableCode code="deviceIntegrationId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the device integration</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -208,15 +214,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_device_integrations"
+    defaultValue="get_device_integration"
     values={[
-        { label: 'list_device_integrations', value: 'list_device_integrations' },
-        { label: 'get_device_integration', value: 'get_device_integration' }
+        { label: 'get_device_integration', value: 'get_device_integration' },
+        { label: 'list_device_integrations', value: 'list_device_integrations' }
     ]}
 >
-<TabItem value="list_device_integrations">
+<TabItem value="get_device_integration">
 
-Lists all device integrations for your org. Examples include Device Posture Provider, Windows Security Center, Chrome Device Trust, OSQuery, and Android Device Trust.
+Retrieves a device integration by `deviceIntegrationId`
 
 ```sql
 SELECT
@@ -228,13 +234,14 @@ metadata,
 platform,
 status
 FROM okta.device_integrations.device_integrations
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE deviceIntegrationId = '{{ deviceIntegrationId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_device_integration">
+<TabItem value="list_device_integrations">
 
-Retrieves a device integration by `deviceIntegrationId`
+Lists all device integrations for your org. Examples include Device Posture Provider, Windows Security Center, Chrome Device Trust, OSQuery, and Android Device Trust.
 
 ```sql
 SELECT
@@ -268,6 +275,7 @@ Activates a device integration and populates the related configurations by `devi
 
 ```sql
 EXEC okta.device_integrations.device_integrations.activate_device_integration 
+@deviceIntegrationId='{{ deviceIntegrationId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -278,6 +286,7 @@ Deactivates a device integration by `deviceIntegrationId`
 
 ```sql
 EXEC okta.device_integrations.device_integrations.deactivate_device_integration 
+@deviceIntegrationId='{{ deviceIntegrationId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

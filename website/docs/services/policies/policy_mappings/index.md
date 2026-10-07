@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>policy_mappings</code> resource
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>policy_mappings</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="policy_mappings" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.policies.policy_mappings" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>policy_mappings</code> resource
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_policy_mappings"
+    defaultValue="get_policy_mapping"
     values={[
-        { label: 'list_policy_mappings', value: 'list_policy_mappings' },
-        { label: 'get_policy_mapping', value: 'get_policy_mapping' }
+        { label: 'get_policy_mapping', value: 'get_policy_mapping' },
+        { label: 'list_policy_mappings', value: 'list_policy_mappings' }
     ]}
 >
-<TabItem value="list_policy_mappings">
+<TabItem value="get_policy_mapping">
 
 <table>
 <thead>
@@ -62,7 +63,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_policy_mapping">
+<TabItem value="list_policy_mappings">
 
 <table>
 <thead>
@@ -104,32 +105,32 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_policy_mappings"><CopyableCode code="list_policy_mappings" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all resources mapped to a policy identified by `policyId`</td>
-</tr>
-<tr>
     <td><a href="#get_policy_mapping"><CopyableCode code="get_policy_mapping" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-mappingId"><code>mappingId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a resource mapping for a policy identified by `policyId` and `mappingId`</td>
 </tr>
 <tr>
+    <td><a href="#list_policy_mappings"><CopyableCode code="list_policy_mappings" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all resources mapped to a policy identified by `policyId`</td>
+</tr>
+<tr>
     <td><a href="#delete_policy_resource_mapping"><CopyableCode code="delete_policy_resource_mapping" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-mappingId"><code>mappingId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes the resource mapping for a policy identified by `policyId` and `mappingId`</td>
 </tr>
 <tr>
     <td><a href="#map_resource_to_policy"><CopyableCode code="map_resource_to_policy" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Maps a resource to a policy identified by `policyId`</td>
+    <td>Maps a resource to a policy identified by `policyId`<br /><br />&gt; **Note:** Use the [Assign an app sign-in policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/ApplicationPolicies/#tag/ApplicationPolicies/operation/assignApplicationPolicy) endpoint to assign an app sign-in policy to an app.</td>
 </tr>
 </tbody>
 </table>
@@ -147,10 +148,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-mappingId">
+    <td><CopyableCode code="mappingId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy resource Mapping</td>
+</tr>
+<tr id="parameter-policyId">
+    <td><CopyableCode code="policyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -158,25 +169,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_policy_mappings"
+    defaultValue="get_policy_mapping"
     values={[
-        { label: 'list_policy_mappings', value: 'list_policy_mappings' },
-        { label: 'get_policy_mapping', value: 'get_policy_mapping' }
+        { label: 'get_policy_mapping', value: 'get_policy_mapping' },
+        { label: 'list_policy_mappings', value: 'list_policy_mappings' }
     ]}
 >
-<TabItem value="list_policy_mappings">
-
-Lists all resources mapped to a policy identified by `policyId`
-
-```sql
-SELECT
-id,
-_links
-FROM okta.policies.policy_mappings
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_policy_mapping">
 
 Retrieves a resource mapping for a policy identified by `policyId` and `mappingId`
@@ -186,7 +184,23 @@ SELECT
 id,
 _links
 FROM okta.policies.policy_mappings
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE policyId = '{{ policyId }}' -- required
+AND mappingId = '{{ mappingId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_policy_mappings">
+
+Lists all resources mapped to a policy identified by `policyId`
+
+```sql
+SELECT
+id,
+_links
+FROM okta.policies.policy_mappings
+WHERE policyId = '{{ policyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -207,7 +221,9 @@ Deletes the resource mapping for a policy identified by `policyId` and `mappingI
 
 ```sql
 DELETE FROM okta.policies.policy_mappings
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE policyId = '{{ policyId }}' --required
+AND mappingId = '{{ mappingId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -224,10 +240,11 @@ WHERE subdomain = '{{ subdomain }}' --required
 >
 <TabItem value="map_resource_to_policy">
 
-Maps a resource to a policy identified by `policyId`
+Maps a resource to a policy identified by `policyId`<br /><br />&gt; **Note:** Use the [Assign an app sign-in policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/ApplicationPolicies/#tag/ApplicationPolicies/operation/assignApplicationPolicy) endpoint to assign an app sign-in policy to an app.
 
 ```sql
 EXEC okta.policies.policy_mappings.map_resource_to_policy 
+@policyId='{{ policyId }}' --required, 
 @subdomain='{{ subdomain }}' --required 
 @@json=
 '{

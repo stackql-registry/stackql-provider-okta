@@ -2,34 +2,25 @@ openapi: 3.0.3
 info:
   title: principal_rate_limits API
   description: okta principal_rate_limits API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/principal-rate-limits:
     get:
       summary: List all principal rate limits
-      description: >-
-        Lists all Principal Rate Limit entities considering the provided
-        parameters
+      description: Lists all Principal Rate Limit entities considering the provided parameters
       operationId: listPrincipalRateLimitEntities
       parameters:
         - name: filter
           in: query
-          description: >-
-            Filters the list of principal rate limit entities by the provided
-            principal type (`principalType`). For example,
-
-            `filter=principalType eq "SSWS_TOKEN"` or `filter=principalType eq
-            "OAUTH_CLIENT"`.
+          description: |-
+            Filters the list of principal rate limit entities by the provided principal type (`principalType`). For example,
+            `filter=principalType eq "SSWS_TOKEN"` or `filter=principalType eq "OAUTH_CLIENT"`.
           schema:
             type: string
           required: true
         - name: after
           in: query
-          description: >-
-            The cursor to use for pagination. It's an opaque string that
-            specifies your current location in the list and is obtained from the
-            `Link` response header. See
-            [Pagination](https://developer.okta.com/docs/api/#pagination).
+          description: The cursor to use for pagination. It's an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).
           schema:
             type: string
         - name: limit
@@ -46,15 +37,12 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PrincipalRateLimitEntity'
+                $ref: '#/components/schemas/ListPrincipalRateLimitEntitiesResponse'
               examples:
                 SSWSListAll:
                   $ref: '#/components/examples/PrincipalRateLimitsSSWSListAllExample'
                 OAuthClientListAll:
-                  $ref: >-
-                    #/components/examples/PrincipalRateLimitsOAuthClientListAllExample
+                  $ref: '#/components/examples/PrincipalRateLimitsOAuthClientListAllExample'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -70,11 +58,14 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: principal_rate_limit_entities
+        wrapperName: ListPrincipalRateLimitEntitiesResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a principal rate limit
-      description: >-
-        Creates a new principal rate limit entity. Okta only allows one
-        principal rate limit entity per org and principal.
+      description: Creates a new principal rate limit entity. Okta only allows one principal rate limit entity per org and principal.
       operationId: createPrincipalRateLimitEntity
       x-codegen-request-body-name: entity
       requestBody:
@@ -95,8 +86,7 @@ paths:
                 $ref: '#/components/schemas/PrincipalRateLimitEntity'
               examples:
                 SSWSToken:
-                  $ref: >-
-                    #/components/examples/PrincipalRateLimitEntityResponseSSWSToken
+                  $ref: '#/components/examples/PrincipalRateLimitEntityResponseSSWSToken'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -128,8 +118,7 @@ paths:
                 $ref: '#/components/schemas/PrincipalRateLimitEntity'
               examples:
                 SSWSToken:
-                  $ref: >-
-                    #/components/examples/PrincipalRateLimitEntityResponseSSWSToken
+                  $ref: '#/components/examples/PrincipalRateLimitEntityResponseSSWSToken'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '404':
@@ -145,6 +134,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathPrincipalRateLimitId'
     put:
       summary: Replace a principal rate limit
       description: Replaces a principal rate limit entity by `principalRateLimitId`
@@ -157,8 +148,7 @@ paths:
               $ref: '#/components/schemas/PrincipalRateLimitEntity'
             examples:
               SSWSToken:
-                $ref: >-
-                  #/components/examples/PrincipalRateLimitEntityReplaceRequestSSWSToken
+                $ref: '#/components/examples/PrincipalRateLimitEntityReplaceRequestSSWSToken'
         required: true
       responses:
         '200':
@@ -169,8 +159,7 @@ paths:
                 $ref: '#/components/schemas/PrincipalRateLimitEntity'
               examples:
                 SSWSToken:
-                  $ref: >-
-                    #/components/examples/PrincipalRateLimitEntityReplaceResponseSSWSToken
+                  $ref: '#/components/examples/PrincipalRateLimitEntityReplaceResponseSSWSToken'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -188,8 +177,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathPrincipalRateLimitId'
+      parameters:
+        - $ref: '#/components/parameters/pathPrincipalRateLimitId'
 components:
   schemas:
     PrincipalRateLimitEntity:
@@ -198,9 +187,7 @@ components:
       type: object
       properties:
         createdBy:
-          description: >-
-            The Okta user ID of the user who created the principle rate limit
-            entity
+          description: The Okta user ID of the user who created the principle rate limit entity
           type: string
           readOnly: true
         createdDate:
@@ -209,14 +196,10 @@ components:
           format: date-time
           readOnly: true
         defaultConcurrencyPercentage:
-          description: >-
-            The default percentage of a given concurrency limit threshold that
-            the owning principal can consume
+          description: The default percentage of a given concurrency limit threshold that the owning principal can consume
           type: integer
         defaultPercentage:
-          description: >-
-            The default percentage of a given rate limit threshold that the
-            owning principal can consume
+          description: The default percentage of a given rate limit threshold that the owning principal can consume
           type: integer
         id:
           description: The unique identifier of the principle rate limit entity
@@ -228,9 +211,7 @@ components:
           format: date-time
           readOnly: true
         lastUpdatedBy:
-          description: >-
-            The Okta user ID of the user who last updated the principle rate
-            limit entity
+          description: The Okta user ID of the user who last updated the principle rate limit entity
           type: string
           readOnly: true
         orgId:
@@ -238,9 +219,7 @@ components:
           type: string
           readOnly: true
         principalId:
-          description: >-
-            The unique identifier of the principal. This is the ID of the API
-            token or OAuth 2.0 app.
+          description: The unique identifier of the principal. This is the ID of the API token or OAuth 2.0 app.
           type: string
         principalType:
           $ref: '#/components/schemas/PrincipalType'
@@ -266,23 +245,25 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     ErrorCause:
       type: object
       properties:
         errorSummary:
           type: string
+    ListPrincipalRateLimitEntitiesResponse:
+      type: object
+      properties:
+        principal_rate_limit_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/PrincipalRateLimitEntity'
   responses:
     ErrorApiValidationFailed400:
       description: Bad Request
@@ -463,7 +444,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

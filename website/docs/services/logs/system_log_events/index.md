@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>system_log_events</code> resour
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>system_log_events</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="system_log_events" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.logs.system_log_events" /></td></tr>
 </tbody></table>
@@ -106,17 +107,17 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="severity" /></td>
     <td><code>string</code></td>
-    <td>Indicates how severe the event is</td>
+    <td>Indicates how severe the event is (DEBUG, ERROR, INFO, WARN)</td>
 </tr>
 <tr>
     <td><CopyableCode code="target" /></td>
     <td><code>array</code></td>
-    <td>The entity that an actor performs an action on. Targets can be anything, such as an app user, a sign-in token, or anything else.  &gt; **Note:** When searching the target array, search for a given `type` rather than the array location. Target types, such as `User` and `AppInstance`,  for a given `eventType` are not always in the same array location.</td>
+    <td>The entity that an actor performs an action on. Targets can be anything, such as an app user, a sign-in token, or anything else.  &gt; **Note:** When searching the target array, search for a given `type` rather than the array location. Target types, such as `User` and `AppInstance`, for a given `eventType` are not always in the same array location.</td>
 </tr>
 <tr>
     <td><CopyableCode code="transaction" /></td>
     <td><code>object</code></td>
-    <td>A `transaction` object comprises contextual information associated with its respective event.  This information is useful for understanding sequences of correlated events. For example, a `transaction` object such as the following: ``` &#123;   "id": "Wn4f-0RQ8D8lTSLkAmkKdQAADqo",   "type": "WEB",   "detail": null &#125; ``` indicates that a `WEB` request with `id` `Wn4f-0RQ8D8lTSLkAmkKdQAADqo` has created this event.  A `transaction` object with a `requestApiTokenId` in the `detail` object, for example : ``` &#123;   "id": "YjSlblAAqnKY7CdyCkXNBgAAAIU",   "type": "WEB",   "detail": &#123;     "requestApiTokenId": "00T94e3cn9kSEO3c51s5"   &#125; &#125; ``` indicates that this event was the result of an action performed through an API using the token identified by 00T94e3cn9kSEO3c51s5. The token ID is visible in the Admin Console, **Security** &gt; **API**. See [API token management](https://help.okta.com/okta_help.htm?id=Security_API). For more information on API tokens, see [Create an API token](https://developer.okta.com/docs/guides/create-an-api-token/).</td>
+    <td>A `transaction` object comprises contextual information associated with its respective event. This information is useful for understanding sequences of correlated events. For example, a `transaction` object such as the following: ``` &#123;   "id": "Wn4f-0RQ8D8lTSLkAmkKdQAADqo",   "type": "WEB",   "detail": null &#125; ``` indicates that a `WEB` request with `id` `Wn4f-0RQ8D8lTSLkAmkKdQAADqo` has created this event.  A `transaction` object with a `requestApiTokenId` in the `detail` object, for example : ``` &#123;   "id": "YjSlblAAqnKY7CdyCkXNBgAAAIU",   "type": "WEB",   "detail": &#123;     "requestApiTokenId": "00T94e3cn9kSEO3c51s5"   &#125; &#125; ``` indicates that this event was the result of an action performed through an API using the token identified by 00T94e3cn9kSEO3c51s5. The token ID is visible in the Admin Console, **Security** &gt; **API**. See [API token management](https://help.okta.com/okta_help.htm?id=Security_API). For more information on API tokens, see [Create an API token](https://developer.okta.com/docs/guides/create-an-api-token/).</td>
 </tr>
 <tr>
     <td><CopyableCode code="uuid" /></td>
@@ -174,7 +175,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>admin_app_targets</code> resou
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>admin_app_targets</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="admin_app_targets" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.admin_app_targets" /></td></tr>
 </tbody></table>
@@ -38,6 +39,8 @@ The following fields are returned by `SELECT` queries:
     ]}
 >
 <TabItem value="list_application_targets_for_application_administrator_role_for_user">
+
+An app in the OIN catalog
 
 <table>
 <thead>
@@ -81,7 +84,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="features" /></td>
     <td><code>array</code></td>
-    <td>Features supported by the app. See app [features](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications!c=200&path=0/features&t=response).</td>
+    <td>Features supported by the app. See app [features](https://developer.okta.com/docs/api/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/features).</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -91,12 +94,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="signOnModes" /></td>
     <td><code>array</code></td>
-    <td>Authentication mode for the app. See app [signOnMode](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Application/#tag/Application/operation/listApplications!c=200&path=0/signOnMode&t=response).</td>
+    <td>Authentication mode for the app. See app [signOnMode](https://developer.okta.com/docs/api/openapi/okta-management/management/application/listapplications#application/listapplications/t=response&c=200&path=&d=0/signonmode).</td>
 </tr>
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>App status</td>
+    <td>App status (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="verificationStatus" /></td>
@@ -131,23 +134,23 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_application_targets_for_application_administrator_role_for_user"><CopyableCode code="list_application_targets_for_application_administrator_role_for_user" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
     <td>Lists all app targets for an `APP_ADMIN` role assigned to a user. The response is a list that includes OIN-cataloged apps or app instances. The response payload for an app instance contains the `id` property, but an OIN-cataloged app payload doesn't.</td>
 </tr>
 <tr>
-    <td><a href="#unassign_app_target_from_app_admin_role_for_user"><CopyableCode code="unassign_app_target_from_app_admin_role_for_user" /></a></td>
-    <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Unassigns an OIN app target from an `APP_ADMIN` role assignment to an admin user.<br /><br />&gt; **Note:** You can't remove the last OIN app target from a role assignment since this causes an exception.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment to the user and recreate a new one.<br /></td>
-</tr>
-<tr>
     <td><a href="#unassign_app_instance_target_from_admin_role_for_user"><CopyableCode code="unassign_app_instance_target_from_admin_role_for_user" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-appId"><code>appId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Unassigns an app instance target from an `APP_ADMIN` role assignment to an admin user.<br /><br />&gt; **Note:** You can't remove the last app instance target from a role assignment since this causes an exception.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment and recreate a new one.</td>
+</tr>
+<tr>
+    <td><a href="#unassign_app_target_from_app_admin_role_for_user"><CopyableCode code="unassign_app_target_from_app_admin_role_for_user" /></a></td>
+    <td><CopyableCode code="delete" /></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-appName"><code>appName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Unassigns an OIN app target from an `APP_ADMIN` role assignment to an admin user.<br /><br />&gt; **Note:** You can't remove the last OIN app target from a role assignment since this causes an exception.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment to the user and recreate a new one.<br /></td>
 </tr>
 </tbody>
 </table>
@@ -165,15 +168,35 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-appId">
+    <td><CopyableCode code="appId" /></td>
+    <td><code>string</code></td>
+    <td>Application ID</td>
+</tr>
+<tr id="parameter-appName">
+    <td><CopyableCode code="appName" /></td>
+    <td><code>string</code></td>
+    <td>Name of the app definition (the OIN catalog app key name)</td>
+</tr>
+<tr id="parameter-roleAssignmentId">
+    <td><CopyableCode code="roleAssignmentId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the role assignment</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -210,7 +233,9 @@ status,
 verificationStatus,
 website
 FROM okta.users.admin_app_targets
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND roleAssignmentId = '{{ roleAssignmentId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND after = '{{ after }}'
 AND limit = '{{ limit }}'
 ;
@@ -222,29 +247,36 @@ AND limit = '{{ limit }}'
 ## `DELETE` examples
 
 <Tabs
-    defaultValue="unassign_app_target_from_app_admin_role_for_user"
+    defaultValue="unassign_app_instance_target_from_admin_role_for_user"
     values={[
-        { label: 'unassign_app_target_from_app_admin_role_for_user', value: 'unassign_app_target_from_app_admin_role_for_user' },
-        { label: 'unassign_app_instance_target_from_admin_role_for_user', value: 'unassign_app_instance_target_from_admin_role_for_user' }
+        { label: 'unassign_app_instance_target_from_admin_role_for_user', value: 'unassign_app_instance_target_from_admin_role_for_user' },
+        { label: 'unassign_app_target_from_app_admin_role_for_user', value: 'unassign_app_target_from_app_admin_role_for_user' }
     ]}
 >
-<TabItem value="unassign_app_target_from_app_admin_role_for_user">
-
-Unassigns an OIN app target from an `APP_ADMIN` role assignment to an admin user.<br /><br />&gt; **Note:** You can't remove the last OIN app target from a role assignment since this causes an exception.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment to the user and recreate a new one.<br />
-
-```sql
-DELETE FROM okta.users.admin_app_targets
-WHERE subdomain = '{{ subdomain }}' --required
-;
-```
-</TabItem>
 <TabItem value="unassign_app_instance_target_from_admin_role_for_user">
 
 Unassigns an app instance target from an `APP_ADMIN` role assignment to an admin user.<br /><br />&gt; **Note:** You can't remove the last app instance target from a role assignment since this causes an exception.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment and recreate a new one.
 
 ```sql
 DELETE FROM okta.users.admin_app_targets
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE userId = '{{ userId }}' --required
+AND roleAssignmentId = '{{ roleAssignmentId }}' --required
+AND appName = '{{ appName }}' --required
+AND appId = '{{ appId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+;
+```
+</TabItem>
+<TabItem value="unassign_app_target_from_app_admin_role_for_user">
+
+Unassigns an OIN app target from an `APP_ADMIN` role assignment to an admin user.<br /><br />&gt; **Note:** You can't remove the last OIN app target from a role assignment since this causes an exception.<br />&gt; If you need a role assignment that applies to all apps, delete the `APP_ADMIN` role assignment to the user and recreate a new one.<br />
+
+```sql
+DELETE FROM okta.users.admin_app_targets
+WHERE userId = '{{ userId }}' --required
+AND roleAssignmentId = '{{ roleAssignmentId }}' --required
+AND appName = '{{ appName }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>keys</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>keys</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="keys" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authorizationservers.keys" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>keys</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_authorization_server_keys"
+    defaultValue="get_authorization_server_key"
     values={[
-        { label: 'list_authorization_server_keys', value: 'list_authorization_server_keys' },
-        { label: 'get_authorization_server_key', value: 'get_authorization_server_key' }
+        { label: 'get_authorization_server_key', value: 'get_authorization_server_key' },
+        { label: 'list_authorization_server_keys', value: 'list_authorization_server_keys' }
     ]}
 >
-<TabItem value="list_authorization_server_keys">
+<TabItem value="get_authorization_server_key">
 
 <table>
 <thead>
@@ -92,7 +93,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_authorization_server_key">
+<TabItem value="list_authorization_server_keys">
 
 <table>
 <thead>
@@ -164,23 +165,23 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_authorization_server_keys"><CopyableCode code="list_authorization_server_keys" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all of the current, future, and expired Keys used by the Custom Authorization Server</td>
-</tr>
-<tr>
     <td><a href="#get_authorization_server_key"><CopyableCode code="get_authorization_server_key" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-keyId"><code>keyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves an Authorization Server Key specified by the `keyId`</td>
 </tr>
 <tr>
+    <td><a href="#list_authorization_server_keys"><CopyableCode code="list_authorization_server_keys" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all of the current, future, and expired Keys used by the Custom Authorization Server</td>
+</tr>
+<tr>
     <td><a href="#rotate_authorization_server_keys"><CopyableCode code="rotate_authorization_server_keys" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Rotates the current Keys for a Custom Authorization Server. If you rotate Keys,<br />the `ACTIVE` Key becomes the `EXPIRED` Key, the `NEXT` Key becomes the `ACTIVE` Key,<br />and the Custom Authorization Server immediately begins using the new active<br />Key to sign tokens.<br /><br />&gt; **Note:** Okta rotates your Keys automatically in `AUTO` mode. You can rotate Keys<br />yourself in either mode. If Keys are rotated manually, you should invalidate any intermediate cache.<br />and fetch the Keys again using the Keys endpoint.</td>
 </tr>
@@ -200,10 +201,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-authServerId">
+    <td><CopyableCode code="authServerId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Authorization Server</td>
+</tr>
+<tr id="parameter-keyId">
+    <td><CopyableCode code="keyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the certificate key</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -211,31 +222,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_authorization_server_keys"
+    defaultValue="get_authorization_server_key"
     values={[
-        { label: 'list_authorization_server_keys', value: 'list_authorization_server_keys' },
-        { label: 'get_authorization_server_key', value: 'get_authorization_server_key' }
+        { label: 'get_authorization_server_key', value: 'get_authorization_server_key' },
+        { label: 'list_authorization_server_keys', value: 'list_authorization_server_keys' }
     ]}
 >
-<TabItem value="list_authorization_server_keys">
-
-Lists all of the current, future, and expired Keys used by the Custom Authorization Server
-
-```sql
-SELECT
-_links,
-alg,
-e,
-kid,
-kty,
-n,
-status,
-use
-FROM okta.authorizationservers.keys
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_authorization_server_key">
 
 Retrieves an Authorization Server Key specified by the `keyId`
@@ -251,7 +243,29 @@ n,
 status,
 use
 FROM okta.authorizationservers.keys
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE authServerId = '{{ authServerId }}' -- required
+AND keyId = '{{ keyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_authorization_server_keys">
+
+Lists all of the current, future, and expired Keys used by the Custom Authorization Server
+
+```sql
+SELECT
+_links,
+alg,
+e,
+kid,
+kty,
+n,
+status,
+use
+FROM okta.authorizationservers.keys
+WHERE authServerId = '{{ authServerId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -272,6 +286,7 @@ Rotates the current Keys for a Custom Authorization Server. If you rotate Keys,<
 
 ```sql
 EXEC okta.authorizationservers.keys.rotate_authorization_server_keys 
+@authServerId='{{ authServerId }}' --required, 
 @subdomain='{{ subdomain }}' --required 
 @@json=
 '{

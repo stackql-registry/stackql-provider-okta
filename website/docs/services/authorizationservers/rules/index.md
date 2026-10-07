@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>rules</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>rules</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="rules" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authorizationservers.rules" /></td></tr>
 </tbody></table>
@@ -32,81 +33,12 @@ Creates, updates, deletes, gets or lists a <code>rules</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_authorization_server_policy_rules"
+    defaultValue="get_authorization_server_policy_rule"
     values={[
-        { label: 'list_authorization_server_policy_rules', value: 'list_authorization_server_policy_rules' },
-        { label: 'get_authorization_server_policy_rule', value: 'get_authorization_server_policy_rule' }
+        { label: 'get_authorization_server_policy_rule', value: 'get_authorization_server_policy_rule' },
+        { label: 'list_authorization_server_policy_rules', value: 'list_authorization_server_policy_rules' }
     ]}
 >
-<TabItem value="list_authorization_server_policy_rules">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>Identifier of the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Name of the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="actions" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="conditions" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the rule was created</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the rule was last modified</td>
-</tr>
-<tr>
-    <td><CopyableCode code="priority" /></td>
-    <td><code>integer</code></td>
-    <td>Priority of the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>Status of the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="system" /></td>
-    <td><code>boolean</code></td>
-    <td>Set to `true` for system rules. You can't delete system rules.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>Rule type</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_authorization_server_policy_rule">
 
 <table>
@@ -135,8 +67,8 @@ The following fields are returned by `SELECT` queries:
 </tr>
 <tr>
     <td><CopyableCode code="actions" /></td>
-    <td><code>object</code></td>
-    <td></td>
+    <td><code>string</code></td>
+    <td>(opaque JSON object)</td>
 </tr>
 <tr>
     <td><CopyableCode code="conditions" /></td>
@@ -161,7 +93,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Status of the rule</td>
+    <td>Status of the rule (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="system" /></td>
@@ -171,7 +103,76 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Rule type</td>
+    <td>Rule type (RESOURCE_ACCESS)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_authorization_server_policy_rules">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>Identifier of the rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Name of the rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="actions" /></td>
+    <td><code>string</code></td>
+    <td>(opaque JSON object)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="conditions" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the rule was created</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the rule was last modified</td>
+</tr>
+<tr>
+    <td><CopyableCode code="priority" /></td>
+    <td><code>integer</code></td>
+    <td>Priority of the rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>Status of the rule (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="system" /></td>
+    <td><code>boolean</code></td>
+    <td>Set to `true` for system rules. You can't delete system rules.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>Rule type (RESOURCE_ACCESS)</td>
 </tr>
 </tbody>
 </table>
@@ -194,51 +195,51 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_authorization_server_policy_rules"><CopyableCode code="list_authorization_server_policy_rules" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all policy rules for the specified Custom Authorization Server and Policy</td>
-</tr>
-<tr>
     <td><a href="#get_authorization_server_policy_rule"><CopyableCode code="get_authorization_server_policy_rule" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a policy rule by `ruleId`</td>
 </tr>
 <tr>
+    <td><a href="#list_authorization_server_policy_rules"><CopyableCode code="list_authorization_server_policy_rules" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all policy rules for the specified Custom Authorization Server and Policy</td>
+</tr>
+<tr>
     <td><a href="#create_authorization_server_policy_rule"><CopyableCode code="create_authorization_server_policy_rule" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__conditions"><code>data__conditions</code></a>, <a href="#parameter-data__type"><code>data__type</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-conditions"><code>conditions</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td></td>
     <td>Creates a policy rule for the specified Custom Authorization Server and Policy</td>
 </tr>
 <tr>
     <td><a href="#replace_authorization_server_policy_rule"><CopyableCode code="replace_authorization_server_policy_rule" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__conditions"><code>data__conditions</code></a>, <a href="#parameter-data__type"><code>data__type</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-conditions"><code>conditions</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td></td>
     <td>Replaces the configuration of the Policy Rule defined in the specified Custom Authorization Server and Policy</td>
 </tr>
 <tr>
     <td><a href="#delete_authorization_server_policy_rule"><CopyableCode code="delete_authorization_server_policy_rule" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a Policy Rule defined in the specified Custom Authorization Server and Policy</td>
 </tr>
 <tr>
     <td><a href="#activate_authorization_server_policy_rule"><CopyableCode code="activate_authorization_server_policy_rule" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates an authorization server policy rule</td>
 </tr>
 <tr>
     <td><a href="#deactivate_authorization_server_policy_rule"><CopyableCode code="deactivate_authorization_server_policy_rule" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates an authorization server policy rule</td>
 </tr>
@@ -258,10 +259,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-authServerId">
+    <td><CopyableCode code="authServerId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Authorization Server</td>
+</tr>
+<tr id="parameter-policyId">
+    <td><CopyableCode code="policyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy</td>
+</tr>
+<tr id="parameter-ruleId">
+    <td><CopyableCode code="ruleId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy rule</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -269,34 +285,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_authorization_server_policy_rules"
+    defaultValue="get_authorization_server_policy_rule"
     values={[
-        { label: 'list_authorization_server_policy_rules', value: 'list_authorization_server_policy_rules' },
-        { label: 'get_authorization_server_policy_rule', value: 'get_authorization_server_policy_rule' }
+        { label: 'get_authorization_server_policy_rule', value: 'get_authorization_server_policy_rule' },
+        { label: 'list_authorization_server_policy_rules', value: 'list_authorization_server_policy_rules' }
     ]}
 >
-<TabItem value="list_authorization_server_policy_rules">
-
-Lists all policy rules for the specified Custom Authorization Server and Policy
-
-```sql
-SELECT
-id,
-name,
-_links,
-actions,
-conditions,
-created,
-lastUpdated,
-priority,
-status,
-system,
-type
-FROM okta.authorizationservers.rules
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_authorization_server_policy_rule">
 
 Retrieves a policy rule by `ruleId`
@@ -315,7 +309,34 @@ status,
 system,
 type
 FROM okta.authorizationservers.rules
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE authServerId = '{{ authServerId }}' -- required
+AND policyId = '{{ policyId }}' -- required
+AND ruleId = '{{ ruleId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_authorization_server_policy_rules">
+
+Lists all policy rules for the specified Custom Authorization Server and Policy
+
+```sql
+SELECT
+id,
+name,
+_links,
+actions,
+conditions,
+created,
+lastUpdated,
+priority,
+status,
+system,
+type
+FROM okta.authorizationservers.rules
+WHERE authServerId = '{{ authServerId }}' -- required
+AND policyId = '{{ policyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -337,13 +358,15 @@ Creates a policy rule for the specified Custom Authorization Server and Policy
 
 ```sql
 INSERT INTO okta.authorizationservers.rules (
-data__actions,
-data__conditions,
-data__name,
-data__priority,
-data__status,
-data__system,
-data__type,
+actions,
+conditions,
+name,
+priority,
+status,
+system,
+type,
+authServerId,
+policyId,
 subdomain
 )
 SELECT 
@@ -354,6 +377,8 @@ SELECT
 '{{ status }}',
 {{ system }},
 '{{ type }}' /* required */,
+'{{ authServerId }}',
+'{{ policyId }}',
 '{{ subdomain }}'
 RETURNING
 id,
@@ -372,45 +397,61 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: rules
   props:
+    - name: authServerId
+      value: "{{ authServerId }}"
+      description: Required parameter for the rules resource.
+    - name: policyId
+      value: "{{ policyId }}"
+      description: Required parameter for the rules resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the rules resource.
     - name: actions
-      value: object
+      value: "{{ actions }}"
+      description: |
+        (opaque JSON object)
     - name: conditions
-      value: object
+      value:
+        grantTypes:
+          include:
+            - "{{ include }}"
+        people:
+          groups:
+            include:
+              - "{{ include }}"
+          users:
+            include:
+              - "{{ include }}"
+        scopes:
+          include:
+            - "{{ include }}"
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Name of the rule
-        
     - name: priority
-      value: integer
-      description: >
+      value: {{ priority }}
+      description: |
         Priority of the rule
-        
     - name: status
-      value: string
-      description: >
+      value: "{{ status }}"
+      description: |
         Status of the rule
-        
       valid_values: ['ACTIVE', 'INACTIVE']
     - name: system
-      value: boolean
-      description: >
-        Set to `true` for system rules. You can't delete system rules.
-        
+      value: {{ system }}
+      description: |
+        Set to \`true\` for system rules. You can't delete system rules.
     - name: type
-      value: string
-      description: >
+      value: "{{ type }}"
+      description: |
         Rule type
-        
       valid_values: ['RESOURCE_ACCESS']
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -430,18 +471,21 @@ Replaces the configuration of the Policy Rule defined in the specified Custom Au
 ```sql
 REPLACE okta.authorizationservers.rules
 SET 
-data__actions = '{{ actions }}',
-data__conditions = '{{ conditions }}',
-data__name = '{{ name }}',
-data__priority = {{ priority }},
-data__status = '{{ status }}',
-data__system = {{ system }},
-data__type = '{{ type }}'
+actions = '{{ actions }}',
+conditions = '{{ conditions }}',
+name = '{{ name }}',
+priority = {{ priority }},
+status = '{{ status }}',
+system = {{ system }},
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__name = '{{ name }}' --required
-AND data__conditions = '{{ conditions }}' --required
-AND data__type = '{{ type }}' --required
+authServerId = '{{ authServerId }}' --required
+AND policyId = '{{ policyId }}' --required
+AND ruleId = '{{ ruleId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND name = '{{ name }}' --required
+AND conditions = '{{ conditions }}' --required
+AND type = '{{ type }}' --required
 RETURNING
 id,
 name,
@@ -453,8 +497,7 @@ lastUpdated,
 priority,
 status,
 system,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -474,7 +517,10 @@ Deletes a Policy Rule defined in the specified Custom Authorization Server and P
 
 ```sql
 DELETE FROM okta.authorizationservers.rules
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE authServerId = '{{ authServerId }}' --required
+AND policyId = '{{ policyId }}' --required
+AND ruleId = '{{ ruleId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -496,6 +542,9 @@ Activates an authorization server policy rule
 
 ```sql
 EXEC okta.authorizationservers.rules.activate_authorization_server_policy_rule 
+@authServerId='{{ authServerId }}' --required, 
+@policyId='{{ policyId }}' --required, 
+@ruleId='{{ ruleId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -506,6 +555,9 @@ Deactivates an authorization server policy rule
 
 ```sql
 EXEC okta.authorizationservers.rules.deactivate_authorization_server_policy_rule 
+@authServerId='{{ authServerId }}' --required, 
+@policyId='{{ policyId }}' --required, 
+@ruleId='{{ ruleId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

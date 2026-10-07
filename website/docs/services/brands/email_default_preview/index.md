@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>email_default_preview</code> r
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>email_default_preview</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="email_default_preview" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.email_default_preview" /></td></tr>
 </tbody></table>
@@ -88,7 +89,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_email_default_preview"><CopyableCode code="get_email_default_preview" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-templateName"><code>templateName</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-language"><code>language</code></a></td>
     <td>Retrieves a preview of an Email Template's default content. All variable references are populated using the current user's context. For example, `$&#123;user.profile.firstName&#125;`.<br /><br />&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; Defaults to the current user's language given the following:<br />- Custom languages for Okta Email Templates is enabled<br />- An additional language is specified for the `language` parameter<br /></td>
 </tr>
@@ -108,10 +109,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-templateName">
+    <td><CopyableCode code="templateName" /></td>
+    <td><code>string</code></td>
+    <td>The name of the email template</td>
 </tr>
 <tr id="parameter-language">
     <td><CopyableCode code="language" /></td>
@@ -139,7 +150,9 @@ _links,
 body,
 subject
 FROM okta.brands.email_default_preview
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND templateName = '{{ templateName }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND language = '{{ language }}'
 ;
 ```

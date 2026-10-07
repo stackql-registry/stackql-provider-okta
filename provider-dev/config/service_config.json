@@ -1,0 +1,18 @@
+{
+  "pagination": {
+    "requestToken": {
+      "key": "",
+      "location": "request"
+    },
+    "responseToken": {
+      "key": "Link",
+      "location": "header"
+    }
+  },
+  "queryParamPushdown": {
+    "top": {
+      "paramName": "limit",
+      "maxValue": 200
+    }
+  }
+}

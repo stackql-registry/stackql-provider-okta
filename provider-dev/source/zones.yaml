@@ -2,24 +2,17 @@ openapi: 3.0.3
 info:
   title: zones API
   description: okta zones API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/zones:
     get:
       summary: List all network zones
-      description: >-
-        Lists all Network Zones with pagination. A subset of zones can be
-        returned that match a supported filter expression or query.
+      description: |-
+        Lists all Network Zones with pagination. A subset of zones can be returned that match a supported filter expression or query.
 
+        This operation requires URL encoding. For example, `filter=(id eq "nzoul0wf9jyb8xwZm0g3" or id eq "nzoul1MxmGN18NDQT0g3")` is encoded as `filter=%28id+eq+%22nzoul0wf9jyb8xwZm0g3%22+or+id+eq+%22nzoul1MxmGN18NDQT0g3%22%29`.
 
-        This operation requires URL encoding. For example, `filter=(id eq
-        "nzoul0wf9jyb8xwZm0g3" or id eq "nzoul1MxmGN18NDQT0g3")` is encoded as
-        `filter=%28id+eq+%22nzoul0wf9jyb8xwZm0g3%22+or+id+eq+%22nzoul1MxmGN18NDQT0g3%22%29`.
-
-
-        Okta supports filtering on the `id`, `usage`, and `system` properties.
-        See [Filter](https://developer.okta.com/docs/api/#filter) for more
-        information on the expressions that are used in filtering.
+        Okta supports filtering on the `id`, `usage`, and `system` properties. See [Filter](https://developer.okta.com/docs/api/#filter) for more information on the expressions that are used in filtering.
       operationId: listNetworkZones
       parameters:
         - name: after
@@ -48,9 +41,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/NetworkZone'
+                $ref: '#/components/schemas/ListNetworkZonesResponse'
               examples:
                 RetrieveAllZonesWithFilter:
                   $ref: '#/components/examples/RetrieveAllZonesWithFilter'
@@ -69,19 +60,19 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: network_zones
+        wrapperName: ListNetworkZonesResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a network zone
-      description: >-
+      description: |-
         Creates a Network Zone
-
-        * For an IP Network Zone, you must define either `gateways` or
-        `proxies`.
-
-        * For a Dynamic Network Zone, you must define at least one of the
-        following: `asns`, `locations`, or `proxyType`.
-
-        * For an Enhanced Dynamic Network Zone, you must define at least one of
-        the following: `asns`, `locations`, or `ipServiceCategories`.
+        * For an IP Network Zone, you must define either `gateways` or `proxies`.
+        * For a Dynamic Network Zone, you must define at least one of the following: `asns`, `locations`, or `proxyType`.
+        * For an Enhanced Dynamic Network Zone, you must define at least one of the following: `asns`, `locations`, or `ipServiceCategories`.
+        > **Note:** To view all properties for an Enhanced Dynamic Network Zone, select `DYNAMIC_V2` from the `type` dropdown list.
       operationId: createNetworkZone
       x-codegen-request-body-name: zone
       requestBody:
@@ -108,8 +99,7 @@ paths:
                 CreateIPPolicyNetworkZone:
                   $ref: '#/components/examples/CreateIPPolicyNetworkZoneResponse'
                 CreateIPPolicyBlocklistNetworkZone:
-                  $ref: >-
-                    #/components/examples/CreateIPPolicyBlockListNetworkZoneResponse
+                  $ref: '#/components/examples/CreateIPPolicyBlockListNetworkZoneResponse'
                 CreateEDNetworkZone:
                   $ref: '#/components/examples/CreateEDNZResponse'
         '400':
@@ -161,33 +151,20 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathZoneId'
     put:
       summary: Replace a network zone
-      description: >-
-        Replaces a Network Zone by `zoneId`. The replaced Network Zone type must
-        be the same as the existing type.
-
-        You can replace the usage (`POLICY`, `BLOCKLIST`) of a Network Zone by
-        updating the `usage` attribute.
-
+      description: |-
+        Replaces a Network Zone by `zoneId`. The replaced Network Zone type must be the same as the existing type.
+        You can replace the usage (`POLICY`, `BLOCKLIST`) of a Network Zone by updating the `usage` attribute.
 
         **IP exempt zone**<br>
-
-        If you have the IP exempt zone feature enabled, you can allow traffic
-        from specific gateway IPs irrespective of Okta ThreatInsight
-        configurations, blocked network zones, or IP change events within
-        Identity Threat Protection with Okta AI.<br>
-
+        If you have the IP exempt zone feature enabled, you can allow traffic from specific gateway IPs irrespective of Okta ThreatInsight configurations, blocked network zones, or IP change events within Identity Threat Protection with Okta AI.<br>
         <br>
+        When you enable this feature, Okta creates a zone called `DefaultExemptIpZone`. Gateway IPs that you add to this zone always have access to Okta resources. See [IP exempt zone](https://help.okta.com/okta_help.htm?type=oie&id=csh-about-ip-exempt-zone).
 
-        When you enable this feature, Okta creates a zone called
-        `DefaultExemptIpZone`. Gateway IPs that you add to this zone always have
-        access to Okta resources. See [IP exempt
-        zone](https://help.okta.com/okta_help.htm?type=oie&id=csh-about-ip-exempt-zone).
-
-
-        > **Note:** You can't add trusted proxy IPs to this zone, delete the
-        zone, or create additional exempt IP zones.
+        > **Note:** You can't add trusted proxy IPs to this zone, delete the zone, or create additional exempt IP zones.
       operationId: replaceNetworkZone
       x-codegen-request-body-name: zone
       requestBody:
@@ -230,20 +207,15 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathZoneId'
     delete:
       summary: Delete a network zone
-      description: >-
+      description: |-
         Deletes a Network Zone by `zoneId`
-
         > **Notes:**
-
-        > * You can't delete a Network Zone that's used by a
-        [Policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/)
-        or
-        [Rule](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Policy/#tag/Policy/operation/listPolicyRules).
-
-        > * For Okta Identity Engine orgs, you can't delete a Network Zone with
-        an ACTIVE `status`. <x-lifecycle class="oie"></x-lifecycle>
+        > * You can't delete a Network Zone that's used by a [Policy](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/policy/) or [Rule](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/policy/#tag/Policy/operation/listPolicyRules).
+        > * For Okta Identity Engine orgs, you can't delete a Network Zone with an ACTIVE `status`. <x-lifecycle class="oie"></x-lifecycle>
       operationId: deleteNetworkZone
       responses:
         '204':
@@ -264,8 +236,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathZoneId'
+      parameters:
+        - $ref: '#/components/parameters/pathZoneId'
   /api/v1/zones/{zoneId}/lifecycle/activate:
     post:
       summary: Activate a network zone
@@ -296,8 +268,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathZoneId'
+      parameters:
+        - $ref: '#/components/parameters/pathZoneId'
   /api/v1/zones/{zoneId}/lifecycle/deactivate:
     post:
       summary: Deactivate a network zone
@@ -328,8 +300,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathZoneId'
+      parameters:
+        - $ref: '#/components/parameters/pathZoneId'
 components:
   schemas:
     NetworkZone:
@@ -358,27 +330,18 @@ components:
         system:
           type: boolean
           readOnly: true
-          description: >
+          description: |
             Indicates a system Network Zone:
-
             * `true` for system Network Zones
-
             * `false` for custom Network Zones
 
-
             The Okta org provides the following default system Network Zones:
-
             * `LegacyIpZone`
-
             * `BlockedIpZone`
-
             * `DefaultEnhancedDynamicZone`
-
             * `DefaultExemptIpZone`
 
-
-            Admins can modify the name of the default system Network Zone and
-            add up to 5000 gateway or proxy IP entries.
+            Admins can modify the name of the default system Network Zone and add up to 5000 gateway or proxy IP entries.
         type:
           $ref: '#/components/schemas/NetworkZoneType'
         usage:
@@ -414,14 +377,16 @@ components:
         - BLOCKLIST
         - POLICY
     LinksSelfAndLifecycle:
-      allOf:
-        - $ref: '#/components/schemas/LinksSelf'
-        - type: object
-          properties:
-            activate:
-              $ref: '#/components/schemas/HrefObjectActivateLink'
-            deactivate:
-              $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HrefObjectSelfLink'
+        activate:
+          $ref: '#/components/schemas/HrefObjectActivateLink'
+        deactivate:
+          $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      readOnly: true
     Error:
       title: Error
       type: object
@@ -435,49 +400,22 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
           $ref: '#/components/schemas/HrefObjectSelfLink'
       readOnly: true
     HrefObjectActivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to activate the resource
-    HrefObjectDeactivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to deactivate the resource
-    ErrorCause:
-      type: object
-      properties:
-        errorSummary:
-          type: string
-    HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -494,15 +432,97 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to activate the resource
+    HrefObjectDeactivateLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to deactivate the resource
+    ErrorCause:
+      type: object
+      properties:
+        errorSummary:
+          type: string
+    HrefObjectSelfLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -521,6 +541,13 @@ components:
         - GET
         - POST
         - PUT
+    ListNetworkZonesResponse:
+      type: object
+      properties:
+        network_zones:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkZone'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -594,8 +621,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -629,8 +655,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                http://{yourOktaDomain}/api/v1/zones/nzok0oz2xYHOZtIch0g4/lifecycle/deactivate
+              href: http://{yourOktaDomain}/api/v1/zones/nzok0oz2xYHOZtIch0g4/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -657,8 +682,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/zones/nzoy0ox5xADOZtKrh0g6/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/zones/nzoy0ox5xADOZtKrh0g6/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -685,8 +709,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -709,8 +732,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/zones/nzou3u0stMCmgOzXK1d6/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/zones/nzou3u0stMCmgOzXK1d6/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -741,8 +763,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/zones/nzou3u0stMCmgOzXK1d6/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/zones/nzou3u0stMCmgOzXK1d6/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -765,8 +786,7 @@ components:
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://{yourOktaDomain}/api/v1/zones/nzou3u0ssJfZjYsWL1d6/lifecycle/deactivate
+              href: https://{yourOktaDomain}/api/v1/zones/nzou3u0ssJfZjYsWL1d6/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -849,8 +869,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzowb8T5Jh5xuAJ0o0g7/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzowb8T5Jh5xuAJ0o0g7/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -880,8 +899,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzo1qasnPb1kqEq0e0g4/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzo1qasnPb1kqEq0e0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -919,8 +937,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              http://{yourOktaDomain}/api/v1/zones/nzok0oz2xYHOZtIch0g4/lifecycle/deactivate
+            href: http://{yourOktaDomain}/api/v1/zones/nzok0oz2xYHOZtIch0g4/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -950,8 +967,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -981,8 +997,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzoy0ox5xADOZtKrh0g6/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzoy0ox5xADOZtKrh0g6/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1022,8 +1037,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzovw2rFz2YoqmvwZ0g9/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzovw2rFz2YoqmvwZ0g9/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1050,8 +1064,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzodufauoBZYt5fIB0w6/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzodufauoBZYt5fIB0w6/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1093,8 +1106,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzovw2rFz2YoqmvwZ0g9/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzovw2rFz2YoqmvwZ0g9/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1124,8 +1136,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzodufauoBZYt5fIB0w6/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzodufauoBZYt5fIB0w6/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1155,8 +1166,7 @@ components:
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
+            href: https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1186,8 +1196,7 @@ components:
                 - PUT
                 - DELETE
           activate:
-            href: >-
-              https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/activate
+            href: https://{yourOktaDomain}/api/v1/zones/nzowc1U5Jh5xuAK0o0g3/lifecycle/activate
             hints:
               allow:
                 - POST
@@ -1228,7 +1237,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

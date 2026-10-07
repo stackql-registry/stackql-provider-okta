@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>active_idp_signing_keys</code>
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>active_idp_signing_keys</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="active_idp_signing_keys" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.idps.active_idp_signing_keys" /></td></tr>
 </tbody></table>
@@ -38,6 +39,8 @@ The following fields are returned by `SELECT` queries:
     ]}
 >
 <TabItem value="list_active_identity_provider_signing_key">
+
+A [JSON Web Key](https://tools.ietf.org/html/rfc7517) for a signature or encryption credential for an IdP
 
 <table>
 <thead>
@@ -121,7 +124,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_active_identity_provider_signing_key"><CopyableCode code="list_active_identity_provider_signing_key" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-idpId"><code>idpId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists the active signing key credential for an identity provider (IdP)</td>
 </tr>
@@ -141,10 +144,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-idpId">
+    <td><CopyableCode code="idpId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of IdP</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -174,7 +182,8 @@ use,
 x5c,
 x5t#S256
 FROM okta.idps.active_idp_signing_keys
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE idpId = '{{ idpId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

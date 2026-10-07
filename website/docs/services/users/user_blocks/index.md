@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>user_blocks</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>user_blocks</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="user_blocks" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.user_blocks" /></td></tr>
 </tbody></table>
@@ -39,6 +40,8 @@ The following fields are returned by `SELECT` queries:
 >
 <TabItem value="list_user_blocks">
 
+Describes how the account is blocked from access. If `appliesTo` is `ANY_DEVICES`, then the account is blocked for all devices. If `appliesTo` is `UNKNOWN_DEVICES`, then the account is only blocked for unknown devices.
+
 <table>
 <thead>
     <tr>
@@ -51,12 +54,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="appliesTo" /></td>
     <td><code>string</code></td>
-    <td>The devices that the block applies to</td>
+    <td>The devices that the block applies to (ANY_DEVICES, UNKNOWN_DEVICES)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Type of access block</td>
+    <td>Type of access block (DEVICE_BASED)</td>
 </tr>
 </tbody>
 </table>
@@ -81,7 +84,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_user_blocks"><CopyableCode code="list_user_blocks" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists information about how the user is blocked from accessing their account</td>
 </tr>
@@ -101,10 +104,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-id">
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -126,7 +134,8 @@ SELECT
 appliesTo,
 type
 FROM okta.users.user_blocks
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE id = '{{ id }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

@@ -18,16 +18,19 @@ identity_sources service documentation.
 
 :::info[Service Summary]
 
-total resources: __2__  
+total resources: __5__  
 
 :::
 
 ## Resources
 <div class="row">
 <div class="providerDocColumn">
+<a href="/services/identity_sources/group_memberships/">group_memberships</a><br />
+<a href="/services/identity_sources/groups/">groups</a><br />
 <a href="/services/identity_sources/identity_sources/">identity_sources</a>
 </div>
 <div class="providerDocColumn">
-<a href="/services/identity_sources/sessions/">sessions</a>
+<a href="/services/identity_sources/sessions/">sessions</a><br />
+<a href="/services/identity_sources/users/">users</a>
 </div>
 </div>

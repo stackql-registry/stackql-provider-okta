@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>policy_rules</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>policy_rules</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="policy_rules" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.policies.policy_rules" /></td></tr>
 </tbody></table>
@@ -32,71 +33,12 @@ Creates, updates, deletes, gets or lists a <code>policy_rules</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_policy_rules"
+    defaultValue="get_policy_rule"
     values={[
-        { label: 'list_policy_rules', value: 'list_policy_rules' },
-        { label: 'get_policy_rule', value: 'get_policy_rule' }
+        { label: 'get_policy_rule', value: 'get_policy_rule' },
+        { label: 'list_policy_rules', value: 'list_policy_rules' }
     ]}
 >
-<TabItem value="list_policy_rules">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>Identifier for the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Name of the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the rule was created</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td>Timestamp when the rule was last modified</td>
-</tr>
-<tr>
-    <td><CopyableCode code="priority" /></td>
-    <td><code>integer</code></td>
-    <td>Priority of the rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td>Whether or not the rule is active. Use the `activate` query parameter to set the status of a rule.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="system" /></td>
-    <td><code>boolean</code></td>
-    <td>Specifies whether Okta created the policy rule (`system=true`). You can't delete policy rules that have `system` set to `true`.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>Rule type</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_policy_rule">
 
 <table>
@@ -141,7 +83,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Whether or not the rule is active. Use the `activate` query parameter to set the status of a rule.</td>
+    <td>Whether or not the rule is active. Use the `activate` query parameter to set the status of a rule. (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="system" /></td>
@@ -151,7 +93,66 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Rule type</td>
+    <td>Rule type (ACCESS_POLICY, DEVICE_SIGNAL_COLLECTION, ENTITY_RISK, IDP_DISCOVERY, MFA_ENROLL, PASSWORD, POST_AUTH_SESSION, PROFILE_ENROLLMENT, SIGN_ON, SESSION_VIOLATION_DETECTION, CLIENT_UPDATE, IDENTITY_CLAIM_SOURCING)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_policy_rules">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>Identifier for the rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Name of the rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the rule was created</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td>Timestamp when the rule was last modified</td>
+</tr>
+<tr>
+    <td><CopyableCode code="priority" /></td>
+    <td><code>integer</code></td>
+    <td>Priority of the rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td>Whether or not the rule is active. Use the `activate` query parameter to set the status of a rule. (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="system" /></td>
+    <td><code>boolean</code></td>
+    <td>Specifies whether Okta created the policy rule (`system=true`). You can't delete policy rules that have `system` set to `true`.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>Rule type (ACCESS_POLICY, DEVICE_SIGNAL_COLLECTION, ENTITY_RISK, IDP_DISCOVERY, MFA_ENROLL, PASSWORD, POST_AUTH_SESSION, PROFILE_ENROLLMENT, SIGN_ON, SESSION_VIOLATION_DETECTION, CLIENT_UPDATE, IDENTITY_CLAIM_SOURCING)</td>
 </tr>
 </tbody>
 </table>
@@ -174,51 +175,51 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_policy_rules"><CopyableCode code="list_policy_rules" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all policy rules</td>
-</tr>
-<tr>
     <td><a href="#get_policy_rule"><CopyableCode code="get_policy_rule" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a policy rule</td>
 </tr>
 <tr>
+    <td><a href="#list_policy_rules"><CopyableCode code="list_policy_rules" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-limit"><code>limit</code></a></td>
+    <td>Lists all policy rules</td>
+</tr>
+<tr>
     <td><a href="#create_policy_rule"><CopyableCode code="create_policy_rule" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td><a href="#parameter-activate"><code>activate</code></a></td>
-    <td>Creates a policy rule<br /><br />&gt; **Note:** You can't create additional rules for the `PROFILE_ENROLLMENT` or `POST_AUTH_SESSION` policies.</td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-activate"><code>activate</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
+    <td>Creates a policy rule<br /><br />&gt; **Note:** You can't create additional rules for the `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION`, `CLIENT_UPDATE`, or &lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; `IDENTITY_CLAIM_SOURCING` policies.</td>
 </tr>
 <tr>
     <td><a href="#replace_policy_rule"><CopyableCode code="replace_policy_rule" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the properties for a policy rule identified by `policyId` and `ruleId`</td>
 </tr>
 <tr>
     <td><a href="#delete_policy_rule"><CopyableCode code="delete_policy_rule" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a policy rule identified by `policyId` and `ruleId`</td>
 </tr>
 <tr>
     <td><a href="#activate_policy_rule"><CopyableCode code="activate_policy_rule" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates a policy rule identified by `policyId` and `ruleId`</td>
 </tr>
 <tr>
     <td><a href="#deactivate_policy_rule"><CopyableCode code="deactivate_policy_rule" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-policyId"><code>policyId</code></a>, <a href="#parameter-ruleId"><code>ruleId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates a policy rule identified by `policyId` and `ruleId`</td>
 </tr>
@@ -238,15 +239,30 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-policyId">
+    <td><CopyableCode code="policyId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy</td>
+</tr>
+<tr id="parameter-ruleId">
+    <td><CopyableCode code="ruleId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the policy rule</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-activate">
     <td><CopyableCode code="activate" /></td>
-    <td><code>boolean</code></td>
+    <td><code>string</code></td>
     <td>Set this parameter to `false` to create an `INACTIVE` rule.</td>
+</tr>
+<tr id="parameter-limit">
+    <td><CopyableCode code="limit" /></td>
+    <td><code>string</code></td>
+    <td>Defines the number of policy rules returned. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
 </tr>
 </tbody>
 </table>
@@ -254,32 +270,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_policy_rules"
+    defaultValue="get_policy_rule"
     values={[
-        { label: 'list_policy_rules', value: 'list_policy_rules' },
-        { label: 'get_policy_rule', value: 'get_policy_rule' }
+        { label: 'get_policy_rule', value: 'get_policy_rule' },
+        { label: 'list_policy_rules', value: 'list_policy_rules' }
     ]}
 >
-<TabItem value="list_policy_rules">
-
-Lists all policy rules
-
-```sql
-SELECT
-id,
-name,
-_links,
-created,
-lastUpdated,
-priority,
-status,
-system,
-type
-FROM okta.policies.policy_rules
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_policy_rule">
 
 Retrieves a policy rule
@@ -296,7 +292,31 @@ status,
 system,
 type
 FROM okta.policies.policy_rules
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE policyId = '{{ policyId }}' -- required
+AND ruleId = '{{ ruleId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_policy_rules">
+
+Lists all policy rules
+
+```sql
+SELECT
+id,
+name,
+_links,
+created,
+lastUpdated,
+priority,
+status,
+system,
+type
+FROM okta.policies.policy_rules
+WHERE policyId = '{{ policyId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND limit = '{{ limit }}'
 ;
 ```
 </TabItem>
@@ -314,17 +334,19 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="create_policy_rule">
 
-Creates a policy rule<br /><br />&gt; **Note:** You can't create additional rules for the `PROFILE_ENROLLMENT` or `POST_AUTH_SESSION` policies.
+Creates a policy rule<br /><br />&gt; **Note:** You can't create additional rules for the `PROFILE_ENROLLMENT`, `POST_AUTH_SESSION`, `CLIENT_UPDATE`, or &lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; `IDENTITY_CLAIM_SOURCING` policies.
 
 ```sql
 INSERT INTO okta.policies.policy_rules (
-data__name,
-data__priority,
-data__status,
-data__system,
-data__type,
+name,
+priority,
+status,
+system,
+type,
+policyId,
 subdomain,
-activate
+activate,
+limit
 )
 SELECT 
 '{{ name }}',
@@ -332,8 +354,10 @@ SELECT
 '{{ status }}',
 {{ system }},
 '{{ type }}',
+'{{ policyId }}',
 '{{ subdomain }}',
-'{{ activate }}'
+'{{ activate }}',
+'{{ limit }}'
 RETURNING
 id,
 name,
@@ -349,45 +373,48 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: policy_rules
   props:
+    - name: policyId
+      value: "{{ policyId }}"
+      description: Required parameter for the policy_rules resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the policy_rules resource.
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Name of the rule
-        
     - name: priority
-      value: integer
-      description: >
+      value: {{ priority }}
+      description: |
         Priority of the rule
-        
     - name: status
-      value: string
-      description: >
-        Whether or not the rule is active. Use the `activate` query parameter to set the status of a rule.
-        
+      value: "{{ status }}"
+      description: |
+        Whether or not the rule is active. Use the \`activate\` query parameter to set the status of a rule.
       valid_values: ['ACTIVE', 'INACTIVE']
     - name: system
-      value: boolean
-      description: >
-        Specifies whether Okta created the policy rule (`system=true`). You can't delete policy rules that have `system` set to `true`.
-        
+      value: {{ system }}
+      description: |
+        Specifies whether Okta created the policy rule (\`system=true\`). You can't delete policy rules that have \`system\` set to \`true\`.
       default: false
     - name: type
-      value: string
-      description: >
+      value: "{{ type }}"
+      description: |
         Rule type
-        
-      valid_values: ['ACCESS_POLICY', 'DEVICE_SIGNAL_COLLECTION', 'ENTITY_RISK', 'IDP_DISCOVERY', 'MFA_ENROLL', 'PASSWORD', 'POST_AUTH_SESSION', 'PROFILE_ENROLLMENT', 'SIGN_ON']
+      valid_values: ['ACCESS_POLICY', 'DEVICE_SIGNAL_COLLECTION', 'ENTITY_RISK', 'IDP_DISCOVERY', 'MFA_ENROLL', 'PASSWORD', 'POST_AUTH_SESSION', 'PROFILE_ENROLLMENT', 'SIGN_ON', 'SESSION_VIOLATION_DETECTION', 'CLIENT_UPDATE', 'IDENTITY_CLAIM_SOURCING']
     - name: activate
-      value: boolean
-      description: Set this parameter to `false` to create an `INACTIVE` rule.
-```
+      value: "{{ activate }}"
+      description: Set this parameter to \`false\` to create an \`INACTIVE\` rule.
+      description: Set this parameter to \`false\` to create an \`INACTIVE\` rule.
+    - name: limit
+      value: "{{ limit }}"
+      description: Defines the number of policy rules returned. See [Pagination](https://developer.okta.com/docs/api/#pagination).
+      description: Defines the number of policy rules returned. See [Pagination](https://developer.okta.com/docs/api/#pagination).
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -407,13 +434,15 @@ Replaces the properties for a policy rule identified by `policyId` and `ruleId`
 ```sql
 REPLACE okta.policies.policy_rules
 SET 
-data__name = '{{ name }}',
-data__priority = {{ priority }},
-data__status = '{{ status }}',
-data__system = {{ system }},
-data__type = '{{ type }}'
+name = '{{ name }}',
+priority = {{ priority }},
+status = '{{ status }}',
+system = {{ system }},
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+policyId = '{{ policyId }}' --required
+AND ruleId = '{{ ruleId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -423,8 +452,7 @@ lastUpdated,
 priority,
 status,
 system,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -444,7 +472,9 @@ Deletes a policy rule identified by `policyId` and `ruleId`
 
 ```sql
 DELETE FROM okta.policies.policy_rules
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE policyId = '{{ policyId }}' --required
+AND ruleId = '{{ ruleId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -466,6 +496,8 @@ Activates a policy rule identified by `policyId` and `ruleId`
 
 ```sql
 EXEC okta.policies.policy_rules.activate_policy_rule 
+@policyId='{{ policyId }}' --required, 
+@ruleId='{{ ruleId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -476,6 +508,8 @@ Deactivates a policy rule identified by `policyId` and `ruleId`
 
 ```sql
 EXEC okta.policies.policy_rules.deactivate_policy_rule 
+@policyId='{{ policyId }}' --required, 
+@ruleId='{{ ruleId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>instance_secrets</code> resour
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>instance_secrets</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="instance_secrets" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.integrations.instance_secrets" /></td></tr>
 </tbody></table>
@@ -81,7 +82,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td>Status of the API Service Integration instance Secret (example: ACTIVE)</td>
+    <td>Status of the API Service Integration instance Secret (ACTIVE, INACTIVE) (example: ACTIVE)</td>
 </tr>
 </tbody>
 </table>
@@ -106,35 +107,35 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_api_service_integration_instance_secrets"><CopyableCode code="list_api_service_integration_instance_secrets" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all client secrets for an API Service Integration instance by `apiServiceId`</td>
 </tr>
 <tr>
     <td><a href="#create_api_service_integration_instance_secret"><CopyableCode code="create_api_service_integration_instance_secret" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Creates an API Service Integration instance Secret object with a new active client secret. You can create up to two Secret objects. An error is returned if you attempt to create more than two Secret objects.</td>
 </tr>
 <tr>
     <td><a href="#delete_api_service_integration_instance_secret"><CopyableCode code="delete_api_service_integration_instance_secret" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-secretId"><code>secretId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes an API Service Integration instance Secret by `secretId`. You can only delete an inactive Secret.</td>
 </tr>
 <tr>
     <td><a href="#activate_api_service_integration_instance_secret"><CopyableCode code="activate_api_service_integration_instance_secret" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-secretId"><code>secretId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates an API Service Integration instance Secret by `secretId`</td>
 </tr>
 <tr>
     <td><a href="#deactivate_api_service_integration_instance_secret"><CopyableCode code="deactivate_api_service_integration_instance_secret" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-apiServiceId"><code>apiServiceId</code></a>, <a href="#parameter-secretId"><code>secretId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates an API Service Integration instance Secret by `secretId`</td>
 </tr>
@@ -154,10 +155,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-apiServiceId">
+    <td><CopyableCode code="apiServiceId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the API Service Integration instance (example: 000lr2rLjZ6NsGn1P0g3)</td>
+</tr>
+<tr id="parameter-secretId">
+    <td><CopyableCode code="secretId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the API Service Integration instance Secret (example: ocs2f4zrZbs8nUa7p0g4)</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -184,7 +195,8 @@ lastUpdated,
 secret_hash,
 status
 FROM okta.integrations.instance_secrets
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE apiServiceId = '{{ apiServiceId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -206,9 +218,11 @@ Creates an API Service Integration instance Secret object with a new active clie
 
 ```sql
 INSERT INTO okta.integrations.instance_secrets (
+apiServiceId,
 subdomain
 )
 SELECT 
+'{{ apiServiceId }}',
 '{{ subdomain }}'
 RETURNING
 id,
@@ -223,14 +237,17 @@ status
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: instance_secrets
   props:
-    - name: subdomain
-      value: string
+    - name: apiServiceId
+      value: "{{ apiServiceId }}"
       description: Required parameter for the instance_secrets resource.
-```
+    - name: subdomain
+      value: "{{ subdomain }}"
+      description: Required parameter for the instance_secrets resource.
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -249,7 +266,9 @@ Deletes an API Service Integration instance Secret by `secretId`. You can only d
 
 ```sql
 DELETE FROM okta.integrations.instance_secrets
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE apiServiceId = '{{ apiServiceId }}' --required
+AND secretId = '{{ secretId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -271,6 +290,8 @@ Activates an API Service Integration instance Secret by `secretId`
 
 ```sql
 EXEC okta.integrations.instance_secrets.activate_api_service_integration_instance_secret 
+@apiServiceId='{{ apiServiceId }}' --required, 
+@secretId='{{ secretId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -281,6 +302,8 @@ Deactivates an API Service Integration instance Secret by `secretId`
 
 ```sql
 EXEC okta.integrations.instance_secrets.deactivate_api_service_integration_instance_secret 
+@apiServiceId='{{ apiServiceId }}' --required, 
+@secretId='{{ secretId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>authorization_servers</code> r
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>authorization_servers</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="authorization_servers" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authorizationservers.authorization_servers" /></td></tr>
 </tbody></table>
@@ -32,96 +33,12 @@ Creates, updates, deletes, gets or lists an <code>authorization_servers</code> r
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_authorization_servers"
+    defaultValue="get_authorization_server"
     values={[
-        { label: 'list_authorization_servers', value: 'list_authorization_servers' },
-        { label: 'get_authorization_server', value: 'get_authorization_server' }
+        { label: 'get_authorization_server', value: 'get_authorization_server' },
+        { label: 'list_authorization_servers', value: 'list_authorization_servers' }
     ]}
 >
-<TabItem value="list_authorization_servers">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>The ID of the custom authorization server</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>The name of the custom authorization server</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="accessTokenEncryptedResponseAlgorithm" /></td>
-    <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="audiences" /></td>
-    <td><code>array</code></td>
-    <td>The recipients that the tokens are intended for. This becomes the `aud` claim in an access token. Okta currently supports only one audience.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string (date-time)</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="credentials" /></td>
-    <td><code>object</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="description" /></td>
-    <td><code>string</code></td>
-    <td>The description of the custom authorization server</td>
-</tr>
-<tr>
-    <td><CopyableCode code="issuer" /></td>
-    <td><code>string</code></td>
-    <td>The complete URL for the custom authorization server. This becomes the `iss` claim in an access token.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="issuerMode" /></td>
-    <td><code>string</code></td>
-    <td>Indicates which value is specified in the issuer of the tokens that a custom authorization server returns: the Okta org domain URL or a custom domain URL.  `issuerMode` is visible if you have a custom URL domain configured or the Dynamic Issuer Mode feature enabled. If you have a custom URL domain configured, you can set a custom domain URL in a custom authorization server, and this property is returned in the appropriate responses.  When set to `ORG_URL`, then in responses, `issuer` is the Okta org domain URL: `https://$&#123;yourOktaDomain&#125;`.  When set to `CUSTOM_URL`, then in responses, `issuer` is the custom domain URL configured in the administration user interface.  When set to `DYNAMIC`, then in responses, `issuer` is the custom domain URL if the OAuth 2.0 request was sent to the custom domain, or is the Okta org's domain URL if the OAuth 2.0 request was sent to the original Okta org domain.  After you configure a custom URL domain, all new custom authorization servers use `CUSTOM_URL` by default. If the Dynamic Issuer Mode feature is enabled, then all new custom authorization servers use `DYNAMIC` by default. All existing custom authorization servers continue to use the original value until they're changed using the Admin Console or the API. This way, existing integrations with the client and resource server continue to work after the feature is enabled.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="jwks" /></td>
-    <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server</td>
-</tr>
-<tr>
-    <td><CopyableCode code="jwks_uri" /></td>
-    <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string (date-time)</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_authorization_server">
 
 <table>
@@ -151,7 +68,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="accessTokenEncryptedResponseAlgorithm" /></td>
     <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed.</td>
+    <td>The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed. (RSA-OAEP-256, RSA-OAEP-384, RSA-OAEP-512)</td>
 </tr>
 <tr>
     <td><CopyableCode code="audiences" /></td>
@@ -186,12 +103,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="jwks" /></td>
     <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server</td>
+    <td>A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server</td>
 </tr>
 <tr>
     <td><CopyableCode code="jwks_uri" /></td>
     <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server</td>
+    <td>URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdated" /></td>
@@ -201,7 +118,91 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
+    <td> (ACTIVE, INACTIVE)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_authorization_servers">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the custom authorization server</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>The name of the custom authorization server</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="accessTokenEncryptedResponseAlgorithm" /></td>
+    <td><code>string</code></td>
+    <td>The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed. (RSA-OAEP-256, RSA-OAEP-384, RSA-OAEP-512)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="audiences" /></td>
+    <td><code>array</code></td>
+    <td>The recipients that the tokens are intended for. This becomes the `aud` claim in an access token. Okta currently supports only one audience.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string (date-time)</code></td>
     <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="credentials" /></td>
+    <td><code>object</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="description" /></td>
+    <td><code>string</code></td>
+    <td>The description of the custom authorization server</td>
+</tr>
+<tr>
+    <td><CopyableCode code="issuer" /></td>
+    <td><code>string</code></td>
+    <td>The complete URL for the custom authorization server. This becomes the `iss` claim in an access token.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="issuerMode" /></td>
+    <td><code>string</code></td>
+    <td>Indicates which value is specified in the issuer of the tokens that a custom authorization server returns: the Okta org domain URL or a custom domain URL.  `issuerMode` is visible if you have a custom URL domain configured or the Dynamic Issuer Mode feature enabled. If you have a custom URL domain configured, you can set a custom domain URL in a custom authorization server, and this property is returned in the appropriate responses.  When set to `ORG_URL`, then in responses, `issuer` is the Okta org domain URL: `https://$&#123;yourOktaDomain&#125;`.  When set to `CUSTOM_URL`, then in responses, `issuer` is the custom domain URL configured in the administration user interface.  When set to `DYNAMIC`, then in responses, `issuer` is the custom domain URL if the OAuth 2.0 request was sent to the custom domain, or is the Okta org's domain URL if the OAuth 2.0 request was sent to the original Okta org domain.  After you configure a custom URL domain, all new custom authorization servers use `CUSTOM_URL` by default. If the Dynamic Issuer Mode feature is enabled, then all new custom authorization servers use `DYNAMIC` by default. All existing custom authorization servers continue to use the original value until they're changed using the Admin Console or the API. This way, existing integrations with the client and resource server continue to work after the feature is enabled.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="jwks" /></td>
+    <td><code>object</code></td>
+    <td>A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server</td>
+</tr>
+<tr>
+    <td><CopyableCode code="jwks_uri" /></td>
+    <td><code>string</code></td>
+    <td>URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string (date-time)</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td> (ACTIVE, INACTIVE)</td>
 </tr>
 </tbody>
 </table>
@@ -224,18 +225,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_authorization_server"><CopyableCode code="get_authorization_server" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves an authorization server</td>
+</tr>
+<tr>
     <td><a href="#list_authorization_servers"><CopyableCode code="list_authorization_servers" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-q"><code>q</code></a>, <a href="#parameter-limit"><code>limit</code></a>, <a href="#parameter-after"><code>after</code></a></td>
     <td>Lists all custom authorization servers in the org</td>
-</tr>
-<tr>
-    <td><a href="#get_authorization_server"><CopyableCode code="get_authorization_server" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves an authorization server</td>
 </tr>
 <tr>
     <td><a href="#create_authorization_server"><CopyableCode code="create_authorization_server" /></a></td>
@@ -247,28 +248,28 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#replace_authorization_server"><CopyableCode code="replace_authorization_server" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces an authorization server</td>
 </tr>
 <tr>
     <td><a href="#delete_authorization_server"><CopyableCode code="delete_authorization_server" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes an authorization server</td>
 </tr>
 <tr>
     <td><a href="#activate_authorization_server"><CopyableCode code="activate_authorization_server" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates an authorization server</td>
 </tr>
 <tr>
     <td><a href="#deactivate_authorization_server"><CopyableCode code="deactivate_authorization_server" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authServerId"><code>authServerId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates an authorization server</td>
 </tr>
@@ -288,10 +289,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-authServerId">
+    <td><CopyableCode code="authServerId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the Authorization Server</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
@@ -314,12 +320,38 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_authorization_servers"
+    defaultValue="get_authorization_server"
     values={[
-        { label: 'list_authorization_servers', value: 'list_authorization_servers' },
-        { label: 'get_authorization_server', value: 'get_authorization_server' }
+        { label: 'get_authorization_server', value: 'get_authorization_server' },
+        { label: 'list_authorization_servers', value: 'list_authorization_servers' }
     ]}
 >
+<TabItem value="get_authorization_server">
+
+Retrieves an authorization server
+
+```sql
+SELECT
+id,
+name,
+_links,
+accessTokenEncryptedResponseAlgorithm,
+audiences,
+created,
+credentials,
+description,
+issuer,
+issuerMode,
+jwks,
+jwks_uri,
+lastUpdated,
+status
+FROM okta.authorizationservers.authorization_servers
+WHERE authServerId = '{{ authServerId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 <TabItem value="list_authorization_servers">
 
 Lists all custom authorization servers in the org
@@ -348,31 +380,6 @@ AND after = '{{ after }}'
 ;
 ```
 </TabItem>
-<TabItem value="get_authorization_server">
-
-Retrieves an authorization server
-
-```sql
-SELECT
-id,
-name,
-_links,
-accessTokenEncryptedResponseAlgorithm,
-audiences,
-created,
-credentials,
-description,
-issuer,
-issuerMode,
-jwks,
-jwks_uri,
-lastUpdated,
-status
-FROM okta.authorizationservers.authorization_servers
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 </Tabs>
 
 
@@ -391,16 +398,16 @@ Creates an authorization server
 
 ```sql
 INSERT INTO okta.authorizationservers.authorization_servers (
-data__accessTokenEncryptedResponseAlgorithm,
-data__audiences,
-data__credentials,
-data__description,
-data__issuer,
-data__issuerMode,
-data__jwks,
-data__jwks_uri,
-data__name,
-data__status,
+accessTokenEncryptedResponseAlgorithm,
+audiences,
+credentials,
+description,
+issuer,
+issuerMode,
+jwks,
+jwks_uri,
+name,
+status,
 subdomain
 )
 SELECT 
@@ -435,70 +442,71 @@ status
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: authorization_servers
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the authorization_servers resource.
     - name: accessTokenEncryptedResponseAlgorithm
-      value: string
-      description: >
-        <x-lifecycle-container><x-lifecycle class="ea"></x-lifecycle></x-lifecycle-container>The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed.
-        
+      value: "{{ accessTokenEncryptedResponseAlgorithm }}"
+      description: |
+        The algorithm for encrypting access tokens issued by this authorization server. If this is requested, the response is signed, and then encrypted. The result is a nested JWT. The default, if omitted, is that no encryption is performed.
       valid_values: ['RSA-OAEP-256', 'RSA-OAEP-384', 'RSA-OAEP-512']
     - name: audiences
-      value: array
-      description: >
-        The recipients that the tokens are intended for. This becomes the `aud` claim in an access token. Okta currently supports only one audience.
-        
+      value:
+        - "{{ audiences }}"
+      description: |
+        The recipients that the tokens are intended for. This becomes the \`aud\` claim in an access token. Okta currently supports only one audience.
     - name: credentials
-      value: object
+      value:
+        signing:
+          kid: "{{ kid }}"
+          lastRotated: "{{ lastRotated }}"
+          nextRotation: "{{ nextRotation }}"
+          rotationMode: "{{ rotationMode }}"
+          use: "{{ use }}"
     - name: description
-      value: string
-      description: >
+      value: "{{ description }}"
+      description: |
         The description of the custom authorization server
-        
     - name: issuer
-      value: string
-      description: >
-        The complete URL for the custom authorization server. This becomes the `iss` claim in an access token.
-        
+      value: "{{ issuer }}"
+      description: |
+        The complete URL for the custom authorization server. This becomes the \`iss\` claim in an access token.
     - name: issuerMode
-      value: string
-      description: >
+      value: "{{ issuerMode }}"
+      description: |
         Indicates which value is specified in the issuer of the tokens that a custom authorization server returns: the Okta org domain URL or a custom domain URL.
-
-`issuerMode` is visible if you have a custom URL domain configured or the Dynamic Issuer Mode feature enabled. If you have a custom URL domain configured, you can set a custom domain URL in a custom authorization server, and this property is returned in the appropriate responses.
-
-When set to `ORG_URL`, then in responses, `issuer` is the Okta org domain URL: `https://${yourOktaDomain}`.
-
-When set to `CUSTOM_URL`, then in responses, `issuer` is the custom domain URL configured in the administration user interface.
-
-When set to `DYNAMIC`, then in responses, `issuer` is the custom domain URL if the OAuth 2.0 request was sent to the custom domain, or is the Okta org's domain URL if the OAuth 2.0 request was sent to the original Okta org domain.
-
-After you configure a custom URL domain, all new custom authorization servers use `CUSTOM_URL` by default. If the Dynamic Issuer Mode feature is enabled, then all new custom authorization servers use `DYNAMIC` by default. All existing custom authorization servers continue to use the original value until they're changed using the Admin Console or the API. This way, existing integrations with the client and resource server continue to work after the feature is enabled.
-        
+        \`issuerMode\` is visible if you have a custom URL domain configured or the Dynamic Issuer Mode feature enabled. If you have a custom URL domain configured, you can set a custom domain URL in a custom authorization server, and this property is returned in the appropriate responses.
+        When set to \`ORG_URL\`, then in responses, \`issuer\` is the Okta org domain URL: \`https://\${yourOktaDomain}\`.
+        When set to \`CUSTOM_URL\`, then in responses, \`issuer\` is the custom domain URL configured in the administration user interface.
+        When set to \`DYNAMIC\`, then in responses, \`issuer\` is the custom domain URL if the OAuth 2.0 request was sent to the custom domain, or is the Okta org's domain URL if the OAuth 2.0 request was sent to the original Okta org domain.
+        After you configure a custom URL domain, all new custom authorization servers use \`CUSTOM_URL\` by default. If the Dynamic Issuer Mode feature is enabled, then all new custom authorization servers use \`DYNAMIC\` by default. All existing custom authorization servers continue to use the original value until they're changed using the Admin Console or the API. This way, existing integrations with the client and resource server continue to work after the feature is enabled.
     - name: jwks
-      value: object
-      description: >
-        <x-lifecycle-container><x-lifecycle class="ea"></x-lifecycle></x-lifecycle-container>A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server
-        
+      description: |
+        A [JSON Web Key Set](https://tools.ietf.org/html/rfc7517#section-5) for encrypting JWTs minted by the custom authorization server
+      value:
+        keys:
+          - e: "{{ e }}"
+            kid: "{{ kid }}"
+            kty: "{{ kty }}"
+            n: "{{ n }}"
+            status: "{{ status }}"
+            use: "{{ use }}"
     - name: jwks_uri
-      value: string
-      description: >
-        <x-lifecycle-container><x-lifecycle class="ea"></x-lifecycle></x-lifecycle-container>URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server
-        
+      value: "{{ jwks_uri }}"
+      description: |
+        URL string that references a JSON Web Key Set for encrypting JWTs minted by the custom authorization server
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         The name of the custom authorization server
-        
     - name: status
-      value: string
+      value: "{{ status }}"
       valid_values: ['ACTIVE', 'INACTIVE']
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -518,18 +526,19 @@ Replaces an authorization server
 ```sql
 REPLACE okta.authorizationservers.authorization_servers
 SET 
-data__accessTokenEncryptedResponseAlgorithm = '{{ accessTokenEncryptedResponseAlgorithm }}',
-data__audiences = '{{ audiences }}',
-data__credentials = '{{ credentials }}',
-data__description = '{{ description }}',
-data__issuer = '{{ issuer }}',
-data__issuerMode = '{{ issuerMode }}',
-data__jwks = '{{ jwks }}',
-data__jwks_uri = '{{ jwks_uri }}',
-data__name = '{{ name }}',
-data__status = '{{ status }}'
+accessTokenEncryptedResponseAlgorithm = '{{ accessTokenEncryptedResponseAlgorithm }}',
+audiences = '{{ audiences }}',
+credentials = '{{ credentials }}',
+description = '{{ description }}',
+issuer = '{{ issuer }}',
+issuerMode = '{{ issuerMode }}',
+jwks = '{{ jwks }}',
+jwks_uri = '{{ jwks_uri }}',
+name = '{{ name }}',
+status = '{{ status }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+authServerId = '{{ authServerId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -544,8 +553,7 @@ issuerMode,
 jwks,
 jwks_uri,
 lastUpdated,
-status
-;
+status;
 ```
 </TabItem>
 </Tabs>
@@ -565,7 +573,8 @@ Deletes an authorization server
 
 ```sql
 DELETE FROM okta.authorizationservers.authorization_servers
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE authServerId = '{{ authServerId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -587,6 +596,7 @@ Activates an authorization server
 
 ```sql
 EXEC okta.authorizationservers.authorization_servers.activate_authorization_server 
+@authServerId='{{ authServerId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -597,6 +607,7 @@ Deactivates an authorization server
 
 ```sql
 EXEC okta.authorizationservers.authorization_servers.deactivate_authorization_server 
+@authServerId='{{ authServerId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

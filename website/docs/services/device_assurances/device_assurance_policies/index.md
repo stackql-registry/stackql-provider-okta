@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>device_assurance_policies</code
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>device_assurance_policies</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="device_assurance_policies" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.device_assurances.device_assurance_policies" /></td></tr>
 </tbody></table>
@@ -32,81 +33,12 @@ Creates, updates, deletes, gets or lists a <code>device_assurance_policies</code
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_device_assurance_policies"
+    defaultValue="get_device_assurance_policy"
     values={[
-        { label: 'list_device_assurance_policies', value: 'list_device_assurance_policies' },
-        { label: 'get_device_assurance_policy', value: 'get_device_assurance_policy' }
+        { label: 'get_device_assurance_policy', value: 'get_device_assurance_policy' },
+        { label: 'list_device_assurance_policies', value: 'list_device_assurance_policies' }
     ]}
 >
-<TabItem value="list_device_assurance_policies">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Display name of the device assurance policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="createdBy" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="createdDate" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="devicePostureChecks" /></td>
-    <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;Represents the Device Posture Checks configuration for the device assurance policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="displayRemediationMode" /></td>
-    <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance (example: SHOW)</td>
-</tr>
-<tr>
-    <td><CopyableCode code="gracePeriod" /></td>
-    <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;Represents the Grace Period configuration for the device assurance policy</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdate" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdatedBy" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="platform" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_device_assurance_policy">
 
 <table>
@@ -144,19 +76,14 @@ The following fields are returned by `SELECT` queries:
     <td></td>
 </tr>
 <tr>
-    <td><CopyableCode code="devicePostureChecks" /></td>
-    <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;Represents the Device Posture Checks configuration for the device assurance policy</td>
-</tr>
-<tr>
     <td><CopyableCode code="displayRemediationMode" /></td>
     <td><code>string</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance (example: SHOW)</td>
+    <td>Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance (HIDE, SHOW) (example: SHOW)</td>
 </tr>
 <tr>
     <td><CopyableCode code="gracePeriod" /></td>
     <td><code>object</code></td>
-    <td>&lt;x-lifecycle-container&gt;&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt;&lt;/x-lifecycle-container&gt;Represents the Grace Period configuration for the device assurance policy</td>
+    <td>Represents the Grace Period configuration for the device assurance policy</td>
 </tr>
 <tr>
     <td><CopyableCode code="lastUpdate" /></td>
@@ -171,7 +98,71 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="platform" /></td>
     <td><code>string</code></td>
+    <td> (ANDROID, CHROMEOS, IOS, MACOS, WINDOWS)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_device_assurance_policies">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
     <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Display name of the device assurance policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="createdBy" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="createdDate" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="displayRemediationMode" /></td>
+    <td><code>string</code></td>
+    <td>Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance (HIDE, SHOW) (example: SHOW)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="gracePeriod" /></td>
+    <td><code>object</code></td>
+    <td>Represents the Grace Period configuration for the device assurance policy</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdate" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdatedBy" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
+<tr>
+    <td><CopyableCode code="platform" /></td>
+    <td><code>string</code></td>
+    <td> (ANDROID, CHROMEOS, IOS, MACOS, WINDOWS)</td>
 </tr>
 </tbody>
 </table>
@@ -194,18 +185,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_device_assurance_policy"><CopyableCode code="get_device_assurance_policy" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-deviceAssuranceId"><code>deviceAssuranceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a device assurance policy by `deviceAssuranceId`</td>
+</tr>
+<tr>
     <td><a href="#list_device_assurance_policies"><CopyableCode code="list_device_assurance_policies" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all device assurance policies</td>
-</tr>
-<tr>
-    <td><a href="#get_device_assurance_policy"><CopyableCode code="get_device_assurance_policy" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a device assurance policy by `deviceAssuranceId`</td>
 </tr>
 <tr>
     <td><a href="#create_device_assurance_policy"><CopyableCode code="create_device_assurance_policy" /></a></td>
@@ -217,14 +208,14 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#replace_device_assurance_policy"><CopyableCode code="replace_device_assurance_policy" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-deviceAssuranceId"><code>deviceAssuranceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a device assurance policy by `deviceAssuranceId`</td>
 </tr>
 <tr>
     <td><a href="#delete_device_assurance_policy"><CopyableCode code="delete_device_assurance_policy" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-deviceAssuranceId"><code>deviceAssuranceId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a device assurance policy by `deviceAssuranceId`. If the device assurance policy is currently being used in the org Authentication Policies, the delete will not be allowed.</td>
 </tr>
@@ -244,10 +235,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-deviceAssuranceId">
+    <td><CopyableCode code="deviceAssuranceId" /></td>
+    <td><code>string</code></td>
+    <td>Id of the device assurance policy</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -255,34 +251,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_device_assurance_policies"
+    defaultValue="get_device_assurance_policy"
     values={[
-        { label: 'list_device_assurance_policies', value: 'list_device_assurance_policies' },
-        { label: 'get_device_assurance_policy', value: 'get_device_assurance_policy' }
+        { label: 'get_device_assurance_policy', value: 'get_device_assurance_policy' },
+        { label: 'list_device_assurance_policies', value: 'list_device_assurance_policies' }
     ]}
 >
-<TabItem value="list_device_assurance_policies">
-
-Lists all device assurance policies
-
-```sql
-SELECT
-id,
-name,
-_links,
-createdBy,
-createdDate,
-devicePostureChecks,
-displayRemediationMode,
-gracePeriod,
-lastUpdate,
-lastUpdatedBy,
-platform
-FROM okta.device_assurances.device_assurance_policies
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_device_assurance_policy">
 
 Retrieves a device assurance policy by `deviceAssuranceId`
@@ -294,7 +268,28 @@ name,
 _links,
 createdBy,
 createdDate,
-devicePostureChecks,
+displayRemediationMode,
+gracePeriod,
+lastUpdate,
+lastUpdatedBy,
+platform
+FROM okta.device_assurances.device_assurance_policies
+WHERE deviceAssuranceId = '{{ deviceAssuranceId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_device_assurance_policies">
+
+Lists all device assurance policies
+
+```sql
+SELECT
+id,
+name,
+_links,
+createdBy,
+createdDate,
 displayRemediationMode,
 gracePeriod,
 lastUpdate,
@@ -323,15 +318,13 @@ Creates a new device assurance policy
 
 ```sql
 INSERT INTO okta.device_assurances.device_assurance_policies (
-data__devicePostureChecks,
-data__displayRemediationMode,
-data__gracePeriod,
-data__name,
-data__platform,
+displayRemediationMode,
+gracePeriod,
+name,
+platform,
 subdomain
 )
 SELECT 
-'{{ devicePostureChecks }}',
 '{{ displayRemediationMode }}',
 '{{ gracePeriod }}',
 '{{ name }}',
@@ -343,7 +336,6 @@ name,
 _links,
 createdBy,
 createdDate,
-devicePostureChecks,
 displayRemediationMode,
 gracePeriod,
 lastUpdate,
@@ -354,38 +346,32 @@ platform
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: device_assurance_policies
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the device_assurance_policies resource.
-    - name: devicePostureChecks
-      value: object
-      description: >
-        <x-lifecycle-container><x-lifecycle class="ea"></x-lifecycle></x-lifecycle-container>Represents the Device Posture Checks configuration for the device assurance policy
-        
     - name: displayRemediationMode
-      value: string
-      description: >
-        <x-lifecycle-container><x-lifecycle class="ea"></x-lifecycle></x-lifecycle-container>Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance
-        
+      value: "{{ displayRemediationMode }}"
+      description: |
+        Represents the remediation mode of this device assurance policy when users are denied access due to device noncompliance
       valid_values: ['HIDE', 'SHOW']
     - name: gracePeriod
-      value: object
-      description: >
-        <x-lifecycle-container><x-lifecycle class="ea"></x-lifecycle></x-lifecycle-container>Represents the Grace Period configuration for the device assurance policy
-        
+      description: |
+        Represents the Grace Period configuration for the device assurance policy
+      value:
+        expiry: "{{ expiry }}"
+        type: "{{ type }}"
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Display name of the device assurance policy
-        
     - name: platform
-      value: string
+      value: "{{ platform }}"
       valid_values: ['ANDROID', 'CHROMEOS', 'IOS', 'MACOS', 'WINDOWS']
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -405,26 +391,24 @@ Replaces a device assurance policy by `deviceAssuranceId`
 ```sql
 REPLACE okta.device_assurances.device_assurance_policies
 SET 
-data__devicePostureChecks = '{{ devicePostureChecks }}',
-data__displayRemediationMode = '{{ displayRemediationMode }}',
-data__gracePeriod = '{{ gracePeriod }}',
-data__name = '{{ name }}',
-data__platform = '{{ platform }}'
+displayRemediationMode = '{{ displayRemediationMode }}',
+gracePeriod = '{{ gracePeriod }}',
+name = '{{ name }}',
+platform = '{{ platform }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+deviceAssuranceId = '{{ deviceAssuranceId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
 _links,
 createdBy,
 createdDate,
-devicePostureChecks,
 displayRemediationMode,
 gracePeriod,
 lastUpdate,
 lastUpdatedBy,
-platform
-;
+platform;
 ```
 </TabItem>
 </Tabs>
@@ -444,7 +428,8 @@ Deletes a device assurance policy by `deviceAssuranceId`. If the device assuranc
 
 ```sql
 DELETE FROM okta.device_assurances.device_assurance_policies
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE deviceAssuranceId = '{{ deviceAssuranceId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

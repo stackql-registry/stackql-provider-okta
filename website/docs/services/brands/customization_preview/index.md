@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>customization_preview</code> re
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>customization_preview</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="customization_preview" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.customization_preview" /></td></tr>
 </tbody></table>
@@ -88,7 +89,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_customization_preview"><CopyableCode code="get_customization_preview" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-templateName"><code>templateName</code></a>, <a href="#parameter-customizationId"><code>customizationId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a Preview of an Email Customization. All variable references are populated from the current user's context. For example, `$&#123;user.profile.firstName&#125;`.<br /><br />&lt;x-lifecycle class="ea"&gt;&lt;/x-lifecycle&gt; If Custom languages for Okta Email Templates is disabled, requests for the preview of an additional language customization by ID return a `404 Not Found` error response.<br /></td>
 </tr>
@@ -108,10 +109,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
+<tr id="parameter-customizationId">
+    <td><CopyableCode code="customizationId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the email customization</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-templateName">
+    <td><CopyableCode code="templateName" /></td>
+    <td><code>string</code></td>
+    <td>The name of the email template</td>
 </tr>
 </tbody>
 </table>
@@ -134,7 +150,10 @@ _links,
 body,
 subject
 FROM okta.brands.customization_preview
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND templateName = '{{ templateName }}' -- required
+AND customizationId = '{{ customizationId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

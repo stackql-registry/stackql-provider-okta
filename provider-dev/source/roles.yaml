@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: roles API
   description: okta roles API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/roles/{roleRef}/subscriptions:
     get:
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: '#/components/schemas/Subscription'
-                type: array
+                $ref: '#/components/schemas/ListSubscriptionsRoleResponse'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '404':
@@ -33,8 +31,13 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathRoleRef'
+      parameters:
+        - $ref: '#/components/parameters/pathRoleRef'
+      x-stackql-bare-array-wrap:
+        wrapperKey: subscriptions_role
+        wrapperName: ListSubscriptionsRoleResponse
+        mediaType: application/json
+        scalar: false
   /api/v1/roles/{roleRef}/subscriptions/{notificationType}:
     get:
       summary: Retrieve a subscription for a role
@@ -62,16 +65,13 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathRoleRef'
-      - $ref: '#/components/parameters/pathNotificationType'
+      parameters:
+        - $ref: '#/components/parameters/pathRoleRef'
+        - $ref: '#/components/parameters/pathNotificationType'
   /api/v1/roles/{roleRef}/subscriptions/{notificationType}/subscribe:
     post:
       summary: Subscribe a role to a specific notification type
-      description: >-
-        Subscribes a Role to a specified notification type. Changes to Role
-        subscriptions override the subscription status of any individual users
-        with the Role.
+      description: Subscribes a Role to a specified notification type. Changes to Role subscriptions override the subscription status of any individual users with the Role.
       operationId: subscribeByNotificationTypeRole
       responses:
         '200':
@@ -91,16 +91,13 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathRoleRef'
-      - $ref: '#/components/parameters/pathNotificationType'
+      parameters:
+        - $ref: '#/components/parameters/pathRoleRef'
+        - $ref: '#/components/parameters/pathNotificationType'
   /api/v1/roles/{roleRef}/subscriptions/{notificationType}/unsubscribe:
     post:
       summary: Unsubscribe a role from a specific notification type
-      description: >-
-        Unsubscribes a Role from a specified notification type. Changes to Role
-        subscriptions override the subscription status of any individual users
-        with the Role.
+      description: Unsubscribes a Role from a specified notification type. Changes to Role subscriptions override the subscription status of any individual users with the Role.
       operationId: unsubscribeByNotificationTypeRole
       responses:
         '200':
@@ -120,9 +117,9 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathRoleRef'
-      - $ref: '#/components/parameters/pathNotificationType'
+      parameters:
+        - $ref: '#/components/parameters/pathRoleRef'
+        - $ref: '#/components/parameters/pathNotificationType'
 components:
   schemas:
     Subscription:
@@ -147,40 +144,41 @@ components:
               $ref: '#/components/schemas/HrefObject'
           readOnly: true
     RoleType:
-      description: Standard role type
+      title: roleType
+      description: |-
+        | Role type                    | Description                                                 |
+        |------------------------------|-------------------------------------------------------------|
+        | ACCESS_CERTIFICATIONS_ADMIN  | Access Certifications Administrator IAM-based standard role |
+        | ACCESS_REQUESTS_ADMIN        | Access Requests Administrator IAM-based standard role       |
+        | API_ACCESS_MANAGEMENT_ADMIN  | Access Management Administrator standard role               |
+        | APP_ADMIN                    | Application Administrator standard role                     |
+        | CUSTOM                       | Custom admin role                                           |
+        | GROUP_MEMBERSHIP_ADMIN       | Group Membership Administrator standard role                |
+        | HELP_DESK_ADMIN              | Help Desk Administrator standard role                       |
+        | ORG_ADMIN                    | Organizational Administrator standard role                  |
+        | READ_ONLY_ADMIN              | Read-Only Administrator standard role                       |
+        | REPORT_ADMIN                 | Report Administrator standard role                          |
+        | SUPER_ADMIN                  | Super Administrator standard role                           |
+        | USER_ADMIN                   | User Administrator standard role                            |
+        | WORKFLOWS_ADMIN              | Workflows Administrator IAM-based standard role             |
       type: string
       enum:
         - ACCESS_CERTIFICATIONS_ADMIN
         - ACCESS_REQUESTS_ADMIN
         - API_ACCESS_MANAGEMENT_ADMIN
-        - API_ADMIN
         - APP_ADMIN
         - CUSTOM
         - GROUP_MEMBERSHIP_ADMIN
         - HELP_DESK_ADMIN
-        - MOBILE_ADMIN
         - ORG_ADMIN
         - READ_ONLY_ADMIN
         - REPORT_ADMIN
         - SUPER_ADMIN
         - USER_ADMIN
         - WORKFLOWS_ADMIN
-      x-enumDescriptions:
-        API_ACCESS_MANAGEMENT_ADMIN: Access Management Administrator
-        API_ADMIN: Access Management Administrator
-        APP_ADMIN: Application Administrator
-        CUSTOM: Custom label specified by the client
-        GROUP_MEMBERSHIP_ADMIN: Group Membership Administrator
-        HELP_DESK_ADMIN: Help Desk Administrator
-        MOBILE_ADMIN: Mobile Administrator
-        ORG_ADMIN: Organizational Administrator
-        READ_ONLY_ADMIN: Read-Only Administrator
-        REPORT_ADMIN: Report Administrator
-        SUPER_ADMIN: Super Administrator
-        USER_ADMIN: Group Administrator
-        WORKFLOWS_ADMIN: Workflows Administrator
-        ACCESS_CERTIFICATIONS_ADMIN: Access Certifications Administrator (predefined resource sets)
-        ACCESS_REQUESTS_ADMIN: Access Requests Administrator (predefined resource sets)
+    RoleId:
+      title: roleId
+      type: string
     NotificationType:
       description: The type of notification
       type: string
@@ -202,21 +200,15 @@ components:
         AD_AGENT: System notification sent when an AD agent disconnects or reconnects
         AGENT_AUTO_UPDATE_NOTIFICATION: System notification sent when an agent automatically updates
         APP_IMPORT: System notification sent with the status of an app user import
-        CONNECTOR_AGENT: >-
-          System notification sent when an on-premises provisioning or Okta
-          on-prem MFA agent disconnects or reconnects
+        CONNECTOR_AGENT: System notification sent when an on-premises provisioning or Okta on-prem MFA agent disconnects or reconnects
         IWA_AGENT: System notification sent when an IGA agent disconnects or reconnects
         LDAP_AGENT: System notification sent when an LDAP agent disconnects or reconnects
         OKTA_ANNOUNCEMENT: Okta communication sent for announcements and release notes
         OKTA_UPDATE: Okta communication sent for scheduled system updates
-        RATELIMIT_NOTIFICATION: >-
-          System notification sent when an org reaches rate limit warning or
-          violation thresholds
+        RATELIMIT_NOTIFICATION: System notification sent when an org reaches rate limit warning or violation thresholds
         REPORT_SUSPICIOUS_ACTIVITY: System notification sent when a user reports suspicious activity
         USER_DEPROVISION: System notification sent when a user is deprovisioned from apps
-        USER_LOCKED_OUT: >-
-          System notification sent when a user is locked out from logging in to
-          Okta
+        USER_LOCKED_OUT: System notification sent when a user is locked out from logging in to Okta
     SubscriptionStatus:
       description: The status of the subscription
       type: string
@@ -224,6 +216,7 @@ components:
         - subscribed
         - unsubscribed
     HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -240,15 +233,11 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -265,18 +254,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     HrefHints:
       description: Describes allowed HTTP verbs for the `href`
       type: object
@@ -297,6 +281,13 @@ components:
         - GET
         - POST
         - PUT
+    ListSubscriptionsRoleResponse:
+      type: object
+      properties:
+        subscriptions_role:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -320,18 +311,13 @@ components:
     pathRoleRef:
       name: roleRef
       in: path
-      description: >-
-        A reference to an existing role. Standard roles require a `roleType`,
-        while Custom Roles require a `roleId`. See [Standard
-        Roles](/openapi/okta-management/guides/roles/#standard-roles).
+      description: A reference to an existing role. Standard roles require a `roleType`, while Custom Roles require a `roleId`. See [Standard roles](/openapi/okta-management/guides/roles/#standard-roles).
       required: true
       schema:
+        x-okta-ignore-redocly-rules-for-sdk: true
         oneOf:
-          - title: roleType
-            type: string
-            $ref: '#/components/schemas/RoleType'
-          - title: roleId
-            type: string
+          - $ref: '#/components/schemas/RoleType'
+          - $ref: '#/components/schemas/RoleId'
     pathNotificationType:
       name: notificationType
       in: path
@@ -360,7 +346,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

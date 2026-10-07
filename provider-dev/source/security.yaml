@@ -2,29 +2,20 @@ openapi: 3.0.3
 info:
   title: security API
   description: okta security API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /security/api/v1/security-events:
     post:
       summary: Publish a security event token
-      description: >-
-        Publishes a Security Event Token (SET) sent by a Security Events
-        Provider. After the token is verified, Okta ingests the event and
-        performs any appropriate action.
+      description: Publishes a security event token (SET) sent by a security events provider. After the token is verified, Okta ingests the event and performs any appropriate action.
       operationId: publishSecurityEventTokens
       x-codegen-request-body-name: Security Event Token
       requestBody:
         required: true
-        description: >
-          The request body is a signed
-          [SET](https://datatracker.ietf.org/doc/html/rfc8417), which is a type
-          of JSON Web Token (JWT).
+        description: |
+          The request body is a signed [SET](https://datatracker.ietf.org/doc/html/rfc8417), which is a type of JSON Web Token (JWT).
 
-
-          For SET JWT header and body descriptions, see [SET JWT
-          header](/openapi/okta-management/management/tag/SSFSecurityEventToken/#tag/SSFSecurityEventToken/schema/SecurityEventTokenRequestJwtHeader)
-          and [SET JWT body
-          payload](/openapi/okta-management/management/tag/SSFSecurityEventToken/#tag/SSFSecurityEventToken/schema/SecurityEventTokenRequestJwtBody).
+          For SET JWT header and body descriptions, see [SET JWT header](/openapi/okta-management/management/ssfsecurityeventtoken/securityeventtokenrequestjwtheader) and [SET JWT body payload](/openapi/okta-management/management/ssfsecurityeventtoken/securityeventtokenrequestjwtbody).
         content:
           application/secevent+jwt:
             schema:
@@ -52,22 +43,16 @@ paths:
 components:
   schemas:
     SecurityEventTokenError:
-      title: Security Event Token Error
-      description: Error object thrown when parsing the Security Event Token
+      title: Security event token error
+      description: Error object thrown when parsing the security event token
       type: object
       properties:
         description:
           type: string
-          description: >
+          description: |
             Describes the error
-
-            > **Note:** SET claim fields with underscores (snake case) are
-            presented in camelcase. For example, `previous_status` appears as
-            `previousStatus`.
-          example: >-
-            Failed claim validation in security event token.
-            'events.mediationDeviceComplianceChangeEvent.previousStatus': The
-            field cannot be left blank
+            > **Note:** SET claim fields with underscores (snake case) are presented in camelcase. For example, `previous_status` appears as `previousStatus`.
+          example: 'Failed claim validation in security event token. ''events.mediationDeviceComplianceChangeEvent.previousStatus'': The field cannot be left blank'
         err:
           type: string
           description: A code that describes the category of the error
@@ -83,7 +68,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

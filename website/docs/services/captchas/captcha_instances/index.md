@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>captcha_instances</code> resour
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>captcha_instances</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="captcha_instances" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.captchas.captcha_instances" /></td></tr>
 </tbody></table>
@@ -32,56 +33,12 @@ Creates, updates, deletes, gets or lists a <code>captcha_instances</code> resour
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_captcha_instances"
+    defaultValue="get_captcha_instance"
     values={[
-        { label: 'list_captcha_instances', value: 'list_captcha_instances' },
-        { label: 'get_captcha_instance', value: 'get_captcha_instance' }
+        { label: 'get_captcha_instance', value: 'get_captcha_instance' },
+        { label: 'list_captcha_instances', value: 'list_captcha_instances' }
     ]}
 >
-<TabItem value="list_captcha_instances">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>The unique key for the CAPTCHA instance</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>The name of the CAPTCHA instance</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="secretKey" /></td>
-    <td><code>string</code></td>
-    <td>The secret key issued from the CAPTCHA provider to perform server-side validation for a CAPTCHA token</td>
-</tr>
-<tr>
-    <td><CopyableCode code="siteKey" /></td>
-    <td><code>string</code></td>
-    <td>The site key issued from the CAPTCHA provider to render a CAPTCHA on a page</td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td>The type of CAPTCHA provider</td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_captcha_instance">
 
 <table>
@@ -121,7 +78,51 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>The type of CAPTCHA provider</td>
+    <td>The type of CAPTCHA provider (HCAPTCHA, RECAPTCHA_V2)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_captcha_instances">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>The unique key for the CAPTCHA instance</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>The name of the CAPTCHA instance</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="secretKey" /></td>
+    <td><code>string</code></td>
+    <td>The secret key issued from the CAPTCHA provider to perform server-side validation for a CAPTCHA token</td>
+</tr>
+<tr>
+    <td><CopyableCode code="siteKey" /></td>
+    <td><code>string</code></td>
+    <td>The site key issued from the CAPTCHA provider to render a CAPTCHA on a page</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td>The type of CAPTCHA provider (HCAPTCHA, RECAPTCHA_V2)</td>
 </tr>
 </tbody>
 </table>
@@ -144,18 +145,18 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_captcha_instance"><CopyableCode code="get_captcha_instance" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-captchaId"><code>captchaId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves the properties of a specified CAPTCHA instance</td>
+</tr>
+<tr>
     <td><a href="#list_captcha_instances"><CopyableCode code="list_captcha_instances" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all CAPTCHA instances with pagination support. A subset of CAPTCHA instances can be returned that match a supported filter expression or query.</td>
-</tr>
-<tr>
-    <td><a href="#get_captcha_instance"><CopyableCode code="get_captcha_instance" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves the properties of a specified CAPTCHA instance</td>
 </tr>
 <tr>
     <td><a href="#create_captcha_instance"><CopyableCode code="create_captcha_instance" /></a></td>
@@ -167,21 +168,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#update_captcha_instance"><CopyableCode code="update_captcha_instance" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-captchaId"><code>captchaId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Partially updates the properties of a specified CAPTCHA instance</td>
 </tr>
 <tr>
     <td><a href="#replace_captcha_instance"><CopyableCode code="replace_captcha_instance" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-captchaId"><code>captchaId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces the properties for a specified CAPTCHA instance</td>
 </tr>
 <tr>
     <td><a href="#delete_captcha_instance"><CopyableCode code="delete_captcha_instance" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-captchaId"><code>captchaId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a specified CAPTCHA instance<br />&gt; **Note:** If your CAPTCHA instance is still associated with your org, the request fails. You must first update your Org-wide CAPTCHA settings to remove the CAPTCHA instance.</td>
 </tr>
@@ -201,10 +202,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-captchaId">
+    <td><CopyableCode code="captchaId" /></td>
+    <td><code>string</code></td>
+    <td>The unique key used to identify your CAPTCHA instance</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -212,15 +218,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_captcha_instances"
+    defaultValue="get_captcha_instance"
     values={[
-        { label: 'list_captcha_instances', value: 'list_captcha_instances' },
-        { label: 'get_captcha_instance', value: 'get_captcha_instance' }
+        { label: 'get_captcha_instance', value: 'get_captcha_instance' },
+        { label: 'list_captcha_instances', value: 'list_captcha_instances' }
     ]}
 >
-<TabItem value="list_captcha_instances">
+<TabItem value="get_captcha_instance">
 
-Lists all CAPTCHA instances with pagination support. A subset of CAPTCHA instances can be returned that match a supported filter expression or query.
+Retrieves the properties of a specified CAPTCHA instance
 
 ```sql
 SELECT
@@ -231,13 +237,14 @@ secretKey,
 siteKey,
 type
 FROM okta.captchas.captcha_instances
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE captchaId = '{{ captchaId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_captcha_instance">
+<TabItem value="list_captcha_instances">
 
-Retrieves the properties of a specified CAPTCHA instance
+Lists all CAPTCHA instances with pagination support. A subset of CAPTCHA instances can be returned that match a supported filter expression or query.
 
 ```sql
 SELECT
@@ -270,10 +277,10 @@ Creates a new CAPTCHA instance. Currently, an org can only configure a single CA
 
 ```sql
 INSERT INTO okta.captchas.captcha_instances (
-data__name,
-data__secretKey,
-data__siteKey,
-data__type,
+name,
+secretKey,
+siteKey,
+type,
 subdomain
 )
 SELECT 
@@ -294,35 +301,31 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: captcha_instances
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the captcha_instances resource.
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         The name of the CAPTCHA instance
-        
     - name: secretKey
-      value: string
-      description: >
+      value: "{{ secretKey }}"
+      description: |
         The secret key issued from the CAPTCHA provider to perform server-side validation for a CAPTCHA token
-        
     - name: siteKey
-      value: string
-      description: >
+      value: "{{ siteKey }}"
+      description: |
         The site key issued from the CAPTCHA provider to render a CAPTCHA on a page
-        
     - name: type
-      value: string
-      description: >
+      value: "{{ type }}"
+      description: |
         The type of CAPTCHA provider
-        
       valid_values: ['HCAPTCHA', 'RECAPTCHA_V2']
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -342,20 +345,20 @@ Partially updates the properties of a specified CAPTCHA instance
 ```sql
 UPDATE okta.captchas.captcha_instances
 SET 
-data__name = '{{ name }}',
-data__secretKey = '{{ secretKey }}',
-data__siteKey = '{{ siteKey }}',
-data__type = '{{ type }}'
+name = '{{ name }}',
+secretKey = '{{ secretKey }}',
+siteKey = '{{ siteKey }}',
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+captchaId = '{{ captchaId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
 _links,
 secretKey,
 siteKey,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -376,20 +379,20 @@ Replaces the properties for a specified CAPTCHA instance
 ```sql
 REPLACE okta.captchas.captcha_instances
 SET 
-data__name = '{{ name }}',
-data__secretKey = '{{ secretKey }}',
-data__siteKey = '{{ siteKey }}',
-data__type = '{{ type }}'
+name = '{{ name }}',
+secretKey = '{{ secretKey }}',
+siteKey = '{{ siteKey }}',
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+captchaId = '{{ captchaId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
 _links,
 secretKey,
 siteKey,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -409,7 +412,8 @@ Deletes a specified CAPTCHA instance<br />&gt; **Note:** If your CAPTCHA instanc
 
 ```sql
 DELETE FROM okta.captchas.captcha_instances
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE captchaId = '{{ captchaId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

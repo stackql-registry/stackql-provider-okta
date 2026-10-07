@@ -1,0 +1,38 @@
+/*+ exists */
+SELECT id FROM okta.users.users
+WHERE subdomain = '{{ subdomain }}'
+AND JSON_EXTRACT(profile, '$.login') = '{{ user_login }}'
+AND status <> 'DEPROVISIONED'
+
+/*+ create */
+INSERT INTO okta.users.users (
+profile,
+subdomain
+)
+SELECT
+'{"firstName": "{{ user_first_name }}", "lastName": "{{ user_last_name }}", "email": "{{ user_login }}", "login": "{{ user_login }}"}',
+'{{ subdomain }}'
+
+/*+ update */
+REPLACE okta.users.users
+SET profile = '{"firstName": "{{ user_first_name }}", "lastName": "{{ user_last_name }}", "email": "{{ user_login }}", "login": "{{ user_login }}"}'
+WHERE id = '{{ this.id }}'
+AND subdomain = '{{ subdomain }}'
+
+/*+ statecheck, retries=3, retry_delay=5 */
+SELECT COUNT(*) as count FROM okta.users.users
+WHERE subdomain = '{{ subdomain }}'
+AND JSON_EXTRACT(profile, '$.login') = '{{ user_login }}'
+AND JSON_EXTRACT(profile, '$.firstName') = '{{ user_first_name }}'
+AND JSON_EXTRACT(profile, '$.lastName') = '{{ user_last_name }}'
+AND status <> 'DEPROVISIONED'
+
+/*+ exports */
+SELECT id as user_id FROM okta.users.users
+WHERE subdomain = '{{ subdomain }}'
+AND JSON_EXTRACT(profile, '$.login') = '{{ user_login }}'
+
+/*+ delete */
+DELETE FROM okta.users.users
+WHERE id = '{{ this.id }}'
+AND subdomain = '{{ subdomain }}'

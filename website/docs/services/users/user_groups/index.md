@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>user_groups</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>user_groups</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="user_groups" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.user_groups" /></td></tr>
 </tbody></table>
@@ -61,7 +62,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="_links" /></td>
     <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+    <td>[Discoverable resources](https://developer.okta.com/docs/api/openapi/okta-management/management/group/listgroups#group/listgroups/t=response&c=200&path=_links/source) related to the group</td>
 </tr>
 <tr>
     <td><CopyableCode code="created" /></td>
@@ -85,13 +86,13 @@ The following fields are returned by `SELECT` queries:
 </tr>
 <tr>
     <td><CopyableCode code="profile" /></td>
-    <td><code></code></td>
-    <td>Specifies required and optional properties for a group. The `objectClass` of a group determines which additional properties are available.  You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/)to manage schema extensions.  Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.</td>
+    <td><code>object</code></td>
+    <td>Profile for any group that is not imported from Active Directory. Specifies the standard and custom profile properties for a group.  The `objectClass` for these groups is `okta:user_group`.  You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/) to manage schema extensions.  Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Determines how a group's profile and memberships are managed</td>
+    <td>Determines how a group's profile and memberships are managed (APP_GROUP, BUILT_IN, OKTA_GROUP)</td>
 </tr>
 </tbody>
 </table>
@@ -116,9 +117,9 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_user_groups"><CopyableCode code="list_user_groups" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Lists all groups of which the user is a member.<br />&gt; **Note:** To list all groups in your org, use the [List all groups endpoints in the Groups API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/#tag/Group/operation/listGroups).</td>
+    <td>Lists all groups of which the user is a member<br />&gt; **Note:** To list all groups in your org, use the [List all groups endpoints in the Groups API](https://developer.okta.com/docs/api/openapi/okta-management/management/group/listgroups).</td>
 </tr>
 </tbody>
 </table>
@@ -136,10 +137,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-id">
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>An ID, login, or login shortname (as long as the shortname is unambiguous) of an existing Okta user</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -154,7 +160,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="list_user_groups">
 
-Lists all groups of which the user is a member.<br />&gt; **Note:** To list all groups in your org, use the [List all groups endpoints in the Groups API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Group/#tag/Group/operation/listGroups).
+Lists all groups of which the user is a member<br />&gt; **Note:** To list all groups in your org, use the [List all groups endpoints in the Groups API](https://developer.okta.com/docs/api/openapi/okta-management/management/group/listgroups).
 
 ```sql
 SELECT
@@ -168,7 +174,8 @@ objectClass,
 profile,
 type
 FROM okta.users.user_groups
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE id = '{{ id }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

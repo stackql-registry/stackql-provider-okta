@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>group_targets</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>group_targets</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="group_targets" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.groups.group_targets" /></td></tr>
 </tbody></table>
@@ -61,7 +62,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="_links" /></td>
     <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+    <td>[Discoverable resources](https://developer.okta.com/docs/api/openapi/okta-management/management/group/listgroups#group/listgroups/t=response&c=200&path=_links/source) related to the group</td>
 </tr>
 <tr>
     <td><CopyableCode code="created" /></td>
@@ -85,13 +86,13 @@ The following fields are returned by `SELECT` queries:
 </tr>
 <tr>
     <td><CopyableCode code="profile" /></td>
-    <td><code></code></td>
-    <td>Specifies required and optional properties for a group. The `objectClass` of a group determines which additional properties are available.  You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/apihttps://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/)to manage schema extensions.  Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.</td>
+    <td><code>object</code></td>
+    <td>Profile for any group that is not imported from Active Directory. Specifies the standard and custom profile properties for a group.  The `objectClass` for these groups is `okta:user_group`.  You can extend group profiles with custom properties, but you must first add the properties to the group profile schema before you can reference them. Use the Profile Editor in the Admin Console or the [Schemas API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Schema/) to manage schema extensions.  Custom properties can contain HTML tags. It is the client's responsibility to escape or encode this data before displaying it. Use [best-practices](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html) to prevent cross-site scripting.</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td>Determines how a group's profile and memberships are managed</td>
+    <td>Determines how a group's profile and memberships are managed (APP_GROUP, BUILT_IN, OKTA_GROUP)</td>
 </tr>
 </tbody>
 </table>
@@ -116,21 +117,21 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_group_targets_for_group_role"><CopyableCode code="list_group_targets_for_group_role" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td><a href="#parameter-after"><code>after</code></a>, <a href="#parameter-limit"><code>limit</code></a></td>
     <td>Lists all group targets for a [`USER_ADMIN`](https://developer.okta.com/docs/api/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a group.<br />If the role isn't scoped to specific group targets, Okta returns an empty array `[]`.</td>
 </tr>
 <tr>
     <td><a href="#assign_group_target_to_group_admin_role"><CopyableCode code="assign_group_target_to_group_admin_role" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-targetGroupId"><code>targetGroupId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Assigns a group target to a [`USER_ADMIN`](https://developer.okta.com/docs/api/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a group.<br />When you assign the first group target, you reduce the scope of the role assignment. The role no longer applies to all targets but applies only to the specified target.</td>
 </tr>
 <tr>
     <td><a href="#unassign_group_target_from_group_admin_role"><CopyableCode code="unassign_group_target_from_group_admin_role" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-groupId"><code>groupId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-targetGroupId"><code>targetGroupId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Unassigns a group target from a [`USER_ADMIN`](https://developer.okta.com/docs/api/openapi/okta-management/guides/roles/#standard-roles), `HELP_DESK_ADMIN`, or `GROUP_MEMBERSHIP_ADMIN` role assignment to a group.</td>
 </tr>
@@ -150,15 +151,30 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-groupId">
+    <td><CopyableCode code="groupId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the group</td>
+</tr>
+<tr id="parameter-roleAssignmentId">
+    <td><CopyableCode code="roleAssignmentId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the role assignment</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-targetGroupId">
+    <td><CopyableCode code="targetGroupId" /></td>
+    <td><code>string</code></td>
+    <td></td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 <tr id="parameter-limit">
     <td><CopyableCode code="limit" /></td>
@@ -192,7 +208,9 @@ objectClass,
 profile,
 type
 FROM okta.groups.group_targets
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE groupId = '{{ groupId }}' -- required
+AND roleAssignmentId = '{{ roleAssignmentId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 AND after = '{{ after }}'
 AND limit = '{{ limit }}'
 ;
@@ -218,8 +236,10 @@ REPLACE okta.groups.group_targets
 SET 
 -- No updatable properties
 WHERE 
-subdomain = '{{ subdomain }}' --required
-;
+groupId = '{{ groupId }}' --required
+AND roleAssignmentId = '{{ roleAssignmentId }}' --required
+AND targetGroupId = '{{ targetGroupId }}' --required
+AND subdomain = '{{ subdomain }}' --required;
 ```
 </TabItem>
 </Tabs>
@@ -239,7 +259,10 @@ Unassigns a group target from a [`USER_ADMIN`](https://developer.okta.com/docs/a
 
 ```sql
 DELETE FROM okta.groups.group_targets
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE groupId = '{{ groupId }}' --required
+AND roleAssignmentId = '{{ roleAssignmentId }}' --required
+AND targetGroupId = '{{ targetGroupId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

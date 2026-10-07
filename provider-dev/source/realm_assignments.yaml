@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: realm_assignments API
   description: okta realm_assignments API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/realm-assignments:
     get:
@@ -15,9 +15,7 @@ paths:
         - $ref: '#/components/parameters/queryLimit'
         - name: after
           in: query
-          description: >-
-            The cursor used for pagination. It represents the priority of the
-            last realm assignment returned in the previous fetch operation.
+          description: The cursor used for pagination. It represents the priority of the last realm assignment returned in the previous fetch operation.
           schema:
             type: string
       responses:
@@ -26,9 +24,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RealmAssignment'
+                $ref: '#/components/schemas/ListRealmAssignmentsResponse'
               examples:
                 AssignmentLists:
                   $ref: '#/components/examples/ListRealmAssignmentsResponse'
@@ -46,6 +42,11 @@ paths:
             - okta.realmAssignments.read
       tags:
         - RealmAssignment
+      x-stackql-bare-array-wrap:
+        wrapperKey: realm_assignments
+        wrapperName: ListRealmAssignmentsResponse
+        mediaType: application/json
+        scalar: false
     post:
       x-okta-lifecycle:
         lifecycle: GA
@@ -86,10 +87,7 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
       summary: List all realm assignment operations
-      description: >-
-        Lists all realm assignment operations. The upper limit is 200 and
-        operations are sorted in descending order from most recent to oldest by
-        ID.
+      description: Lists all realm assignment operations. The upper limit is 200 and operations are sorted in descending order from most recent to oldest by ID.
       operationId: listRealmAssignmentOperations
       parameters:
         - $ref: '#/components/parameters/queryLimit'
@@ -100,9 +98,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/OperationResponse'
+                $ref: '#/components/schemas/ListRealmAssignmentOperationsResponse'
               examples:
                 Executions:
                   value:
@@ -129,8 +125,7 @@ paths:
                       _links:
                         self:
                           rel: self
-                          href: >-
-                            http://your-subdomain.okta.com/api/v1/operations/rre4mje4ez6B2a7B60g7
+                          href: http://your-subdomain.okta.com/api/v1/operations/rre4mje4ez6B2a7B60g7
                           method: GET
                     - id: rre4mje4ez7B2a7B60g7
                       type: realm:assignment
@@ -146,8 +141,7 @@ paths:
                       _links:
                         self:
                           rel: self
-                          href: >-
-                            http://your-subdomain.okta.com/api/v1/operations/rre4mje4ez7B2a7B60g7
+                          href: http://your-subdomain.okta.com/api/v1/operations/rre4mje4ez7B2a7B60g7
                           method: GET
         '403':
           description: Forbidden
@@ -163,6 +157,11 @@ paths:
             - okta.realmAssignments.read
       tags:
         - RealmAssignment
+      x-stackql-bare-array-wrap:
+        wrapperKey: realm_assignment_operations
+        wrapperName: ListRealmAssignmentOperationsResponse
+        mediaType: application/json
+        scalar: false
     post:
       x-okta-lifecycle:
         lifecycle: GA
@@ -189,7 +188,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationResponse'
+                $ref: '#/components/schemas/RealmAssignmentOperationResponse'
               examples:
                 Execution:
                   $ref: '#/components/examples/OperationResponse'
@@ -238,6 +237,8 @@ paths:
             - okta.realmAssignments.read
       tags:
         - RealmAssignment
+      parameters:
+        - $ref: '#/components/parameters/assignmentId'
     put:
       x-okta-lifecycle:
         lifecycle: GA
@@ -275,6 +276,8 @@ paths:
             - okta.realmAssignments.manage
       tags:
         - RealmAssignment
+      parameters:
+        - $ref: '#/components/parameters/assignmentId'
     delete:
       x-okta-lifecycle:
         lifecycle: GA
@@ -311,8 +314,8 @@ paths:
             - okta.realmAssignments.manage
       tags:
         - RealmAssignment
-    parameters:
-      - $ref: '#/components/parameters/assignmentId'
+      parameters:
+        - $ref: '#/components/parameters/assignmentId'
   /api/v1/realm-assignments/{assignmentId}/lifecycle/activate:
     post:
       x-okta-lifecycle:
@@ -338,8 +341,8 @@ paths:
             - okta.realmAssignments.manage
       tags:
         - RealmAssignment
-    parameters:
-      - $ref: '#/components/parameters/assignmentId'
+      parameters:
+        - $ref: '#/components/parameters/assignmentId'
   /api/v1/realm-assignments/{assignmentId}/lifecycle/deactivate:
     post:
       x-okta-lifecycle:
@@ -365,8 +368,8 @@ paths:
             - okta.realmAssignments.manage
       tags:
         - RealmAssignment
-    parameters:
-      - $ref: '#/components/parameters/assignmentId'
+      parameters:
+        - $ref: '#/components/parameters/assignmentId'
 components:
   schemas:
     RealmAssignment:
@@ -383,22 +386,18 @@ components:
           readOnly: true
         domains:
           type: array
-          description: >-
-            Array of allowed domains. No user in this realm can be created or
-            updated unless they have a username and email from one of these
-            domains.
+          items:
+            type: string
+          description: |-
+            Array of allowed domains. No user in this realm can be created or updated unless they have a username and email from one of these domains.
 
-
-            The following characters aren't allowed in the domain name:
-            `!$%^&()=*+,:;<>'[]|/?\`
+            The following characters aren't allowed in the domain name: `!$%^&()=*+,:;<>'[]|/?\`
         id:
           description: Unique ID of the realm assignment
           type: string
           readOnly: true
         isDefault:
-          description: >-
-            Indicates the default realm. Existing users will start out in the
-            default realm and can be moved individually to other realms.
+          description: Indicates the default realm. Existing users will start out in the default realm and can be moved individually to other realms.
           type: boolean
           readOnly: true
         lastUpdated:
@@ -411,13 +410,9 @@ components:
           type: string
         priority:
           type: integer
-          description: >-
-            The priority of the realm assignment. The lower the number, the
-            higher the priority. This helps resolve conflicts between realm
-            assignments. 
-
-            > **Note:** When you create realm assignments in bulk, realm
-            assignment priorities must be unique.
+          description: |-
+            The priority of the realm assignment. The lower the number, the higher the priority. This helps resolve conflicts between realm assignments.
+            > **Note:** When you create realm assignments in bulk, realm assignment priorities must be unique.
         status:
           $ref: '#/components/schemas/LifecycleStatus'
         _links:
@@ -435,18 +430,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     CreateRealmAssignmentRequest:
       type: object
       properties:
@@ -459,16 +449,38 @@ components:
           description: Name of the realm
         priority:
           type: integer
-          description: >-
-            The priority of the realm assignment. The lower the number, the
-            higher the priority. This helps resolve conflicts between realm
-            assignments. 
-
-            > **Note:** When you create realm assignments in bulk, realm
-            assignment priorities must be unique.
-    OperationResponse:
+          description: |-
+            The priority of the realm assignment. The lower the number, the higher the priority. This helps resolve conflicts between realm assignments.
+            > **Note:** When you create realm assignments in bulk, realm assignment priorities must be unique.
+    RealmAssignmentOperationResponse:
       type: object
       properties:
+        completed:
+          type: string
+          description: Timestamp of when the operation completed
+          format: date-time
+        created:
+          type: string
+          description: Timestamp of when the operation was created
+          format: date-time
+        id:
+          type: string
+          description: ID of the asynchronous operation
+        started:
+          type: string
+          description: Timestamp of when the operation started
+          format: date-time
+        status:
+          type: string
+          description: The status of the asynchronous operation
+          enum:
+            - COMPLETED
+            - SCHEDULED
+            - IN_PROGRESS
+            - FAILED
+        type:
+          type: string
+          description: The operation type
         assignmentOperation:
           type: object
           description: Definition of the realm assignment operation
@@ -496,20 +508,6 @@ components:
                 name:
                   type: string
                   description: Name of the realm assignment operation
-        completed:
-          description: Timestamp when the realm assignment operation completed
-          type: string
-          format: date-time
-          readOnly: true
-        created:
-          description: Timestamp when the realm assignment operation was created
-          type: string
-          format: date-time
-          readOnly: true
-        id:
-          description: ID of the realm
-          type: string
-          readOnly: true
         numUserMoved:
           description: Number of users moved
           type: number
@@ -522,26 +520,13 @@ components:
           description: Name of the realm
           type: string
           readOnly: true
-        started:
-          description: Timestamp when the realm assignment operation started
-          type: string
-          format: date-time
-          readOnly: true
-        status:
-          description: Current status of the operation
-          type: string
-          readOnly: true
-          enum:
-            - COMPLETED
-            - SCHEDULED
-            - IN_PROGRESS
-            - FAILED
-        type:
-          description: Realm type
-          type: string
-          readOnly: true
         _links:
           $ref: '#/components/schemas/LinksSelf'
+      required:
+        - id
+        - type
+        - status
+        - created
     OperationRequest:
       type: object
       properties:
@@ -559,13 +544,9 @@ components:
           type: string
         priority:
           type: integer
-          description: >-
-            The priority of the realm assignment. The lower the number, the
-            higher the priority. This helps resolve conflicts between realm
-            assignments. 
-
-            > **Note:** When you create realm assignments in bulk, realm
-            assignment priorities must be unique.
+          description: |-
+            The priority of the realm assignment. The lower the number, the higher the priority. This helps resolve conflicts between realm assignments.
+            > **Note:** When you create realm assignments in bulk, realm assignment priorities must be unique.
     Actions:
       description: Action to apply to a user
       type: object
@@ -587,13 +568,7 @@ components:
         - ACTIVE
         - INACTIVE
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
@@ -604,6 +579,40 @@ components:
       properties:
         errorSummary:
           type: string
+    OperationResponse:
+      type: object
+      properties:
+        completed:
+          type: string
+          description: Timestamp of when the operation completed
+          format: date-time
+        created:
+          type: string
+          description: Timestamp of when the operation was created
+          format: date-time
+        id:
+          type: string
+          description: ID of the asynchronous operation
+        started:
+          type: string
+          description: Timestamp of when the operation started
+          format: date-time
+        status:
+          type: string
+          description: The status of the asynchronous operation
+          enum:
+            - COMPLETED
+            - SCHEDULED
+            - IN_PROGRESS
+            - FAILED
+        type:
+          type: string
+          description: The operation type
+      required:
+        - id
+        - type
+        - status
+        - created
     AssignUserToRealm:
       description: Action that assigns a user to a realm
       type: object
@@ -619,10 +628,7 @@ components:
           description: Value of the condition expression
           type: string
     HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -639,15 +645,38 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -666,6 +695,20 @@ components:
         - GET
         - POST
         - PUT
+    ListRealmAssignmentsResponse:
+      type: object
+      properties:
+        realm_assignments:
+          type: array
+          items:
+            $ref: '#/components/schemas/RealmAssignment'
+    ListRealmAssignmentOperationsResponse:
+      type: object
+      properties:
+        realm_assignment_operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/RealmAssignmentOperationResponse'
   responses:
     ErrorTooManyRequests429:
       description: Too Many Requests
@@ -718,11 +761,7 @@ components:
       in: query
       schema:
         type: string
-      description: >-
-        The cursor to use for pagination. It is an opaque string that specifies
-        your current location in the list and is obtained from the `Link`
-        response header. See
-        [Pagination](https://developer.okta.com/docs/api/#pagination).
+      description: The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).
     assignmentId:
       name: assignmentId
       description: ID of the realm assignment
@@ -754,8 +793,7 @@ components:
           _links:
             self:
               rel: self
-              href: >-
-                http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO3ng00g4
+              href: http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO3ng00g4
               method: GET
         - id: rul2jy7jLUlnO5ng00g4
           status: ACTIVE
@@ -777,8 +815,7 @@ components:
           _links:
             self:
               rel: self
-              href: >-
-                http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO5ng00g4
+              href: http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO5ng00g4
               method: GET
     CreateRealmAssignmentRequest:
       value:
@@ -816,8 +853,7 @@ components:
         _links:
           self:
             rel: self
-            href: >-
-              http://your-subdomain.okta.com/api/v1/operations/rre4mje4ez6B2a7B60g7
+            href: http://your-subdomain.okta.com/api/v1/operations/rre4mje4ez6B2a7B60g7
             method: GET
     GetRealmAssignmentResponse:
       value:
@@ -841,8 +877,7 @@ components:
         _links:
           self:
             rel: self
-            href: >-
-              http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO3ng00g4
+            href: http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO3ng00g4
             method: GET
     DefaultRealmAssignment:
       value:
@@ -863,8 +898,7 @@ components:
         _links:
           self:
             rel: self
-            href: >-
-              http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO5ng00g4
+            href: http://your-subdomain.okta.com/api/v1/realm-assignments/rul2jy7jLUlnO5ng00g4
             method: GET
     ErrorTooManyRequests:
       summary: Too Many Requests
@@ -903,7 +937,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

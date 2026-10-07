@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>roles</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>roles</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="roles" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.iam.roles" /></td></tr>
 </tbody></table>
@@ -32,36 +33,12 @@ Creates, updates, deletes, gets or lists a <code>roles</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_roles"
+    defaultValue="get_role"
     values={[
-        { label: 'list_roles', value: 'list_roles' },
-        { label: 'get_role', value: 'get_role' }
+        { label: 'get_role', value: 'get_role' },
+        { label: 'list_roles', value: 'list_roles' }
     ]}
 >
-<TabItem value="list_roles">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="_links" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the current status of an application using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. Use the `LinksNext` object for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="roles" /></td>
-    <td><code>array</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_role">
 
 <table>
@@ -106,6 +83,30 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
+<TabItem value="list_roles">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="_links" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available for the current status of an application using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. Use the `LinksNext` object for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="roles" /></td>
+    <td><code>array</code></td>
+    <td></td>
+</tr>
+</tbody>
+</table>
+</TabItem>
 </Tabs>
 
 ## Methods
@@ -124,6 +125,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_role"><CopyableCode code="get_role" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a role by `roleIdOrLabel`</td>
+</tr>
+<tr>
     <td><a href="#list_roles"><CopyableCode code="list_roles" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -131,30 +139,23 @@ The following methods are available for this resource:
     <td>Lists all custom roles with pagination support</td>
 </tr>
 <tr>
-    <td><a href="#get_role"><CopyableCode code="get_role" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a role by `roleIdOrLabel`</td>
-</tr>
-<tr>
     <td><a href="#create_role"><CopyableCode code="create_role" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__label"><code>data__label</code></a>, <a href="#parameter-data__description"><code>data__description</code></a>, <a href="#parameter-data__permissions"><code>data__permissions</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-label"><code>label</code></a>, <a href="#parameter-description"><code>description</code></a>, <a href="#parameter-permissions"><code>permissions</code></a></td>
     <td></td>
     <td>Creates a custom role</td>
 </tr>
 <tr>
     <td><a href="#replace_role"><CopyableCode code="replace_role" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__label"><code>data__label</code></a>, <a href="#parameter-data__description"><code>data__description</code></a></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-label"><code>label</code></a>, <a href="#parameter-description"><code>description</code></a></td>
     <td></td>
     <td>Replaces the label and description for a custom role by `roleIdOrLabel`</td>
 </tr>
 <tr>
     <td><a href="#delete_role"><CopyableCode code="delete_role" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-roleIdOrLabel"><code>roleIdOrLabel</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a custom role by `roleIdOrLabel`</td>
 </tr>
@@ -174,15 +175,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-roleIdOrLabel">
+    <td><CopyableCode code="roleIdOrLabel" /></td>
+    <td><code>string</code></td>
+    <td>`id` or `label` of the role</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-after">
     <td><CopyableCode code="after" /></td>
     <td><code>string</code></td>
-    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination).</td>
+    <td>The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).</td>
 </tr>
 </tbody>
 </table>
@@ -190,26 +196,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_roles"
+    defaultValue="get_role"
     values={[
-        { label: 'list_roles', value: 'list_roles' },
-        { label: 'get_role', value: 'get_role' }
+        { label: 'get_role', value: 'get_role' },
+        { label: 'list_roles', value: 'list_roles' }
     ]}
 >
-<TabItem value="list_roles">
-
-Lists all custom roles with pagination support
-
-```sql
-SELECT
-_links,
-roles
-FROM okta.iam.roles
-WHERE subdomain = '{{ subdomain }}' -- required
-AND after = '{{ after }}'
-;
-```
-</TabItem>
 <TabItem value="get_role">
 
 Retrieves a role by `roleIdOrLabel`
@@ -223,7 +215,22 @@ description,
 label,
 lastUpdated
 FROM okta.iam.roles
+WHERE roleIdOrLabel = '{{ roleIdOrLabel }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_roles">
+
+Lists all custom roles with pagination support
+
+```sql
+SELECT
+_links,
+roles
+FROM okta.iam.roles
 WHERE subdomain = '{{ subdomain }}' -- required
+AND after = '{{ after }}'
 ;
 ```
 </TabItem>
@@ -245,9 +252,9 @@ Creates a custom role
 
 ```sql
 INSERT INTO okta.iam.roles (
-data__description,
-data__label,
-data__permissions,
+description,
+label,
+permissions,
 subdomain
 )
 SELECT 
@@ -267,29 +274,27 @@ lastUpdated
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: roles
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the roles resource.
     - name: description
-      value: string
-      description: >
+      value: "{{ description }}"
+      description: |
         Description of the role
-        
     - name: label
-      value: string
-      description: >
+      value: "{{ label }}"
+      description: |
         Unique label for the role
-        
     - name: permissions
-      value: array
-      description: >
+      value:
+        - "{{ permissions }}"
+      description: |
         Array of permissions that the role grants. See [Permissions](https://developer.okta.com/docs/api/openapi/okta-management/guides/permissions).
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -309,20 +314,20 @@ Replaces the label and description for a custom role by `roleIdOrLabel`
 ```sql
 REPLACE okta.iam.roles
 SET 
-data__description = '{{ description }}',
-data__label = '{{ label }}'
+description = '{{ description }}',
+label = '{{ label }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__label = '{{ label }}' --required
-AND data__description = '{{ description }}' --required
+roleIdOrLabel = '{{ roleIdOrLabel }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND label = '{{ label }}' --required
+AND description = '{{ description }}' --required
 RETURNING
 id,
 _links,
 created,
 description,
 label,
-lastUpdated
-;
+lastUpdated;
 ```
 </TabItem>
 </Tabs>
@@ -342,7 +347,8 @@ Deletes a custom role by `roleIdOrLabel`
 
 ```sql
 DELETE FROM okta.iam.roles
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE roleIdOrLabel = '{{ roleIdOrLabel }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

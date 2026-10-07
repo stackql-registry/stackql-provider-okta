@@ -2,14 +2,12 @@ openapi: 3.0.3
 info:
   title: rate_limit_settings API
   description: okta rate_limit_settings API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/rate-limit-settings/admin-notifications:
     get:
       summary: Retrieve the rate limit admin notification settings
-      description: >-
-        Retrieves the currently configured Rate Limit Admin Notification
-        Settings
+      description: Retrieves the currently configured Rate Limit Admin Notification Settings
       operationId: getRateLimitSettingsAdminNotifications
       responses:
         '200':
@@ -38,9 +36,7 @@ paths:
         isGenerallyAvailable: true
     put:
       summary: Replace the rate limit admin notification settings
-      description: >-
-        Replaces the Rate Limit Admin Notification Settings and returns the
-        configured properties
+      description: Replaces the Rate Limit Admin Notification Settings and returns the configured properties
       operationId: replaceRateLimitSettingsAdminNotifications
       x-codegen-request-body-name: RateLimitAdminNotifications
       requestBody:
@@ -95,14 +91,11 @@ paths:
                 $ref: '#/components/schemas/PerClientRateLimitSettings'
               examples:
                 EnforceDefault:
-                  $ref: >-
-                    #/components/examples/PerClientRateLimitSettingsEnforceDefault
+                  $ref: '#/components/examples/PerClientRateLimitSettingsEnforceDefault'
                 EnforceDefaultWithOverrides:
-                  $ref: >-
-                    #/components/examples/PerClientRateLimitSettingsEnforceDefaultWithOverrides
+                  $ref: '#/components/examples/PerClientRateLimitSettingsEnforceDefaultWithOverrides'
                 PreviewDefaultWithOverrides:
-                  $ref: >-
-                    #/components/examples/PerClientRateLimitSettingsPreviewDefaultWithOverrides
+                  $ref: '#/components/examples/PerClientRateLimitSettingsPreviewDefaultWithOverrides'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '429':
@@ -118,9 +111,7 @@ paths:
         isGenerallyAvailable: true
     put:
       summary: Replace the per-client rate limit settings
-      description: >-
-        Replaces the Per-Client Rate Limit Settings and returns the configured
-        properties
+      description: Replaces the Per-Client Rate Limit Settings and returns the configured properties
       operationId: replaceRateLimitSettingsPerClient
       x-codegen-request-body-name: perClientRateLimitSettings
       requestBody:
@@ -132,11 +123,9 @@ paths:
               EnforceDefault:
                 $ref: '#/components/examples/PerClientRateLimitSettingsEnforceDefault'
               EnforceDefaultWithOverrides:
-                $ref: >-
-                  #/components/examples/PerClientRateLimitSettingsEnforceDefaultWithOverrides
+                $ref: '#/components/examples/PerClientRateLimitSettingsEnforceDefaultWithOverrides'
               PreviewDefaultWithOverrides:
-                $ref: >-
-                  #/components/examples/PerClientRateLimitSettingsPreviewDefaultWithOverrides
+                $ref: '#/components/examples/PerClientRateLimitSettingsPreviewDefaultWithOverrides'
         required: true
       responses:
         '200':
@@ -147,14 +136,11 @@ paths:
                 $ref: '#/components/schemas/PerClientRateLimitSettings'
               examples:
                 EnforceDefault:
-                  $ref: >-
-                    #/components/examples/PerClientRateLimitSettingsEnforceDefault
+                  $ref: '#/components/examples/PerClientRateLimitSettingsEnforceDefault'
                 EnforceDefaultWithOverrides:
-                  $ref: >-
-                    #/components/examples/PerClientRateLimitSettingsEnforceDefaultWithOverrides
+                  $ref: '#/components/examples/PerClientRateLimitSettingsEnforceDefaultWithOverrides'
                 PreviewDefaultWithOverrides:
-                  $ref: >-
-                    #/components/examples/PerClientRateLimitSettingsPreviewDefaultWithOverrides
+                  $ref: '#/components/examples/PerClientRateLimitSettingsPreviewDefaultWithOverrides'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '403':
@@ -173,9 +159,7 @@ paths:
   /api/v1/rate-limit-settings/warning-threshold:
     get:
       summary: Retrieve the rate limit warning threshold percentage
-      description: >-
-        Retrieves the currently configured threshold for warning notifications
-        when the API's rate limit is exceeded
+      description: Retrieves the currently configured threshold for warning notifications when the API's rate limit is exceeded
       operationId: getRateLimitSettingsWarningThreshold
       responses:
         '200':
@@ -202,9 +186,7 @@ paths:
         isGenerallyAvailable: true
     put:
       summary: Replace the rate limit warning threshold percentage
-      description: >-
-        Replaces the Rate Limit Warning Threshold Percentage and returns the
-        configured property
+      description: Replaces the Rate Limit Warning Threshold Percentage and returns the configured property
       operationId: replaceRateLimitSettingsWarningThreshold
       x-codegen-request-body-name: RateLimitWarningThreshold
       requestBody:
@@ -258,14 +240,9 @@ components:
       properties:
         defaultMode:
           $ref: '#/components/schemas/PerClientRateLimitMode'
-          description: >-
-            The default PerClientRateLimitMode that applies to any use case in
-            the absence of a more specific override
+          description: The default PerClientRateLimitMode that applies to any use case in the absence of a more specific override
         useCaseModeOverrides:
-          description: >-
-            A map of Per-Client Rate Limit Use Case to the applicable
-            PerClientRateLimitMode. Overrides the `defaultMode` property for the
-            specified use cases.
+          description: A map of Per-Client Rate Limit Use Case to the applicable PerClientRateLimitMode. Overrides the `defaultMode` property for the specified use cases.
           type: object
           properties:
             LOGIN_PAGE:
@@ -282,10 +259,7 @@ components:
       type: object
       properties:
         warningThreshold:
-          description: >-
-            The threshold value (percentage) of a rate limit that, when
-            exceeded, triggers a warning notification. By default, this value is
-            90 for Workforce orgs and 60 for CIAM orgs.
+          description: The threshold value (percentage) of a rate limit that, when exceeded, triggers a warning notification. By default, this value is 90 for Workforce orgs and 60 for CIAM orgs.
           type: integer
           minimum: 30
           maximum: 90
@@ -295,10 +269,7 @@ components:
       type: object
       properties:
         warningThreshold:
-          description: >-
-            The threshold value (percentage) of a rate limit that, when
-            exceeded, triggers a warning notification. By default, this value is
-            90 for Workforce orgs and 60 for CIAM orgs.
+          description: The threshold value (percentage) of a rate limit that, when exceeded, triggers a warning notification. By default, this value is 90 for Workforce orgs and 60 for CIAM orgs.
           type: integer
           minimum: 30
           maximum: 90
@@ -317,18 +288,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     PerClientRateLimitMode:
       type: string
       enum:
@@ -421,7 +387,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

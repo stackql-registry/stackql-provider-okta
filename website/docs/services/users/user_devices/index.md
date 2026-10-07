@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>user_devices</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>user_devices</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="user_devices" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.user_devices" /></td></tr>
 </tbody></table>
@@ -86,9 +87,9 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_user_devices"><CopyableCode code="list_user_devices" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Lists all devices enrolled by a user.<br /><br />&gt; **Note:** To list all devices registered to an org, use the [List all devices endpoint in the Devices API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Device/#tag/Device/operation/listDevices).</td>
+    <td>Lists all devices enrolled by a user<br /><br />&gt; **Note:** To list all devices registered to an org, use the [List all devices endpoint in the Devices API](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/device/other/listdevices).</td>
 </tr>
 </tbody>
 </table>
@@ -109,7 +110,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 </tbody>
 </table>
@@ -124,7 +130,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="list_user_devices">
 
-Lists all devices enrolled by a user.<br /><br />&gt; **Note:** To list all devices registered to an org, use the [List all devices endpoint in the Devices API](https://developer.okta.com/docs/api/openapi/okta-management/management/tag/Device/#tag/Device/operation/listDevices).
+Lists all devices enrolled by a user<br /><br />&gt; **Note:** To list all devices registered to an org, use the [List all devices endpoint in the Devices API](https://developer.okta.com/docs/api/openapi/okta-management/management/tags/device/other/listdevices).
 
 ```sql
 SELECT
@@ -132,7 +138,8 @@ created,
 device,
 deviceUserId
 FROM okta.users.user_devices
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: eventhooks API
   description: okta eventhooks API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/eventHooks:
     get:
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/EventHook'
+                $ref: '#/components/schemas/ListEventHooksResponse'
               examples:
                 RetrieveAllEventHooks:
                   $ref: '#/components/examples/RetrieveAllEventHooks'
@@ -34,25 +32,24 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      x-stackql-bare-array-wrap:
+        wrapperKey: event_hooks
+        wrapperName: ListEventHooksResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create an event hook
-      description: >-
-        Creates a new event hook for your organization in `ACTIVE` status. You
-        pass an event hook object in the JSON payload
-
-        of your request. That object represents the set of required information
-        about the event hook you're registering, including:
+      description: |-
+        Creates a new event hook for your organization in `ACTIVE` status. You pass an event hook object in the JSON payload
+        of your request. That object represents the set of required information about the event hook you're registering, including:
           * The URI of your external service
           * The [events](https://developer.okta.com/docs/reference/api/event-types/) in Okta you want to subscribe to
           * An optional event hook filter that can reduce the number of event hook calls. This is a self-service Early Access (EA) feature.
             See [Create an event hook filter](https://developer.okta.com/docs/concepts/event-hooks/#create-an-event-hook-filter).
 
             Additionally, you can specify a secret API key for Okta to pass to your external service endpoint for security verification. Note that the API key you set here is unrelated to the Okta API token
-        you must supply when making calls to Okta APIs. Optionally, you can
-        specify extra headers that Okta passes to your external
-
+        you must supply when making calls to Okta APIs. Optionally, you can specify extra headers that Okta passes to your external
         service with each call.
-
         Your external service must use a valid HTTPS endpoint.
       operationId: createEventHook
       x-codegen-request-body-name: eventHook
@@ -124,18 +121,15 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathEventHookId'
     put:
       summary: Replace an event hook
-      description: >-
-        Replaces an event hook. Okta validates the new properties before
-        replacing the existing values.
+      description: |-
+        Replaces an event hook. Okta validates the new properties before replacing the existing values.
+        Some event hook properties are immutable and can't be updated. Refer to the parameter description in the request body schema.
 
-        Some event hook properties are immutable and can't be updated. Refer to
-        the parameter description in the request body schema.
-
-
-        >**Note:** Updating the `channel` property requires you to verify the
-        hook again.
+        >**Note:** Updating the `channel` property requires you to verify the hook again.
       operationId: replaceEventHook
       x-codegen-request-body-name: eventHook
       requestBody:
@@ -174,14 +168,13 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
+      parameters:
+        - $ref: '#/components/parameters/pathEventHookId'
     delete:
       summary: Delete an event hook
-      description: >-
-        Deletes the event hook that matches the provided `id`. After deletion,
-        the event hook is unrecoverable.
-
-        As a safety precaution, you can only delete event hooks with a status of
-        `INACTIVE`.
+      description: |-
+        Deletes the event hook that matches the provided `id`. After deletion, the event hook is unrecoverable.
+        As a safety precaution, you can only delete event hooks with a status of `INACTIVE`.
       operationId: deleteEventHook
       responses:
         '204':
@@ -202,8 +195,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathEventHookId'
+      parameters:
+        - $ref: '#/components/parameters/pathEventHookId'
   /api/v1/eventHooks/{eventHookId}/lifecycle/activate:
     post:
       summary: Activate an event hook
@@ -234,8 +227,8 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathEventHookId'
+      parameters:
+        - $ref: '#/components/parameters/pathEventHookId'
   /api/v1/eventHooks/{eventHookId}/lifecycle/deactivate:
     post:
       summary: Deactivate an event hook
@@ -266,26 +259,18 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathEventHookId'
+      parameters:
+        - $ref: '#/components/parameters/pathEventHookId'
   /api/v1/eventHooks/{eventHookId}/lifecycle/verify:
     post:
       summary: Verify an event hook
-      description: >-
-        Verifies that the event hook matches the provided `eventHookId`. To
-        verify ownership, your endpoint must send information back to Okta in
-        JSON format. See [Event
-        hooks](https://developer.okta.com/docs/concepts/event-hooks/#one-time-verification-request).
-
+      description: |-
+        Verifies that the event hook matches the provided `eventHookId`. To verify ownership, your endpoint must send information back to Okta in JSON format. See [Event hooks](https://developer.okta.com/docs/concepts/event-hooks/#one-time-verification-request).
 
         Only `ACTIVE` and `VERIFIED` event hooks can receive events from Okta.
 
-
-        If a response is not received within 3 seconds, the outbound request
-        times out. One retry is attempted after a timeout or error response.
-
-        If a successful response still isn't received, this operation returns a
-        400 error with more information about the failure.
+        If a response is not received within 3 seconds, the outbound request times out. One retry is attempted after a timeout or error response.
+        If a successful response still isn't received, this operation returns a 400 error with more information about the failure.
       operationId: verifyEventHook
       responses:
         '200':
@@ -314,11 +299,12 @@ paths:
       x-okta-lifecycle:
         lifecycle: GA
         isGenerallyAvailable: true
-    parameters:
-      - $ref: '#/components/parameters/pathEventHookId'
+      parameters:
+        - $ref: '#/components/parameters/pathEventHookId'
 components:
   schemas:
     EventHook:
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         channel:
@@ -360,14 +346,16 @@ components:
         verificationStatus:
           $ref: '#/components/schemas/EventHookVerificationStatus'
         _links:
-          allOf:
-            - $ref: '#/components/schemas/LinksSelf'
-            - properties:
-                deactivate:
-                  $ref: '#/components/schemas/HrefObject'
-                verify:
-                  $ref: '#/components/schemas/HrefObject'
-              type: object
+          description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
+          type: object
+          properties:
+            self:
+              $ref: '#/components/schemas/HrefObjectSelfLink'
+            deactivate:
+              $ref: '#/components/schemas/HrefObject'
+            verify:
+              $ref: '#/components/schemas/HrefObject'
+          readOnly: true
       required:
         - name
         - events
@@ -380,9 +368,7 @@ components:
         type:
           $ref: '#/components/schemas/EventHookChannelType'
         version:
-          description: >-
-            Version of the channel. Currently the only supported version is
-            `1.0.0``.
+          description: Version of the channel. Currently the only supported version is `1.0.0`.
           type: string
       required:
         - type
@@ -401,28 +387,21 @@ components:
         - type
         - items
     EventHookVerificationStatus:
-      description: >-
-        Verification status of the event hook. `UNVERIFIED` event hooks won't
-        receive any events.
+      description: Verification status of the event hook. `UNVERIFIED` event hooks won't receive any events.
       type: string
       enum:
         - UNVERIFIED
         - VERIFIED
       readOnly: true
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
           $ref: '#/components/schemas/HrefObjectSelfLink'
       readOnly: true
     HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -439,15 +418,11 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -464,31 +439,22 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     EventHookChannelConfig:
       type: object
       properties:
         authScheme:
           $ref: '#/components/schemas/EventHookChannelConfigAuthScheme'
         headers:
-          description: >-
-            Optional list of key/value pairs for headers that can be sent with
-            the request to the external service. For example,
-
-            `X-Other-Header` is an example of an optional header, with a value
-            of `my-header-value`, that you want Okta to pass to your
-
+          description: |-
+            Optional list of key/value pairs for headers that can be sent with the request to the external service. For example,
+            `X-Other-Header` is an example of an optional header, with a value of `my-header-value`, that you want Okta to pass to your
             external service.
           type: array
           items:
@@ -498,9 +464,7 @@ components:
           type: string
           readOnly: true
         uri:
-          description: >-
-            The external service endpoint called to execute the event hook
-            handler
+          description: The external service endpoint called to execute the event hook handler
           type: string
       required:
         - uri
@@ -511,16 +475,11 @@ components:
         - HTTP
     EventHookFilters:
       nullable: true
-      description: >-
+      description: |-
         The optional filter defined on a specific event type
 
-
-        > **Note:** Event hook filters is a [self-service Early Access
-        (EA)](/openapi/okta-management/guides/release-lifecycle/#early-access-ea)
-        to enable.
-
-        If you want to disable this feature, it's recommended to first remove
-        all event filters.
+        > **Note:** Event hook filters is a [self-service Early Access (EA)](/openapi/okta-management/guides/release-lifecycle/#early-access-ea) to enable.
+        If you want to disable this feature, it's recommended to first remove all event filters.
       type: object
       properties:
         eventFilterMap:
@@ -530,16 +489,10 @@ components:
           description: The type of filter. Currently only supports `EXPRESSION_LANGUAGE`
           readOnly: true
     EventHookSubscribedEventTypes:
-      description: >-
-        The subscribed event types that trigger the event hook. When you
-        register an event hook
-
-        you need to specify which events you want to subscribe to. To see the
-        list of event types
-
-        currently eligible for use in event hooks, use the [Event Types
-        catalog](https://developer.okta.com/docs/reference/api/event-types/#catalog)
-
+      description: |-
+        The subscribed event types that trigger the event hook. When you register an event hook
+        you need to specify which events you want to subscribe to. To see the list of event types
+        currently eligible for use in event hooks, use the [Event Types catalog](https://developer.okta.com/docs/reference/api/event-types/#catalog)
         and search with the parameter `event-hook-eligible`.
       items:
         type: string
@@ -550,9 +503,32 @@ components:
       enum:
         - EVENT_TYPE
     HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
     HrefHints:
       description: Describes allowed HTTP verbs for the `href`
       type: object
@@ -567,17 +543,12 @@ components:
         errorSummary:
           type: string
     EventHookChannelConfigAuthScheme:
-      description: >-
+      description: |-
         The authentication scheme used for this request.
 
-
         To use Basic Auth for authentication, set `type` to `HEADER`,
-
-        `key` to `Authorization`, and `value` to the Base64-encoded string of
-        "username:password". Ensure that you include
-
-        the scheme (including space) as part of the `value` parameter. For
-        example, `Basic YWRtaW46c3VwZXJzZWNyZXQ=`.
+        `key` to `Authorization`, and `value` to the Base64-encoded string of "username:password". Ensure that you include
+        the scheme (including space) as part of the `value` parameter. For example, `Basic YWRtaW46c3VwZXJzZWNyZXQ=`.
       type: object
       properties:
         key:
@@ -586,10 +557,8 @@ components:
         type:
           $ref: '#/components/schemas/EventHookChannelConfigAuthSchemeType'
         value:
-          description: >-
-            The header value. This secret key is passed to your external service
-            endpoint for security verification.
-
+          description: |-
+            The header value. This secret key is passed to your external service endpoint for security verification.
             This property is not returned in the response.
           type: string
           writeOnly: true
@@ -639,6 +608,13 @@ components:
           nullable: true
           description: Internal field
           readOnly: true
+    ListEventHooksResponse:
+      type: object
+      properties:
+        event_hooks:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventHook'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -717,14 +693,12 @@ components:
             self:
               href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx135
             verify:
-              href: >-
-                https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx135/lifecycle/verify
+              href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx135/lifecycle/verify
               hints:
                 allow:
                   - POST
             deactivate:
-              href: >-
-                https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx135/lifecycle/deactivate
+              href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx135/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -746,9 +720,7 @@ components:
                 - event: group.user_membership.add
                   condition:
                     version: null
-                    expression: >-
-                      event.target.?[type eq 'UserGroup'].size()>0 &&
-                      event.target.?[displayName eq 'Sales'].size()>0
+                    expression: event.target.?[type eq 'UserGroup'].size()>0 && event.target.?[displayName eq 'Sales'].size()>0
           channel:
             type: HTTP
             version: 1.0.0
@@ -763,14 +735,12 @@ components:
             self:
               href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6
             verify:
-              href: >-
-                https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
+              href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
               hints:
                 allow:
                   - POST
             deactivate:
-              href: >-
-                https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
+              href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
               hints:
                 allow:
                   - POST
@@ -808,9 +778,7 @@ components:
             eventFilterMap:
               - event: group.user_membership.add
                 condition:
-                  expression: >-
-                    event.target.?[type eq 'UserGroup'].size()>0 &&
-                    event.target.?[displayName eq 'Sales'].size()>0
+                  expression: event.target.?[type eq 'UserGroup'].size()>0 && event.target.?[displayName eq 'Sales'].size()>0
         channel:
           type: HTTP
           version: 1.0.0
@@ -852,14 +820,12 @@ components:
           self:
             href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6
           verify:
-            href: >-
-              https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
+            href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
             hints:
               allow:
                 - POST
           deactivate:
-            href: >-
-              https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
+            href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -884,9 +850,7 @@ components:
               - event: group.user_membership.add
                 condition:
                   version: null
-                  expression: >-
-                    event.target.?[type eq 'UserGroup'].size()>0 &&
-                    event.target.?[displayName eq 'Sales'].size()>0
+                  expression: event.target.?[type eq 'UserGroup'].size()>0 && event.target.?[displayName eq 'Sales'].size()>0
         channel:
           type: HTTP
           version: 1.0.0
@@ -900,14 +864,12 @@ components:
           self:
             href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6
           verify:
-            href: >-
-              https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
+            href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
           hints:
             allow:
               - POST
           deactivate:
-            href: >-
-              https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
+            href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -925,9 +887,7 @@ components:
             eventFilterMap:
               - event: group.user_membership.add
                 condition:
-                  expression: >-
-                    event.target.?[type eq 'UserGroup'].size()>0 &&
-                    event.target.?[displayName eq 'Sales'].size()>0
+                  expression: event.target.?[type eq 'UserGroup'].size()>0 && event.target.?[displayName eq 'Sales'].size()>0
         channel:
           type: HTTP
           version: 1.0.0
@@ -969,14 +929,12 @@ components:
           self:
             href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6
           verify:
-            href: >-
-              https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
+            href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/verify
             hints:
               allow:
                 - POST
           deactivate:
-            href: >-
-              https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
+            href: https://example.com/api/v1/eventHooks/who8tsqyrhCdmetzx1e6/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -1017,7 +975,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

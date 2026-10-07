@@ -2,6 +2,16 @@
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
+## Shared configuration
+
+Navbar, footer, theme and plugin configuration is shared across the StackQL
+provider microsites via [`stackql/docusaurus-config`](https://github.com/stackql/docusaurus-config),
+vendored into `.shared-config/` at build time. The `vendor-config` script runs
+automatically before `start` and `build` (it clones the shared config, so network
+access to GitHub is required). Site-local files are `provider.js` (the provider
+identity), the thin `docusaurus.config.js` / `sidebars.js` wrappers, the
+components/theme under `src/`, and the assets under `static/`.
+
 ## Installation
 
 ```bash

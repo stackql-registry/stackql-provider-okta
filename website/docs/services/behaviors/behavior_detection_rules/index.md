@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>behavior_detection_rules</code>
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>behavior_detection_rules</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="behavior_detection_rules" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.behaviors.behavior_detection_rules" /></td></tr>
 </tbody></table>
@@ -32,61 +33,12 @@ Creates, updates, deletes, gets or lists a <code>behavior_detection_rules</code>
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_behavior_detection_rules"
+    defaultValue="get_behavior_detection_rule"
     values={[
-        { label: 'list_behavior_detection_rules', value: 'list_behavior_detection_rules' },
-        { label: 'get_behavior_detection_rule', value: 'get_behavior_detection_rule' }
+        { label: 'get_behavior_detection_rule', value: 'get_behavior_detection_rule' },
+        { label: 'list_behavior_detection_rules', value: 'list_behavior_detection_rules' }
     ]}
 >
-<TabItem value="list_behavior_detection_rules">
-
-<table>
-<thead>
-    <tr>
-    <th>Name</th>
-    <th>Datatype</th>
-    <th>Description</th>
-    </tr>
-</thead>
-<tbody>
-<tr>
-    <td><CopyableCode code="id" /></td>
-    <td><code>string</code></td>
-    <td>ID of the Behavior Detection Rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="name" /></td>
-    <td><code>string</code></td>
-    <td>Name of the Behavior Detection Rule</td>
-</tr>
-<tr>
-    <td><CopyableCode code="_link" /></td>
-    <td><code>object</code></td>
-    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
-</tr>
-<tr>
-    <td><CopyableCode code="created" /></td>
-    <td><code>string</code></td>
-    <td>Timestamp when the Behavior Detection Rule was created</td>
-</tr>
-<tr>
-    <td><CopyableCode code="lastUpdated" /></td>
-    <td><code>string</code></td>
-    <td>Timestamp when the Behavior Detection Rule was last modified</td>
-</tr>
-<tr>
-    <td><CopyableCode code="status" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-<tr>
-    <td><CopyableCode code="type" /></td>
-    <td><code>string</code></td>
-    <td></td>
-</tr>
-</tbody>
-</table>
-</TabItem>
 <TabItem value="get_behavior_detection_rule">
 
 <table>
@@ -126,12 +78,61 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="status" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (ACTIVE, INACTIVE)</td>
 </tr>
 <tr>
     <td><CopyableCode code="type" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td> (ANOMALOUS_DEVICE, ANOMALOUS_IP, ANOMALOUS_LOCATION, VELOCITY, ANOMALOUS_ASN)</td>
+</tr>
+</tbody>
+</table>
+</TabItem>
+<TabItem value="list_behavior_detection_rules">
+
+<table>
+<thead>
+    <tr>
+    <th>Name</th>
+    <th>Datatype</th>
+    <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+<tr>
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>ID of the Behavior Detection Rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="name" /></td>
+    <td><code>string</code></td>
+    <td>Name of the Behavior Detection Rule</td>
+</tr>
+<tr>
+    <td><CopyableCode code="_link" /></td>
+    <td><code>object</code></td>
+    <td>Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.</td>
+</tr>
+<tr>
+    <td><CopyableCode code="created" /></td>
+    <td><code>string</code></td>
+    <td>Timestamp when the Behavior Detection Rule was created</td>
+</tr>
+<tr>
+    <td><CopyableCode code="lastUpdated" /></td>
+    <td><code>string</code></td>
+    <td>Timestamp when the Behavior Detection Rule was last modified</td>
+</tr>
+<tr>
+    <td><CopyableCode code="status" /></td>
+    <td><code>string</code></td>
+    <td> (ACTIVE, INACTIVE)</td>
+</tr>
+<tr>
+    <td><CopyableCode code="type" /></td>
+    <td><code>string</code></td>
+    <td> (ANOMALOUS_DEVICE, ANOMALOUS_IP, ANOMALOUS_LOCATION, VELOCITY, ANOMALOUS_ASN)</td>
 </tr>
 </tbody>
 </table>
@@ -154,6 +155,13 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
+    <td><a href="#get_behavior_detection_rule"><CopyableCode code="get_behavior_detection_rule" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-behaviorId"><code>behaviorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Retrieves a Behavior Detection Rule by `behaviorId`</td>
+</tr>
+<tr>
     <td><a href="#list_behavior_detection_rules"><CopyableCode code="list_behavior_detection_rules" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -161,44 +169,37 @@ The following methods are available for this resource:
     <td>Lists all behavior detection rules with pagination support</td>
 </tr>
 <tr>
-    <td><a href="#get_behavior_detection_rule"><CopyableCode code="get_behavior_detection_rule" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Retrieves a Behavior Detection Rule by `behaviorId`</td>
-</tr>
-<tr>
     <td><a href="#create_behavior_detection_rule"><CopyableCode code="create_behavior_detection_rule" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__type"><code>data__type</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td></td>
     <td>Creates a new behavior detection rule</td>
 </tr>
 <tr>
     <td><a href="#replace_behavior_detection_rule"><CopyableCode code="replace_behavior_detection_rule" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__type"><code>data__type</code></a></td>
+    <td><a href="#parameter-behaviorId"><code>behaviorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-type"><code>type</code></a></td>
     <td></td>
     <td>Replaces a Behavior Detection Rule by `behaviorId`</td>
 </tr>
 <tr>
     <td><a href="#delete_behavior_detection_rule"><CopyableCode code="delete_behavior_detection_rule" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-behaviorId"><code>behaviorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a Behavior Detection Rule by `behaviorId`</td>
 </tr>
 <tr>
     <td><a href="#activate_behavior_detection_rule"><CopyableCode code="activate_behavior_detection_rule" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-behaviorId"><code>behaviorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Activates a behavior detection rule</td>
 </tr>
 <tr>
     <td><a href="#deactivate_behavior_detection_rule"><CopyableCode code="deactivate_behavior_detection_rule" /></a></td>
     <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-behaviorId"><code>behaviorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deactivates a behavior detection rule</td>
 </tr>
@@ -218,10 +219,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-behaviorId">
+    <td><CopyableCode code="behaviorId" /></td>
+    <td><code>string</code></td>
+    <td>ID of the Behavior Detection Rule</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -229,15 +235,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_behavior_detection_rules"
+    defaultValue="get_behavior_detection_rule"
     values={[
-        { label: 'list_behavior_detection_rules', value: 'list_behavior_detection_rules' },
-        { label: 'get_behavior_detection_rule', value: 'get_behavior_detection_rule' }
+        { label: 'get_behavior_detection_rule', value: 'get_behavior_detection_rule' },
+        { label: 'list_behavior_detection_rules', value: 'list_behavior_detection_rules' }
     ]}
 >
-<TabItem value="list_behavior_detection_rules">
+<TabItem value="get_behavior_detection_rule">
 
-Lists all behavior detection rules with pagination support
+Retrieves a Behavior Detection Rule by `behaviorId`
 
 ```sql
 SELECT
@@ -249,13 +255,14 @@ lastUpdated,
 status,
 type
 FROM okta.behaviors.behavior_detection_rules
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE behaviorId = '{{ behaviorId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
-<TabItem value="get_behavior_detection_rule">
+<TabItem value="list_behavior_detection_rules">
 
-Retrieves a Behavior Detection Rule by `behaviorId`
+Lists all behavior detection rules with pagination support
 
 ```sql
 SELECT
@@ -289,9 +296,9 @@ Creates a new behavior detection rule
 
 ```sql
 INSERT INTO okta.behaviors.behavior_detection_rules (
-data__name,
-data__status,
-data__type,
+name,
+status,
+type,
 subdomain
 )
 SELECT 
@@ -312,25 +319,24 @@ type
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: behavior_detection_rules
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the behavior_detection_rules resource.
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Name of the Behavior Detection Rule
-        
     - name: status
-      value: string
+      value: "{{ status }}"
       valid_values: ['ACTIVE', 'INACTIVE']
     - name: type
-      value: string
-      valid_values: ['ANOMALOUS_DEVICE', 'ANOMALOUS_IP', 'ANOMALOUS_LOCATION', 'VELOCITY']
-```
+      value: "{{ type }}"
+      valid_values: ['ANOMALOUS_DEVICE', 'ANOMALOUS_IP', 'ANOMALOUS_LOCATION', 'VELOCITY', 'ANOMALOUS_ASN']
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -350,13 +356,14 @@ Replaces a Behavior Detection Rule by `behaviorId`
 ```sql
 REPLACE okta.behaviors.behavior_detection_rules
 SET 
-data__name = '{{ name }}',
-data__status = '{{ status }}',
-data__type = '{{ type }}'
+name = '{{ name }}',
+status = '{{ status }}',
+type = '{{ type }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-AND data__name = '{{ name }}' --required
-AND data__type = '{{ type }}' --required
+behaviorId = '{{ behaviorId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND name = '{{ name }}' --required
+AND type = '{{ type }}' --required
 RETURNING
 id,
 name,
@@ -364,8 +371,7 @@ _link,
 created,
 lastUpdated,
 status,
-type
-;
+type;
 ```
 </TabItem>
 </Tabs>
@@ -385,7 +391,8 @@ Deletes a Behavior Detection Rule by `behaviorId`
 
 ```sql
 DELETE FROM okta.behaviors.behavior_detection_rules
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE behaviorId = '{{ behaviorId }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>
@@ -407,6 +414,7 @@ Activates a behavior detection rule
 
 ```sql
 EXEC okta.behaviors.behavior_detection_rules.activate_behavior_detection_rule 
+@behaviorId='{{ behaviorId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```
@@ -417,6 +425,7 @@ Deactivates a behavior detection rule
 
 ```sql
 EXEC okta.behaviors.behavior_detection_rules.deactivate_behavior_detection_rule 
+@behaviorId='{{ behaviorId }}' --required, 
 @subdomain='{{ subdomain }}' --required
 ;
 ```

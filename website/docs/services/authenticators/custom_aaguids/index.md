@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>custom_aaguids</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>custom_aaguids</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="custom_aaguids" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.authenticators.custom_aaguids" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>custom_aaguids</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_all_custom_aaguids"
+    defaultValue="get_custom_aaguid"
     values={[
-        { label: 'list_all_custom_aaguids', value: 'list_all_custom_aaguids' },
-        { label: 'get_custom_aaguid', value: 'get_custom_aaguid' }
+        { label: 'get_custom_aaguid', value: 'get_custom_aaguid' },
+        { label: 'list_all_custom_aaguids', value: 'list_all_custom_aaguids' }
     ]}
 >
-<TabItem value="list_all_custom_aaguids">
+<TabItem value="get_custom_aaguid">
 
 <table>
 <thead>
@@ -77,7 +78,7 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_custom_aaguid">
+<TabItem value="list_all_custom_aaguids">
 
 <table>
 <thead>
@@ -134,44 +135,44 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_all_custom_aaguids"><CopyableCode code="list_all_custom_aaguids" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all custom Authenticator Attestation Global Unique Identifiers (AAGUIDs) in the org<br /><br />Only custom AAGUIDs that an admin has created are returned.</td>
-</tr>
-<tr>
     <td><a href="#get_custom_aaguid"><CopyableCode code="get_custom_aaguid" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-aaguid"><code>aaguid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves a custom AAGUID</td>
 </tr>
 <tr>
+    <td><a href="#list_all_custom_aaguids"><CopyableCode code="list_all_custom_aaguids" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all custom Authenticator Attestation Global Unique Identifiers (AAGUIDs) in the org<br /><br />Only custom AAGUIDs that an admin has created are returned.</td>
+</tr>
+<tr>
     <td><a href="#create_custom_aaguid"><CopyableCode code="create_custom_aaguid" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Creates a custom AAGUID for the WebAuthn authenticator</td>
+    <td>Creates a custom AAGUID for the Passkey (FIDO2 WebAuthn) authenticator</td>
 </tr>
 <tr>
     <td><a href="#update_custom_aaguid"><CopyableCode code="update_custom_aaguid" /></a></td>
     <td><CopyableCode code="update" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-aaguid"><code>aaguid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Updates the properties of a custom AAGUID by the `authenticatorId` and `aaguid` ID</td>
 </tr>
 <tr>
     <td><a href="#replace_custom_aaguid"><CopyableCode code="replace_custom_aaguid" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-aaguid"><code>aaguid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Replaces a custom AAGUID for the specified WebAuthn authenticator</td>
+    <td>Replaces a custom AAGUID for the specified Passkey (FIDO2 WebAuthn) authenticator</td>
 </tr>
 <tr>
     <td><a href="#delete_custom_aaguid"><CopyableCode code="delete_custom_aaguid" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-authenticatorId"><code>authenticatorId</code></a>, <a href="#parameter-aaguid"><code>aaguid</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a custom AAGUID<br /><br />You can only delete custom AAGUIDs that an admin has created.</td>
 </tr>
@@ -191,10 +192,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-aaguid">
+    <td><CopyableCode code="aaguid" /></td>
+    <td><code>string</code></td>
+    <td>Unique ID of a custom AAGUID</td>
+</tr>
+<tr id="parameter-authenticatorId">
+    <td><CopyableCode code="authenticatorId" /></td>
+    <td><code>string</code></td>
+    <td>`id` of the authenticator</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -202,28 +213,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_all_custom_aaguids"
+    defaultValue="get_custom_aaguid"
     values={[
-        { label: 'list_all_custom_aaguids', value: 'list_all_custom_aaguids' },
-        { label: 'get_custom_aaguid', value: 'get_custom_aaguid' }
+        { label: 'get_custom_aaguid', value: 'get_custom_aaguid' },
+        { label: 'list_all_custom_aaguids', value: 'list_all_custom_aaguids' }
     ]}
 >
-<TabItem value="list_all_custom_aaguids">
-
-Lists all custom Authenticator Attestation Global Unique Identifiers (AAGUIDs) in the org<br /><br />Only custom AAGUIDs that an admin has created are returned.
-
-```sql
-SELECT
-name,
-_links,
-aaguid,
-attestationRootCertificates,
-authenticatorCharacteristics
-FROM okta.authenticators.custom_aaguids
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_custom_aaguid">
 
 Retrieves a custom AAGUID
@@ -236,7 +231,26 @@ aaguid,
 attestationRootCertificates,
 authenticatorCharacteristics
 FROM okta.authenticators.custom_aaguids
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE authenticatorId = '{{ authenticatorId }}' -- required
+AND aaguid = '{{ aaguid }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
+<TabItem value="list_all_custom_aaguids">
+
+Lists all custom Authenticator Attestation Global Unique Identifiers (AAGUIDs) in the org<br /><br />Only custom AAGUIDs that an admin has created are returned.
+
+```sql
+SELECT
+name,
+_links,
+aaguid,
+attestationRootCertificates,
+authenticatorCharacteristics
+FROM okta.authenticators.custom_aaguids
+WHERE authenticatorId = '{{ authenticatorId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -254,19 +268,21 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="create_custom_aaguid">
 
-Creates a custom AAGUID for the WebAuthn authenticator
+Creates a custom AAGUID for the Passkey (FIDO2 WebAuthn) authenticator
 
 ```sql
 INSERT INTO okta.authenticators.custom_aaguids (
-data__aaguid,
-data__attestationRootCertificates,
-data__authenticatorCharacteristics,
+aaguid,
+attestationRootCertificates,
+authenticatorCharacteristics,
+authenticatorId,
 subdomain
 )
 SELECT 
 '{{ aaguid }}',
 '{{ attestationRootCertificates }}',
 '{{ authenticatorCharacteristics }}',
+'{{ authenticatorId }}',
 '{{ subdomain }}'
 RETURNING
 name,
@@ -279,29 +295,33 @@ authenticatorCharacteristics
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: custom_aaguids
   props:
+    - name: authenticatorId
+      value: "{{ authenticatorId }}"
+      description: Required parameter for the custom_aaguids resource.
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the custom_aaguids resource.
     - name: aaguid
-      value: string
-      description: >
+      value: "{{ aaguid }}"
+      description: |
         An Authenticator Attestation Global Unique Identifier (AAGUID) is a 128-bit identifier indicating the model.
-        
     - name: attestationRootCertificates
-      value: array
-      description: >
+      description: |
         Contains the certificate and information about it
-        
+      value:
+        - x5c: "{{ x5c }}"
     - name: authenticatorCharacteristics
-      value: object
-      description: >
+      description: |
         Contains additional properties about custom AAGUID.
-        
-```
+      value:
+        fipsCompliant: {{ fipsCompliant }}
+        hardwareProtected: {{ hardwareProtected }}
+        platformAttached: {{ platformAttached }}
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -321,18 +341,19 @@ Updates the properties of a custom AAGUID by the `authenticatorId` and `aaguid` 
 ```sql
 UPDATE okta.authenticators.custom_aaguids
 SET 
-data__attestationRootCertificates = '{{ attestationRootCertificates }}',
-data__authenticatorCharacteristics = '{{ authenticatorCharacteristics }}',
-data__name = '{{ name }}'
+attestationRootCertificates = '{{ attestationRootCertificates }}',
+authenticatorCharacteristics = '{{ authenticatorCharacteristics }}',
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+authenticatorId = '{{ authenticatorId }}' --required
+AND aaguid = '{{ aaguid }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 name,
 _links,
 aaguid,
 attestationRootCertificates,
-authenticatorCharacteristics
-;
+authenticatorCharacteristics;
 ```
 </TabItem>
 </Tabs>
@@ -348,23 +369,24 @@ authenticatorCharacteristics
 >
 <TabItem value="replace_custom_aaguid">
 
-Replaces a custom AAGUID for the specified WebAuthn authenticator
+Replaces a custom AAGUID for the specified Passkey (FIDO2 WebAuthn) authenticator
 
 ```sql
 REPLACE okta.authenticators.custom_aaguids
 SET 
-data__attestationRootCertificates = '{{ attestationRootCertificates }}',
-data__authenticatorCharacteristics = '{{ authenticatorCharacteristics }}',
-data__name = '{{ name }}'
+attestationRootCertificates = '{{ attestationRootCertificates }}',
+authenticatorCharacteristics = '{{ authenticatorCharacteristics }}',
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+authenticatorId = '{{ authenticatorId }}' --required
+AND aaguid = '{{ aaguid }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 name,
 _links,
 aaguid,
 attestationRootCertificates,
-authenticatorCharacteristics
-;
+authenticatorCharacteristics;
 ```
 </TabItem>
 </Tabs>
@@ -384,7 +406,9 @@ Deletes a custom AAGUID<br /><br />You can only delete custom AAGUIDs that an ad
 
 ```sql
 DELETE FROM okta.authenticators.custom_aaguids
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE authenticatorId = '{{ authenticatorId }}' --required
+AND aaguid = '{{ aaguid }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

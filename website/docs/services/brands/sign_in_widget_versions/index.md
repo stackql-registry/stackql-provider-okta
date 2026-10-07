@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>sign_in_widget_versions</code> 
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>sign_in_widget_versions</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="sign_in_widget_versions" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.sign_in_widget_versions" /></td></tr>
 </tbody></table>
@@ -39,8 +40,6 @@ The following fields are returned by `SELECT` queries:
 >
 <TabItem value="list_all_sign_in_widget_versions">
 
-Successfully listed the sign-in widget versions.
-
 <table>
 <thead>
     <tr>
@@ -50,6 +49,11 @@ Successfully listed the sign-in widget versions.
     </tr>
 </thead>
 <tbody>
+<tr>
+    <td><CopyableCode code="sign_in_widget_version" /></td>
+    <td><code>string</code></td>
+    <td></td>
+</tr>
 </tbody>
 </table>
 </TabItem>
@@ -73,7 +77,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#list_all_sign_in_widget_versions"><CopyableCode code="list_all_sign_in_widget_versions" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Lists all sign-in widget versions supported by the current org</td>
 </tr>
@@ -93,10 +97,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -115,9 +124,10 @@ Lists all sign-in widget versions supported by the current org
 
 ```sql
 SELECT
-*
+sign_in_widget_version
 FROM okta.brands.sign_in_widget_versions
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

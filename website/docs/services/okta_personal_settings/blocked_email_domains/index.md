@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>blocked_email_domains</code> re
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>blocked_email_domains</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="blocked_email_domains" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.okta_personal_settings.blocked_email_domains" /></td></tr>
 </tbody></table>
@@ -75,7 +76,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -95,10 +96,9 @@ Replaces the list of blocked email domains which are excluded from app migration
 ```sql
 REPLACE okta.okta_personal_settings.blocked_email_domains
 SET 
-data__domains = '{{ domains }}'
+domains = '{{ domains }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
-;
+subdomain = '{{ subdomain }}' --required;
 ```
 </TabItem>
 </Tabs>

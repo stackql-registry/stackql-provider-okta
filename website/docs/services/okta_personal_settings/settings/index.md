@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>settings</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>settings</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="settings" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.okta_personal_settings.settings" /></td></tr>
 </tbody></table>
@@ -75,7 +76,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -95,11 +96,10 @@ Replaces Okta Personal admin settings in a Workforce org
 ```sql
 REPLACE okta.okta_personal_settings.settings
 SET 
-data__enableEnduserEntryPoints = {{ enableEnduserEntryPoints }},
-data__enableExportApps = {{ enableExportApps }}
+enableEnduserEntryPoints = {{ enableEnduserEntryPoints }},
+enableExportApps = {{ enableExportApps }}
 WHERE 
-subdomain = '{{ subdomain }}' --required
-;
+subdomain = '{{ subdomain }}' --required;
 ```
 </TabItem>
 </Tabs>

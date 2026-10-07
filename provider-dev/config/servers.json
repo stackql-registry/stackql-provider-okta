@@ -1,0 +1,10 @@
+[
+  {
+    "url": "https://{subdomain}.okta.com/",
+    "variables": {
+      "subdomain": {
+        "default": "my-org"
+      }
+    }
+  }
+]

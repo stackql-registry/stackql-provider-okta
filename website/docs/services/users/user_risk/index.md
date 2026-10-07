@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>user_risk</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>user_risk</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="user_risk" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.user_risk" /></td></tr>
 </tbody></table>
@@ -56,7 +57,7 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="riskLevel" /></td>
     <td><code>string</code></td>
-    <td>The risk level associated with the user</td>
+    <td>The risk level associated with the user (HIGH, LOW, MEDIUM, NONE)</td>
 </tr>
 </tbody>
 </table>
@@ -81,16 +82,16 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_user_risk"><CopyableCode code="get_user_risk" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the user risk object for a user ID</td>
 </tr>
 <tr>
     <td><a href="#upsert_user_risk"><CopyableCode code="upsert_user_risk" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-riskLevel"><code>riskLevel</code></a></td>
     <td></td>
-    <td>Upserts (creates or updates) the user risk object for a user ID</td>
+    <td>Upserts (creates or updates) the user risk object for a user ID. You can optionally provide a `riskReason` to describe why the risk level is being changed. If `riskReason` isn't provided, the reason defaults to `override.by.admin`.</td>
 </tr>
 </tbody>
 </table>
@@ -111,7 +112,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +139,8 @@ SELECT
 _links,
 riskLevel
 FROM okta.users.user_risk
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>
@@ -150,19 +157,21 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="upsert_user_risk">
 
-Upserts (creates or updates) the user risk object for a user ID
+Upserts (creates or updates) the user risk object for a user ID. You can optionally provide a `riskReason` to describe why the risk level is being changed. If `riskReason` isn't provided, the reason defaults to `override.by.admin`.
 
 ```sql
 REPLACE okta.users.user_risk
 SET 
-data__riskLevel = '{{ riskLevel }}'
+riskLevel = '{{ riskLevel }}',
+riskReason = '{{ riskReason }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+userId = '{{ userId }}' --required
+AND subdomain = '{{ subdomain }}' --required
+AND riskLevel = '{{ riskLevel }}' --required
 RETURNING
 _links,
 reason,
-riskLevel
-;
+riskLevel;
 ```
 </TabItem>
 </Tabs>

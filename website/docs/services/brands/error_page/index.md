@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>error_page</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>error_page</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="error_page" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.brands.error_page" /></td></tr>
 </tbody></table>
@@ -83,8 +84,8 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_error_page"><CopyableCode code="get_error_page" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
+    <td><a href="#parameter-brandId"><code>brandId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-expand"><code>expand</code></a></td>
     <td>Retrieves the error page sub-resources. The `expand` query parameter specifies which sub-resources to include in the response.</td>
 </tr>
 </tbody>
@@ -103,10 +104,20 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-brandId">
+    <td><CopyableCode code="brandId" /></td>
+    <td><code>string</code></td>
+    <td>The ID of the brand</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-expand">
+    <td><CopyableCode code="expand" /></td>
+    <td><code>array</code></td>
+    <td>Specifies additional metadata to be included in the response</td>
 </tr>
 </tbody>
 </table>
@@ -128,7 +139,9 @@ SELECT
 _embedded,
 _links
 FROM okta.brands.error_page
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE brandId = '{{ brandId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
+AND expand = '{{ expand }}'
 ;
 ```
 </TabItem>

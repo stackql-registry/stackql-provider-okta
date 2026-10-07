@@ -2,15 +2,12 @@ openapi: 3.0.3
 info:
   title: captchas API
   description: okta captchas API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/captchas:
     get:
       summary: List all CAPTCHA instances
-      description: >-
-        Lists all CAPTCHA instances with pagination support. A subset of CAPTCHA
-        instances can be returned that match a supported filter expression or
-        query.
+      description: Lists all CAPTCHA instances with pagination support. A subset of CAPTCHA instances can be returned that match a supported filter expression or query.
       operationId: listCaptchaInstances
       responses:
         '200':
@@ -18,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CAPTCHAInstance'
+                $ref: '#/components/schemas/ListCaptchaInstancesResponse'
         '403':
           $ref: '#/components/responses/ErrorAccessDenied403'
         '429':
@@ -36,11 +31,14 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      x-stackql-bare-array-wrap:
+        wrapperKey: captcha_instances
+        wrapperName: ListCaptchaInstancesResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a CAPTCHA instance
-      description: >-
-        Creates a new CAPTCHA instance. Currently, an org can only configure a
-        single CAPTCHA instance.
+      description: Creates a new CAPTCHA instance. Currently, an org can only configure a single CAPTCHA instance.
       operationId: createCaptchaInstance
       x-codegen-request-body-name: instance
       requestBody:
@@ -126,6 +124,8 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      parameters:
+        - $ref: '#/components/parameters/pathCaptchaId'
     post:
       summary: Update a CAPTCHA instance
       description: Partially updates the properties of a specified CAPTCHA instance
@@ -173,6 +173,8 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      parameters:
+        - $ref: '#/components/parameters/pathCaptchaId'
     put:
       summary: Replace a CAPTCHA instance
       description: Replaces the properties for a specified CAPTCHA instance
@@ -220,14 +222,13 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      parameters:
+        - $ref: '#/components/parameters/pathCaptchaId'
     delete:
       summary: Delete a CAPTCHA instance
-      description: >-
+      description: |-
         Deletes a specified CAPTCHA instance
-
-        > **Note:** If your CAPTCHA instance is still associated with your org,
-        the request fails. You must first update your Org-wide CAPTCHA settings
-        to remove the CAPTCHA instance.
+        > **Note:** If your CAPTCHA instance is still associated with your org, the request fails. You must first update your Org-wide CAPTCHA settings to remove the CAPTCHA instance.
       operationId: deleteCaptchaInstance
       responses:
         '204':
@@ -259,8 +260,8 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
-    parameters:
-      - $ref: '#/components/parameters/pathCaptchaId'
+      parameters:
+        - $ref: '#/components/parameters/pathCaptchaId'
 components:
   schemas:
     CAPTCHAInstance:
@@ -276,15 +277,11 @@ components:
           description: The name of the CAPTCHA instance
           type: string
         secretKey:
-          description: >-
-            The secret key issued from the CAPTCHA provider to perform
-            server-side validation for a CAPTCHA token
+          description: The secret key issued from the CAPTCHA provider to perform server-side validation for a CAPTCHA token
           type: string
           writeOnly: true
         siteKey:
-          description: >-
-            The site key issued from the CAPTCHA provider to render a CAPTCHA on
-            a page
+          description: The site key issued from the CAPTCHA provider to render a CAPTCHA on a page
           type: string
         type:
           $ref: '#/components/schemas/CAPTCHAType'
@@ -303,18 +300,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     CAPTCHAType:
       description: The type of CAPTCHA provider
       type: string
@@ -322,13 +314,7 @@ components:
         - HCAPTCHA
         - RECAPTCHA_V2
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
@@ -340,10 +326,7 @@ components:
         errorSummary:
           type: string
     HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -360,15 +343,38 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -387,6 +393,13 @@ components:
         - GET
         - POST
         - PUT
+    ListCaptchaInstancesResponse:
+      type: object
+      properties:
+        captcha_instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/CAPTCHAInstance'
   responses:
     ErrorAccessDenied403:
       description: Forbidden
@@ -486,18 +499,14 @@ components:
     ErrorCAPTCHALimitOfOne:
       value:
         errorCode: E0000165
-        errorSummary: >-
-          CAPTCHA count limit reached. At most one CAPTCHA instance is allowed
-          per Org.
+        errorSummary: CAPTCHA count limit reached. At most one CAPTCHA instance is allowed per Org.
         errorLink: E0000165
         errorId: oaejrB1fWL1S7mc-2KcG-SOtw
         errorCauses: []
     ErrorCAPTCHAOrgWideSetting:
       value:
         errorCode: E0000149
-        errorSummary: >-
-          Current CAPTCHA is associated with org-wide settings, cannot be
-          removed.
+        errorSummary: Current CAPTCHA is associated with org-wide settings, cannot be removed.
         errorLink: E0000149
         errorId: samplezsusshPdiTWiITwqBt8
         errorCauses: []
@@ -530,7 +539,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

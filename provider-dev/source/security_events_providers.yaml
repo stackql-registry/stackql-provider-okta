@@ -2,12 +2,12 @@ openapi: 3.0.3
 info:
   title: security_events_providers API
   description: okta security_events_providers API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/security-events-providers:
     get:
       summary: List all security events providers
-      description: Lists all Security Events Provider instances
+      description: Lists all security events provider instances
       operationId: listSecurityEventsProviderInstances
       responses:
         '200':
@@ -15,9 +15,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SecurityEventsProviderResponse'
+                $ref: '#/components/schemas/ListSecurityEventsProviderInstancesResponse'
               examples:
                 list:
                   $ref: '#/components/examples/ListOfSecurityEventsProviderInstances'
@@ -38,9 +36,14 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      x-stackql-bare-array-wrap:
+        wrapperKey: security_events_provider_instances
+        wrapperName: ListSecurityEventsProviderInstancesResponse
+        mediaType: application/json
+        scalar: false
     post:
       summary: Create a security events provider
-      description: Creates a Security Events Provider instance
+      description: Creates a security events provider instance
       operationId: createSecurityEventsProviderInstance
       x-codegen-request-body-name: instance
       requestBody:
@@ -51,11 +54,9 @@ paths:
               $ref: '#/components/schemas/SecurityEventsProviderRequest'
             examples:
               well-known-URL-provided:
-                $ref: >-
-                  #/components/examples/SecurityEventsProviderRequestWellKnownUrl
+                $ref: '#/components/examples/SecurityEventsProviderRequestWellKnownUrl'
               issuer-and-JWKS-URL-provided:
-                $ref: >-
-                  #/components/examples/SecurityEventsProviderRequestIssuerAndJwksUrl
+                $ref: '#/components/examples/SecurityEventsProviderRequestIssuerAndJwksUrl'
       responses:
         '200':
           description: OK
@@ -65,11 +66,9 @@ paths:
                 $ref: '#/components/schemas/SecurityEventsProviderResponse'
               examples:
                 well-known-URL-provided:
-                  $ref: >-
-                    #/components/examples/SecurityEventsProviderResponseWellKnownUrl
+                  $ref: '#/components/examples/SecurityEventsProviderResponseWellKnownUrl'
                 issuer-and-JWKS-URL-provided:
-                  $ref: >-
-                    #/components/examples/SecurityEventsProviderResponseIssuerAndJwksUrl
+                  $ref: '#/components/examples/SecurityEventsProviderResponseIssuerAndJwksUrl'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '401':
@@ -92,7 +91,7 @@ paths:
   /api/v1/security-events-providers/{securityEventProviderId}:
     get:
       summary: Retrieve the security events provider
-      description: Retrieves the Security Events Provider instance specified by `id`
+      description: Retrieves the security events provider instance specified by `id`
       operationId: getSecurityEventsProviderInstance
       responses:
         '200':
@@ -103,8 +102,7 @@ paths:
                 $ref: '#/components/schemas/SecurityEventsProviderResponse'
               examples:
                 get:
-                  $ref: >-
-                    #/components/examples/SecurityEventsProviderResponseWellKnownUrl
+                  $ref: '#/components/examples/SecurityEventsProviderResponseWellKnownUrl'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -124,9 +122,11 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      parameters:
+        - $ref: '#/components/parameters/pathSecurityEventProviderId'
     put:
       summary: Replace a security events provider
-      description: Replaces a Security Events Provider instance specified by `id`
+      description: Replaces a security events provider instance specified by `id`
       operationId: replaceSecurityEventsProviderInstance
       x-codegen-request-body-name: instance
       requestBody:
@@ -137,11 +137,9 @@ paths:
               $ref: '#/components/schemas/SecurityEventsProviderRequest'
             examples:
               well-known-URL-provided:
-                $ref: >-
-                  #/components/examples/SecurityEventsProviderRequestWellKnownUrl
+                $ref: '#/components/examples/SecurityEventsProviderRequestWellKnownUrl'
               issuer-and-JWKS-URL-provided:
-                $ref: >-
-                  #/components/examples/SecurityEventsProviderRequestIssuerAndJwksUrl
+                $ref: '#/components/examples/SecurityEventsProviderRequestIssuerAndJwksUrl'
       responses:
         '200':
           description: OK
@@ -151,11 +149,9 @@ paths:
                 $ref: '#/components/schemas/SecurityEventsProviderResponse'
               examples:
                 well-known-URL-provided:
-                  $ref: >-
-                    #/components/examples/SecurityEventsProviderResponseWellKnownUrl
+                  $ref: '#/components/examples/SecurityEventsProviderResponseWellKnownUrl'
                 issuer-and-JWKS-URL-provided:
-                  $ref: >-
-                    #/components/examples/SecurityEventsProviderResponseIssuerAndJwksUrl
+                  $ref: '#/components/examples/SecurityEventsProviderResponseIssuerAndJwksUrl'
         '400':
           $ref: '#/components/responses/ErrorApiValidationFailed400'
         '401':
@@ -177,9 +173,11 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
+      parameters:
+        - $ref: '#/components/parameters/pathSecurityEventProviderId'
     delete:
       summary: Delete a security events provider
-      description: Deletes a Security Events Provider instance specified by `id`
+      description: Deletes a security events provider instance specified by `id`
       operationId: deleteSecurityEventsProviderInstance
       responses:
         '204':
@@ -204,17 +202,14 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
-    parameters:
-      - $ref: '#/components/parameters/pathSecurityEventProviderId'
+      parameters:
+        - $ref: '#/components/parameters/pathSecurityEventProviderId'
   /api/v1/security-events-providers/{securityEventProviderId}/lifecycle/activate:
     post:
       summary: Activate a security events provider
-      description: >-
-        Activates a Security Events Provider instance by setting its status to
-        `ACTIVE`.
-
-        This operation resumes the flow of events from the Security Events
-        Provider to Okta.
+      description: |-
+        Activates a security events provider instance by setting its status to `ACTIVE`.
+        This operation resumes the flow of events from the security events provider to Okta.
       operationId: activateSecurityEventsProviderInstance
       responses:
         '200':
@@ -225,8 +220,7 @@ paths:
                 $ref: '#/components/schemas/SecurityEventsProviderResponse'
               examples:
                 activatedInstance:
-                  $ref: >-
-                    #/components/examples/SecurityEventsProviderResponseWellKnownUrl
+                  $ref: '#/components/examples/SecurityEventsProviderResponseWellKnownUrl'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -246,17 +240,14 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
-    parameters:
-      - $ref: '#/components/parameters/pathSecurityEventProviderId'
+      parameters:
+        - $ref: '#/components/parameters/pathSecurityEventProviderId'
   /api/v1/security-events-providers/{securityEventProviderId}/lifecycle/deactivate:
     post:
       summary: Deactivate a security events provider
-      description: >-
-        Deactivates a Security Events Provider instance by setting its status to
-        `INACTIVE`.
-
-        This operation stops the flow of events from the Security Events
-        Provider to Okta.
+      description: |-
+        Deactivates a security events provider instance by setting its status to `INACTIVE`.
+        This operation stops the flow of events from the security events provider to Okta.
       operationId: deactivateSecurityEventsProviderInstance
       responses:
         '200':
@@ -267,8 +258,7 @@ paths:
                 $ref: '#/components/schemas/SecurityEventsProviderResponse'
               examples:
                 deactivatedInstance:
-                  $ref: >-
-                    #/components/examples/DeactivatedSecurityEventsProviderResponse
+                  $ref: '#/components/examples/DeactivatedSecurityEventsProviderResponse'
         '401':
           $ref: '#/components/responses/ErrorInvalidToken401'
         '403':
@@ -288,13 +278,13 @@ paths:
         isGenerallyAvailable: false
         SKUs:
           - Okta Identity Engine
-    parameters:
-      - $ref: '#/components/parameters/pathSecurityEventProviderId'
+      parameters:
+        - $ref: '#/components/parameters/pathSecurityEventProviderId'
 components:
   schemas:
     SecurityEventsProviderResponse:
-      title: Security Events Provider Response
-      description: The Security Events Provider response
+      title: Security events provider response
+      description: The security events provider response
       type: object
       properties:
         id:
@@ -303,48 +293,66 @@ components:
           readOnly: true
           example: sse1qg25RpusjUP6m0g5
         name:
-          description: The name of the Security Events Provider instance
+          description: The name of the security events provider instance
           type: string
           maxLength: 100
           example: Target SSF Provider
         settings:
-          description: Information about the Security Events Provider for signal ingestion
+          description: Information about the security events provider for signal ingestion
           $ref: '#/components/schemas/SecurityEventsProviderSettingsResponse'
         status:
-          description: Indicates whether the Security Events Provider is active or not
+          description: Indicates whether the security events provider is active or not
           type: string
           enum:
             - ACTIVE
             - INACTIVE
           readOnly: true
         type:
-          description: The application type of the Security Events Provider
+          description: The app type of the security events provider
           maxLength: 255
           type: string
           example: okta
         _links:
           $ref: '#/components/schemas/LinksSelfAndLifecycle'
     SecurityEventsProviderRequest:
-      title: Security Events Provider Request
-      description: >-
-        The request schema for creating or updating a Security Events Provider.
-        The `settings` must match one of the schemas.
+      title: Security events provider request
+      description: The request schema for creating or updating a security events provider. The `settings` must match one of the schemas.
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         name:
-          description: The name of the Security Events Provider instance
+          description: The name of the security events provider instance
           type: string
           maxLength: 100
           example: Target SSF Provider
         settings:
           type: object
-          description: Information about the Security Events Provider for signal ingestion
-          oneOf:
-            - $ref: '#/components/schemas/SecurityEventsProviderSettingsSSFCompliant'
-            - $ref: >-
-                #/components/schemas/SecurityEventsProviderSettingsNonSSFCompliant
+          description: Information about the security events provider for signal ingestion
+          title: Provider with well-known URL setting
+          properties:
+            well_known_url:
+              type: string
+              format: url
+              description: The published well-known URL of the security events provider (the SSF transmitter)
+              maxLength: 1000
+              example: https://example.okta.com/.well-known/ssf-configuration
+            issuer:
+              type: string
+              description: Issuer URL
+              maxLength: 700
+              example: example.okta.com
+            jwks_url:
+              type: string
+              format: url
+              description: The public URL where the JWKS public key is uploaded
+              maxLength: 1000
+              example: https://example.okta.com/oauth2/v1/keys
+          required:
+            - well_known_url
+            - jwks_url
+            - issuer
         type:
-          description: The application type of the Security Events Provider
+          description: The app type of the security events provider
           maxLength: 255
           type: string
           example: okta
@@ -353,8 +361,8 @@ components:
         - settings
         - type
     SecurityEventsProviderSettingsResponse:
-      title: Security Events Provider settings
-      description: Security Events Provider settings
+      title: Security events provider settings
+      description: Security events provider settings
       type: object
       properties:
         issuer:
@@ -371,21 +379,21 @@ components:
         well_known_url:
           type: string
           format: url
-          description: >-
-            The well-known URL of the Security Events Provider (the SSF
-            transmitter)
+          description: The well-known URL of the security events provider (the SSF transmitter)
           nullable: true
           maxLength: 1000
           example: https://example.okta.com/.well-known/ssf-configuration
     LinksSelfAndLifecycle:
-      allOf:
-        - $ref: '#/components/schemas/LinksSelf'
-        - type: object
-          properties:
-            activate:
-              $ref: '#/components/schemas/HrefObjectActivateLink'
-            deactivate:
-              $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
+      type: object
+      properties:
+        self:
+          $ref: '#/components/schemas/HrefObjectSelfLink'
+        activate:
+          $ref: '#/components/schemas/HrefObjectActivateLink'
+        deactivate:
+          $ref: '#/components/schemas/HrefObjectDeactivateLink'
+      readOnly: true
     Error:
       title: Error
       type: object
@@ -399,38 +407,29 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     SecurityEventsProviderSettingsSSFCompliant:
       title: Provider with well-known URL setting
-      description: Security Events Provider with well-known URL setting
+      description: Security events provider with well-known URL setting
       type: object
       properties:
         well_known_url:
           type: string
           format: url
-          description: >-
-            The published well-known URL of the Security Events Provider (the
-            SSF transmitter)
+          description: The published well-known URL of the security events provider (the SSF transmitter)
           maxLength: 1000
           example: https://example.okta.com/.well-known/ssf-configuration
       required:
         - well_known_url
     SecurityEventsProviderSettingsNonSSFCompliant:
       title: Provider with issuer and JWKS settings
-      description: >-
-        Security Events Provider with issuer and JWKS settings for signal
-        ingestion
+      description: Security events provider with issuer and JWKS settings for signal ingestion
       type: object
       properties:
         issuer:
@@ -448,36 +447,14 @@ components:
         - jwks_url
         - issuer
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
           $ref: '#/components/schemas/HrefObjectSelfLink'
       readOnly: true
     HrefObjectActivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to activate the resource
-    HrefObjectDeactivateLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to deactivate the resource
-    ErrorCause:
-      type: object
-      properties:
-        errorSummary:
-          type: string
-    HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -494,15 +471,97 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to activate the resource
+    HrefObjectDeactivateLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to deactivate the resource
+    ErrorCause:
+      type: object
+      properties:
+        errorSummary:
+          type: string
+    HrefObjectSelfLink:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -521,6 +580,13 @@ components:
         - GET
         - POST
         - PUT
+    ListSecurityEventsProviderInstancesResponse:
+      type: object
+      properties:
+        security_events_provider_instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityEventsProviderResponse'
   responses:
     ErrorInvalidToken401:
       description: Unauthorized
@@ -575,13 +641,13 @@ components:
         type: string
         example: sse1qg25RpusjUP6m0g5
       required: true
-      description: '`id` of the Security Events Provider instance'
+      description: '`id` of the security events provider instance'
   examples:
     ListOfSecurityEventsProviderInstances:
       summary: List of security events providers
       value:
         - id: sse1qg25RpusjUP6m0g5
-          name: Security Events Provider with well-known URL
+          name: Security events provider with well-known URL
           type: okta
           status: ACTIVE
           settings:
@@ -590,21 +656,19 @@ components:
             jwks_url: https://example.okta.com/jwks/path
           _links:
             self:
-              href: >-
-                https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5
+              href: https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5/lifecycle/deactivate
+              href: https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5/lifecycle/deactivate
               hints:
                 allow:
                   - POST
         - id: sse1qu4fUtsoD12iF0g5
-          name: Security Events Provider with an issuer and a JWKS URL
+          name: Security events provider with an issuer and a JWKS URL
           type: okta
           status: ACTIVE
           settings:
@@ -612,30 +676,28 @@ components:
             jwks_url: https://example.okta.com/jwks/path
           _links:
             self:
-              href: >-
-                https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5
+              href: https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5
               hints:
                 allow:
                   - GET
                   - PUT
                   - DELETE
             deactivate:
-              href: >-
-                https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5/lifecycle/deactivate
+              href: https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5/lifecycle/deactivate
               hints:
                 allow:
                   - POST
     SecurityEventsProviderRequestWellKnownUrl:
       summary: Provider with well-known URL
       value:
-        name: Security Events Provider with well-known URL
+        name: Security events provider with well-known URL
         type: okta
         settings:
           well_known_url: https://example.okta.com/.well-known/ssf-configuration
     SecurityEventsProviderRequestIssuerAndJwksUrl:
       summary: Provider with issuer and JWKS
       value:
-        name: Security Events Provider with an issuer and a JWKS URL
+        name: Security events provider with an issuer and a JWKS URL
         type: okta
         settings:
           issuer: Issuer
@@ -644,7 +706,7 @@ components:
       summary: Provider with well-known URL
       value:
         id: sse1qg25RpusjUP6m0g5
-        name: Security Events Provider with well-known URL
+        name: Security events provider with well-known URL
         type: okta
         status: ACTIVE
         settings:
@@ -653,16 +715,14 @@ components:
           jwks_url: https://example.okta.com/jwks/path
         _links:
           self:
-            href: >-
-              https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5
+            href: https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5
             hints:
               allow:
                 - GET
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5/lifecycle/deactivate
+            href: https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -670,7 +730,7 @@ components:
       summary: Provider with issuer and JWKS
       value:
         id: sse1qu4fUtsoD12iF0g5
-        name: Security Events Provider with an issuer and a JWKS URL
+        name: Security events provider with an issuer and a JWKS URL
         type: okta
         status: ACTIVE
         settings:
@@ -678,16 +738,14 @@ components:
           jwks_url: https://example.okta.com/jwks/path
         _links:
           self:
-            href: >-
-              https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5
+            href: https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5
             hints:
               allow:
                 - GET
                 - PUT
                 - DELETE
           deactivate:
-            href: >-
-              https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5/lifecycle/deactivate
+            href: https://example.okta.com/api/v1/security-events-providers/sse1qu4fUtsoD12iF0g5/lifecycle/deactivate
             hints:
               allow:
                 - POST
@@ -695,7 +753,7 @@ components:
       summary: Inactive security events provider
       value:
         id: sse1qg25RpusjUP6m0g5
-        name: Security Events Provider with well-known URL
+        name: Security events provider with well-known URL
         type: okta
         status: INACTIVE
         settings:
@@ -704,16 +762,14 @@ components:
           jwks_url: https://example.okta.com/jwks/path
         _links:
           self:
-            href: >-
-              https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5
+            href: https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5
             hints:
               allow:
                 - GET
                 - PUT
                 - DELETE
           activate:
-            href: >-
-              https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5/lifecycle/activate
+            href: https://example.okta.com/api/v1/security-events-providers/sse1qg25RpusjUP6m0g5/lifecycle/activate
             hints:
               allow:
                 - POST
@@ -762,7 +818,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

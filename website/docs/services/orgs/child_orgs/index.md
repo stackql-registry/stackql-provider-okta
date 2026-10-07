@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>child_orgs</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>child_orgs</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="child_orgs" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.orgs.child_orgs" /></td></tr>
 </tbody></table>
@@ -52,7 +53,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#create_child_org"><CopyableCode code="create_child_org" /></a></td>
     <td><CopyableCode code="insert" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-data__admin"><code>data__admin</code></a>, <a href="#parameter-data__edition"><code>data__edition</code></a>, <a href="#parameter-data__name"><code>data__name</code></a>, <a href="#parameter-data__subdomain"><code>data__subdomain</code></a></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-admin"><code>admin</code></a>, <a href="#parameter-edition"><code>edition</code></a>, <a href="#parameter-name"><code>name</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Creates an org (child org) that has the same features as the current requesting org (parent org).<br />A child org inherits any new features added to the parent org, but new features added to the child org aren't propagated back to the parent org.<br />&gt; **Notes:**<br />&gt; * Some features associated with products, such as Atspoke, Workflows, and Okta Identity Governance, aren't propagated to the child org.<br />&gt; * Wait at least 30 seconds after a 201-Created response before you make API requests to the new child org.<br />&gt; * For rate limits, see [Org creation rate limits](https://developer.okta.com/docs/reference/rl-additional-limits/#org-creation-rate-limits).</td>
 </tr>
@@ -75,7 +76,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -95,11 +96,11 @@ Creates an org (child org) that has the same features as the current requesting 
 
 ```sql
 INSERT INTO okta.orgs.child_orgs (
-data__admin,
-data__edition,
-data__name,
-data__subdomain,
-data__website,
+admin,
+edition,
+name,
+subdomain,
+website,
 subdomain
 )
 SELECT 
@@ -108,7 +109,7 @@ SELECT
 '{{ name }}' /* required */,
 '{{ subdomain }}' /* required */,
 '{{ website }}',
-'{{ subdomain }}'
+'{{ subdomain }}' /* required */
 RETURNING
 id,
 name,
@@ -128,43 +129,49 @@ website
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: child_orgs
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the child_orgs resource.
     - name: admin
-      value: object
-      description: >
+      description: |
         Profile and credential information for the first super admin user of the child org.
-If you plan to configure and manage the org programmatically, create a system user with a dedicated email address and a strong password.
-> **Note:** If you don't provide `credentials`, the super admin user is prompted to set up their credentials when they sign in to the org for the first time.
-        
+        If you plan to configure and manage the org programmatically, create a system user with a dedicated email address and a strong password.
+        > **Note:** If you don't provide \`credentials\`, the super admin user is prompted to set up their credentials when they sign in to the org for the first time.
+      value:
+        credentials:
+          password:
+            value: "{{ value }}"
+          recovery_question:
+            answer: "{{ answer }}"
+            question: "{{ question }}"
+        profile:
+          firstName: "{{ firstName }}"
+          lastName: "{{ lastName }}"
+          email: "{{ email }}"
+          login: "{{ login }}"
     - name: edition
-      value: string
-      description: >
-        Edition for the org. `SKU` is the only supported value.
-        
+      value: "{{ edition }}"
+      description: |
+        Edition for the org. \`SKU\` is the only supported value.
       valid_values: ['SKU']
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Unique name of the org.
-This name appears in the HTML `<title>` tag of the new org sign-in page.
-Only less than 4-width UTF-8 encoded characters are allowed.
-        
+        This name appears in the HTML \`<title>\` tag of the new org sign-in page.
+        Only less than 4-width UTF-8 encoded characters are allowed.
     - name: subdomain
-      value: string
-      description: >
+      value: "{{ subdomain }}"
+      description: |
         Subdomain of the org. Must be unique and include no spaces.
-        
     - name: website
-      value: string
-      description: >
+      value: "{{ website }}"
+      description: |
         Default website for the org
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>

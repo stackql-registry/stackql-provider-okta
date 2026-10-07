@@ -2,21 +2,22 @@ openapi: 3.0.3
 info:
   title: realms API
   description: okta realms API
-  version: 5.1.0
+  version: 2026.07.2
 paths:
   /api/v1/realms:
     get:
       x-okta-lifecycle:
         lifecycle: GA
       summary: List all realms
-      description: Lists all Realms
+      description: |-
+        Lists all realms.
+
+        > **Note:** The `search` parameter results are sourced from an eventually consistent datasource and may not reflect the latest information.
       operationId: listRealms
       parameters:
         - name: limit
           in: query
-          description: >-
-            Specifies the number of results returned. Defaults to 10 if `search`
-            is provided.
+          description: Specifies the number of results returned. Defaults to 10 if `search` is provided.
           schema:
             type: integer
             format: int32
@@ -24,41 +25,26 @@ paths:
         - $ref: '#/components/parameters/queryAfter'
         - name: search
           in: query
-          description: >-
-            Searches for realms with a supported filtering expression for most
-            properties.
+          description: |-
+            Searches for realms with a supported filtering expression for most properties.
 
-
-            Searches for realms can be filtered by the contains (`co`) operator.
-            You can only use `co` with the `profile.name` property. See
-            [Operators](https://developer.okta.com/docs/api/#operators).
+            Searches for realms can be filtered by the contains (`co`) operator. You can only use `co` with the `profile.name` property. See [Operators](https://developer.okta.com/docs/api/#operators).
           schema:
             type: string
         - name: sortBy
           in: query
-          description: >-
-            Specifies the field to sort by and can be any single property (for
-            search queries only)
+          description: Specifies the field to sort by and can be any single property (for search queries only)
           schema:
             type: string
             example: profile.name
-        - name: sortOrder
-          in: query
-          description: >-
-            Specifies the sort order: `asc` or `desc` (for search queries only).
-            This parameter is ignored if `sortBy` isn't present.
-          schema:
-            type: string
-            default: asc
+        - $ref: '#/components/parameters/querySortOrder'
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Realm'
+                $ref: '#/components/schemas/ListRealmsResponse'
               examples:
                 Realm Lists:
                   $ref: '#/components/examples/ListRealmsResponse'
@@ -76,6 +62,11 @@ paths:
             - okta.realms.read
       tags:
         - Realm
+      x-stackql-bare-array-wrap:
+        wrapperKey: realms
+        wrapperName: ListRealmsResponse
+        mediaType: application/json
+        scalar: false
     post:
       x-okta-lifecycle:
         lifecycle: GA
@@ -147,6 +138,8 @@ paths:
             - okta.realms.read
       tags:
         - Realm
+      parameters:
+        - $ref: '#/components/parameters/pathRealmId'
     put:
       x-okta-lifecycle:
         lifecycle: GA
@@ -184,14 +177,13 @@ paths:
             - okta.realms.manage
       tags:
         - Realm
+      parameters:
+        - $ref: '#/components/parameters/pathRealmId'
     delete:
       x-okta-lifecycle:
         lifecycle: GA
       summary: Delete a realm
-      description: >-
-        Deletes a realm permanently. This operation can only be performed after
-        disassociating other entities like users and identity providers from a
-        realm.
+      description: Deletes a realm permanently. This operation can only be performed after disassociating other entities like users and identity providers from a realm.
       operationId: deleteRealm
       responses:
         '204':
@@ -223,8 +215,8 @@ paths:
             - okta.realms.manage
       tags:
         - Realm
-    parameters:
-      - $ref: '#/components/parameters/pathRealmId'
+      parameters:
+        - $ref: '#/components/parameters/pathRealmId'
 components:
   schemas:
     Realm:
@@ -241,11 +233,7 @@ components:
           readOnly: true
         isDefault:
           type: boolean
-          description: >-
-            Indicates the default realm. Existing users will start out in the
-            default realm and can be moved to other realms individually or
-            through realm assignments. See [Realms Assignments
-            API](/openapi/okta-management/management/tag/RealmAssignment/).
+          description: Indicates the default realm. Existing users will start out in the default realm and can be moved to other realms individually or through realm assignments. See [Realms Assignments API](/openapi/okta-management/management/tags/realmassignment/).
           readOnly: true
         lastUpdated:
           type: string
@@ -269,18 +257,13 @@ components:
           description: An Okta code for this type of error
         errorId:
           type: string
-          description: >-
-            A unique identifier for this error. This can be used by Okta Support
-            to help with troubleshooting.
+          description: A unique identifier for this error. This can be used by Okta Support to help with troubleshooting.
         errorLink:
           type: string
           description: An Okta code for this type of error
         errorSummary:
           type: string
-          description: >-
-            A short description of what caused this error. Sometimes this
-            contains dynamically-generated information about your specific
-            error.
+          description: A short description of what caused this error. Sometimes this contains dynamically-generated information about your specific error.
     CreateRealmRequest:
       type: object
       properties:
@@ -292,26 +275,23 @@ components:
         profile:
           $ref: '#/components/schemas/RealmProfile'
     RealmProfile:
+      x-okta-ignore-redocly-rules-for-sdk: true
       type: object
       properties:
         domains:
           type: array
-          description: >-
-            Array of allowed domains. No user in this realm can be created or
-            updated unless they have a username and email from one of these
-            domains.
+          items:
+            type: string
+          description: |-
+            Array of allowed domains. No user in this realm can be created or updated unless they have a username and email from one of these domains.
 
-
-            The following characters aren't allowed in the domain name:
-            `!$%^&()=*+,:;<>'[]|/?\`
+            The following characters aren't allowed in the domain name: `!$%^&()=*+,:;<>'[]|/?\`
         name:
           type: string
           description: Name of a realm
         realmType:
           type: string
-          description: >-
-            Used to store partner users. This property must be set to `PARTNER`
-            to access Okta's external partner portal.
+          description: Used to store partner users. This property must be set to `PARTNER` to access Okta's external partner portal.
           enum:
             - PARTNER
             - DEFAULT
@@ -321,13 +301,7 @@ components:
       required:
         - name
     LinksSelf:
-      description: >-
-        Specifies link relations (see [Web
-        Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the
-        [JSON Hypertext Application
-        Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06)
-        specification. This object is used for dynamic discovery of related
-        resources and lifecycle operations.
+      description: Specifies link relations (see [Web Linking](https://www.rfc-editor.org/rfc/rfc8288)) available using the [JSON Hypertext Application Language](https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-06) specification. This object is used for dynamic discovery of related resources and lifecycle operations.
       type: object
       properties:
         self:
@@ -339,10 +313,7 @@ components:
         errorSummary:
           type: string
     HrefObjectSelfLink:
-      allOf:
-        - $ref: '#/components/schemas/HrefObject'
-        - description: Link to the resource (self)
-    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
       title: Link Object
       additionalProperties: true
       type: object
@@ -359,15 +330,38 @@ components:
           readOnly: true
         templated:
           type: boolean
-          description: >-
-            Indicates whether the link object's `href` property is a URI
-            template.
+          description: Indicates whether the link object's `href` property is a URI template.
           readOnly: true
         type:
           type: string
-          description: >-
-            The media type of the link. If omitted, it is implicitly
-            `application/json`.
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
+          readOnly: true
+      required:
+        - href
+      description: Link to the resource (self)
+    HrefObject:
+      x-okta-ignore-redocly-rules-for-sdk: true
+      title: Link Object
+      additionalProperties: true
+      type: object
+      properties:
+        hints:
+          $ref: '#/components/schemas/HrefHints'
+          readOnly: true
+        href:
+          type: string
+          description: Link URI
+        name:
+          type: string
+          description: Link name
+          readOnly: true
+        templated:
+          type: boolean
+          description: Indicates whether the link object's `href` property is a URI template.
+          readOnly: true
+        type:
+          type: string
+          description: The media type of the link. If omitted, it is implicitly `application/json`.
           readOnly: true
       required:
         - href
@@ -386,6 +380,13 @@ components:
         - GET
         - POST
         - PUT
+    ListRealmsResponse:
+      type: object
+      properties:
+        realms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Realm'
   responses:
     ErrorTooManyRequests429:
       description: Too Many Requests
@@ -429,11 +430,14 @@ components:
       in: query
       schema:
         type: string
-      description: >-
-        The cursor to use for pagination. It is an opaque string that specifies
-        your current location in the list and is obtained from the `Link`
-        response header. See
-        [Pagination](https://developer.okta.com/docs/api/#pagination).
+      description: The cursor to use for pagination. It is an opaque string that specifies your current location in the list and is obtained from the `Link` response header. See [Pagination](https://developer.okta.com/docs/api/#pagination) and [Link header](https://developer.okta.com/docs/api/#link-header).
+    querySortOrder:
+      name: sortOrder
+      in: query
+      description: 'Specifies sort order: `asc` or `desc` (for search queries only). This parameter is ignored if `sortBy` isn''t present.'
+      schema:
+        type: string
+        default: asc
     pathRealmId:
       name: realmId
       description: ID of the realm
@@ -458,8 +462,7 @@ components:
           _links:
             self:
               rel: self
-              href: >-
-                http://your-subdomain.okta.com/api/v1/realms/guox9jQ16k9V8IFEL0g3
+              href: http://your-subdomain.okta.com/api/v1/realms/guox9jQ16k9V8IFEL0g3
               method: GET
     CreateRealmRequest:
       value:
@@ -535,7 +538,4 @@ servers:
     variables:
       yourOktaDomain:
         default: subdomain.okta.com
-        description: >-
-          The domain of your organization. This can be a provided subdomain of
-          an official okta domain (okta.com, oktapreview.com, etc) or one of
-          your configured custom domains.
+        description: The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains.

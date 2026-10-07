@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>hook_keys</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>hook_keys</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="hook_keys" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.hook_keys.hook_keys" /></td></tr>
 </tbody></table>
@@ -32,13 +33,13 @@ Creates, updates, deletes, gets or lists a <code>hook_keys</code> resource.
 The following fields are returned by `SELECT` queries:
 
 <Tabs
-    defaultValue="list_hook_keys"
+    defaultValue="get_hook_key"
     values={[
-        { label: 'list_hook_keys', value: 'list_hook_keys' },
-        { label: 'get_hook_key', value: 'get_hook_key' }
+        { label: 'get_hook_key', value: 'get_hook_key' },
+        { label: 'list_hook_keys', value: 'list_hook_keys' }
     ]}
 >
-<TabItem value="list_hook_keys">
+<TabItem value="get_hook_key">
 
 <table>
 <thead>
@@ -82,7 +83,9 @@ The following fields are returned by `SELECT` queries:
 </tbody>
 </table>
 </TabItem>
-<TabItem value="get_hook_key">
+<TabItem value="list_hook_keys">
+
+The `id` property in the response as `id` serves as the unique ID for the key, which you can specify when invoking other CRUD operations. <br /><br />The `keyId` provided in the response is the alias of the public key that you can use to get details of the public key data in a separate call.
 
 <table>
 <thead>
@@ -144,13 +147,6 @@ The following methods are available for this resource:
 </thead>
 <tbody>
 <tr>
-    <td><a href="#list_hook_keys"><CopyableCode code="list_hook_keys" /></a></td>
-    <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
-    <td></td>
-    <td>Lists all keys</td>
-</tr>
-<tr>
     <td><a href="#get_hook_key"><CopyableCode code="get_hook_key" /></a></td>
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -158,23 +154,30 @@ The following methods are available for this resource:
     <td>Retrieves the public portion of the Key object using the `id` parameter<br /><br />&gt;**Note:** The `?expand=publickey` query parameter optionally returns the full object including the details of the public key in the response body's `_embedded` property.</td>
 </tr>
 <tr>
+    <td><a href="#list_hook_keys"><CopyableCode code="list_hook_keys" /></a></td>
+    <td><CopyableCode code="select" /></td>
+    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td></td>
+    <td>Lists all keys</td>
+</tr>
+<tr>
     <td><a href="#create_hook_key"><CopyableCode code="create_hook_key" /></a></td>
     <td><CopyableCode code="insert" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Creates a key for use with other parts of the application, such as inline hooks<br /><br />&gt; **Note:**  Use the key name to access this key for inline hook operations.<br /><br />The total number of keys that you can create in an Okta org is limited to 50.<br /><br /> The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the <br /> key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when <br /> invoking other CRUD operations. The `keyId` provided in the response is the alias of the public key that you can use to get <br /> details of the public key data in a separate call.<br /><br />&gt; **Note:** The keyId is the alias of the public key that you can use to retrieve the public key.</td>
+    <td>Creates a key for use with other parts of the application, such as inline hooks<br /><br />&gt; **Note:**  Use the key name to access this key for inline hook operations.<br /><br />The total number of keys that you can create in an Okta org is limited to 50.<br /><br /> The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the<br /> key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when<br /> invoking other CRUD operations. The `keyId` provided in the response is the alias of the public key that you can use to get<br /> details of the public key data in a separate call.<br /><br />&gt; **Note:** The keyId is the alias of the public key that you can use to retrieve the public key.</td>
 </tr>
 <tr>
     <td><a href="#replace_hook_key"><CopyableCode code="replace_hook_key" /></a></td>
     <td><CopyableCode code="replace" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Replaces a key by `id`<br /><br />This request replaces existing properties after passing validation.<br /><br />&gt; **Note:** The only parameter that you can update is the name of the key, which must be unique at all times.</td>
 </tr>
 <tr>
     <td><a href="#delete_hook_key"><CopyableCode code="delete_hook_key" /></a></td>
     <td><CopyableCode code="delete" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-id"><code>id</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Deletes a key by `id`. After being deleted, the key is unrecoverable.<br /><br />As a safety precaution, only keys that aren't being used are eligible for deletion.<br /></td>
 </tr>
@@ -194,10 +197,15 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-id">
+    <td><CopyableCode code="id" /></td>
+    <td><code>string</code></td>
+    <td>ID of the Hook Key</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 <tr id="parameter-id">
     <td><CopyableCode code="id" /></td>
@@ -210,29 +218,12 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 ## `SELECT` examples
 
 <Tabs
-    defaultValue="list_hook_keys"
+    defaultValue="get_hook_key"
     values={[
-        { label: 'list_hook_keys', value: 'list_hook_keys' },
-        { label: 'get_hook_key', value: 'get_hook_key' }
+        { label: 'get_hook_key', value: 'get_hook_key' },
+        { label: 'list_hook_keys', value: 'list_hook_keys' }
     ]}
 >
-<TabItem value="list_hook_keys">
-
-Lists all keys
-
-```sql
-SELECT
-id,
-name,
-created,
-isUsed,
-keyId,
-lastUpdated
-FROM okta.hook_keys.hook_keys
-WHERE subdomain = '{{ subdomain }}' -- required
-;
-```
-</TabItem>
 <TabItem value="get_hook_key">
 
 Retrieves the public portion of the Key object using the `id` parameter<br /><br />&gt;**Note:** The `?expand=publickey` query parameter optionally returns the full object including the details of the public key in the response body's `_embedded` property.
@@ -251,6 +242,23 @@ AND id = '{{ id }}'
 ;
 ```
 </TabItem>
+<TabItem value="list_hook_keys">
+
+Lists all keys
+
+```sql
+SELECT
+id,
+name,
+created,
+isUsed,
+keyId,
+lastUpdated
+FROM okta.hook_keys.hook_keys
+WHERE subdomain = '{{ subdomain }}' -- required
+;
+```
+</TabItem>
 </Tabs>
 
 
@@ -265,11 +273,11 @@ AND id = '{{ id }}'
 >
 <TabItem value="create_hook_key">
 
-Creates a key for use with other parts of the application, such as inline hooks<br /><br />&gt; **Note:**  Use the key name to access this key for inline hook operations.<br /><br />The total number of keys that you can create in an Okta org is limited to 50.<br /><br /> The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the <br /> key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when <br /> invoking other CRUD operations. The `keyId` provided in the response is the alias of the public key that you can use to get <br /> details of the public key data in a separate call.<br /><br />&gt; **Note:** The keyId is the alias of the public key that you can use to retrieve the public key.
+Creates a key for use with other parts of the application, such as inline hooks<br /><br />&gt; **Note:**  Use the key name to access this key for inline hook operations.<br /><br />The total number of keys that you can create in an Okta org is limited to 50.<br /><br /> The response is a [Key object](https://developer.okta.com/docs/reference/api/hook-keys/#key-object) that represents the<br /> key that you create. The `id` property in the response serves as the unique ID for the key, which you can specify when<br /> invoking other CRUD operations. The `keyId` provided in the response is the alias of the public key that you can use to get<br /> details of the public key data in a separate call.<br /><br />&gt; **Note:** The keyId is the alias of the public key that you can use to retrieve the public key.
 
 ```sql
 INSERT INTO okta.hook_keys.hook_keys (
-data__name,
+name,
 subdomain
 )
 SELECT 
@@ -288,19 +296,18 @@ lastUpdated
 </TabItem>
 <TabItem value="manifest">
 
-```yaml
-# Description fields are for documentation purposes
+<CodeBlock language="yaml">{`# Description fields are for documentation purposes
 - name: hook_keys
   props:
     - name: subdomain
-      value: string
+      value: "{{ subdomain }}"
       description: Required parameter for the hook_keys resource.
     - name: name
-      value: string
-      description: >
+      value: "{{ name }}"
+      description: |
         Display name for the key
-        
-```
+`}</CodeBlock>
+
 </TabItem>
 </Tabs>
 
@@ -320,9 +327,10 @@ Replaces a key by `id`<br /><br />This request replaces existing properties afte
 ```sql
 REPLACE okta.hook_keys.hook_keys
 SET 
-data__name = '{{ name }}'
+name = '{{ name }}'
 WHERE 
-subdomain = '{{ subdomain }}' --required
+id = '{{ id }}' --required
+AND subdomain = '{{ subdomain }}' --required
 RETURNING
 id,
 name,
@@ -330,8 +338,7 @@ _embedded,
 created,
 isUsed,
 keyId,
-lastUpdated
-;
+lastUpdated;
 ```
 </TabItem>
 </Tabs>
@@ -351,7 +358,8 @@ Deletes a key by `id`. After being deleted, the key is unrecoverable.<br /><br /
 
 ```sql
 DELETE FROM okta.hook_keys.hook_keys
-WHERE subdomain = '{{ subdomain }}' --required
+WHERE id = '{{ id }}' --required
+AND subdomain = '{{ subdomain }}' --required
 ;
 ```
 </TabItem>

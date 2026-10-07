@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>role_assignment_governance_gran
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>role_assignment_governance_grant_resources</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="role_assignment_governance_grant_resources" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.users.role_assignment_governance_grant_resources" /></td></tr>
 </tbody></table>
@@ -81,7 +82,7 @@ The following methods are available for this resource:
 <tr>
     <td><a href="#get_role_assignment_governance_grant_resources"><CopyableCode code="get_role_assignment_governance_grant_resources" /></a></td>
     <td><CopyableCode code="select" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
+    <td><a href="#parameter-userId"><code>userId</code></a>, <a href="#parameter-roleAssignmentId"><code>roleAssignmentId</code></a>, <a href="#parameter-grantId"><code>grantId</code></a>, <a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
     <td>Retrieves the resources of a governance source (identified by `grantId`) for a role (identified by `roleAssignmentId`) that's assigned to a user (identified by `userId`)</td>
 </tr>
@@ -101,10 +102,25 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
     </tr>
 </thead>
 <tbody>
+<tr id="parameter-grantId">
+    <td><CopyableCode code="grantId" /></td>
+    <td><code>string</code></td>
+    <td>Grant ID</td>
+</tr>
+<tr id="parameter-roleAssignmentId">
+    <td><CopyableCode code="roleAssignmentId" /></td>
+    <td><code>string</code></td>
+    <td>The `id` of the role assignment</td>
+</tr>
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
+</tr>
+<tr id="parameter-userId">
+    <td><CopyableCode code="userId" /></td>
+    <td><code>string</code></td>
+    <td>ID of an existing Okta user</td>
 </tr>
 </tbody>
 </table>
@@ -126,7 +142,10 @@ SELECT
 _links,
 resources
 FROM okta.users.role_assignment_governance_grant_resources
-WHERE subdomain = '{{ subdomain }}' -- required
+WHERE userId = '{{ userId }}' -- required
+AND roleAssignmentId = '{{ roleAssignmentId }}' -- required
+AND grantId = '{{ grantId }}' -- required
+AND subdomain = '{{ subdomain }}' -- required
 ;
 ```
 </TabItem>

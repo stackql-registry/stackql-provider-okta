@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists a <code>preferences</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>preferences</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="preferences" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.org.preferences" /></td></tr>
 </tbody></table>
@@ -86,13 +87,6 @@ The following methods are available for this resource:
     <td>Retrieves preferences of your Okta org</td>
 </tr>
 <tr>
-    <td><a href="#upload_org_logo"><CopyableCode code="upload_org_logo" /></a></td>
-    <td><CopyableCode code="exec" /></td>
-    <td><a href="#parameter-subdomain"><code>subdomain</code></a>, <a href="#parameter-file"><code>file</code></a></td>
-    <td></td>
-    <td>Uploads and replaces the logo for your organization</td>
-</tr>
-<tr>
     <td><a href="#set_org_hide_okta_uifooter"><CopyableCode code="set_org_hide_okta_uifooter" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
@@ -125,7 +119,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -157,27 +151,12 @@ WHERE subdomain = '{{ subdomain }}' -- required
 ## Lifecycle Methods
 
 <Tabs
-    defaultValue="upload_org_logo"
+    defaultValue="set_org_hide_okta_uifooter"
     values={[
-        { label: 'upload_org_logo', value: 'upload_org_logo' },
         { label: 'set_org_hide_okta_uifooter', value: 'set_org_hide_okta_uifooter' },
         { label: 'set_org_show_okta_uifooter', value: 'set_org_show_okta_uifooter' }
     ]}
 >
-<TabItem value="upload_org_logo">
-
-Uploads and replaces the logo for your organization
-
-```sql
-EXEC okta.org.preferences.upload_org_logo 
-@subdomain='{{ subdomain }}' --required 
-@@json=
-'{
-"file": "{{ file }}"
-}'
-;
-```
-</TabItem>
 <TabItem value="set_org_hide_okta_uifooter">
 
 Sets the preference to hide the Okta End-User Dashboard footer for all end users of your org

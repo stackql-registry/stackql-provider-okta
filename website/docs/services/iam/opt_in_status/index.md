@@ -15,6 +15,7 @@ image: /img/stackql-okta-provider-featured-image.png
 ---
 
 import CopyableCode from '@site/src/components/CopyableCode/CopyableCode';
+import CodeBlock from '@theme/CodeBlock';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -22,7 +23,7 @@ Creates, updates, deletes, gets or lists an <code>opt_in_status</code> resource.
 
 ## Overview
 <table><tbody>
-<tr><td><b>Name</b></td><td><code>opt_in_status</code></td></tr>
+<tr><td><b>Name</b></td><td><CopyableCode code="opt_in_status" /></td></tr>
 <tr><td><b>Type</b></td><td>Resource</td></tr>
 <tr><td><b>Id</b></td><td><CopyableCode code="okta.iam.opt_in_status" /></td></tr>
 </tbody></table>
@@ -51,12 +52,12 @@ The following fields are returned by `SELECT` queries:
 <tr>
     <td><CopyableCode code="_links" /></td>
     <td><code>object</code></td>
-    <td></td>
+    <td>Link relations available</td>
 </tr>
 <tr>
     <td><CopyableCode code="optInStatus" /></td>
     <td><code>string</code></td>
-    <td></td>
+    <td>The entitlement management opt-in status for the Admin Console (OPTING_IN, OPTED_IN, OPTING_OUT, OPTED_OUT)</td>
 </tr>
 </tbody>
 </table>
@@ -83,21 +84,21 @@ The following methods are available for this resource:
     <td><CopyableCode code="select" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Retrieves the opt-in status of the Admin Console from RAMP</td>
+    <td>Retrieves the entitlement management opt-in status for the Admin Console</td>
 </tr>
 <tr>
     <td><a href="#opt_in"><CopyableCode code="opt_in" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Opts in the Admin Console to RAMP</td>
+    <td>Opts in the Admin Console to entitlement management</td>
 </tr>
 <tr>
     <td><a href="#opt_out"><CopyableCode code="opt_out" /></a></td>
     <td><CopyableCode code="exec" /></td>
     <td><a href="#parameter-subdomain"><code>subdomain</code></a></td>
     <td></td>
-    <td>Opts out the Admin Console from RAMP</td>
+    <td>Opts out the Admin Console from entitlement management</td>
 </tr>
 </tbody>
 </table>
@@ -118,7 +119,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 <tr id="parameter-subdomain">
     <td><CopyableCode code="subdomain" /></td>
     <td><code>string</code></td>
-    <td>The domain of your organization. This can be a provided subdomain of an official okta domain (okta.com, oktapreview.com, etc) or one of your configured custom domains. (default: my-org)</td>
+    <td>(default: my-org)</td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +134,7 @@ Parameters can be passed in the `WHERE` clause of a query. Check the [Methods](#
 >
 <TabItem value="get_opt_in_status">
 
-Retrieves the opt-in status of the Admin Console from RAMP
+Retrieves the entitlement management opt-in status for the Admin Console
 
 ```sql
 SELECT
@@ -158,7 +159,7 @@ WHERE subdomain = '{{ subdomain }}' -- required
 >
 <TabItem value="opt_in">
 
-Opts in the Admin Console to RAMP
+Opts in the Admin Console to entitlement management
 
 ```sql
 EXEC okta.iam.opt_in_status.opt_in 
@@ -168,7 +169,7 @@ EXEC okta.iam.opt_in_status.opt_in
 </TabItem>
 <TabItem value="opt_out">
 
-Opts out the Admin Console from RAMP
+Opts out the Admin Console from entitlement management
 
 ```sql
 EXEC okta.iam.opt_in_status.opt_out 
